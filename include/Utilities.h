@@ -2,25 +2,27 @@
 #define UTILITIES_H
 
 #include <stdlib.h>
+#include <string>
+
 namespace chessgame
 {
-    class PieceColor
+    using std::string;
+
+    enum PieceColor
     {
-    public:
-        enum Color
-        {
-            WHITE,
-            BLACK
-        };
+        WHITE,
+        BLACK
     };
 
     class Coordinates
     {
     public:
-        Coordinates(int x, int y);
-        Coordinates();
         int x;
         int y;
+        string symbol;
+
+        Coordinates(int x, int y);
+        Coordinates();
     };
 }
 
