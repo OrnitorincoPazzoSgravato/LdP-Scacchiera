@@ -31,7 +31,7 @@ namespace chessgame
         @return: vector<Coordinates> of the possible moves of the current piece
 
     */
-    vector<Coordinates> Cavallo::getMoves(const vector<vector<Piece>> &board, int x, int y)
+    vector<Coordinates> Cavallo::getMoves(vector<vector<Piece *>> &board, int x, int y)
     {
         vector<Coordinates> moves;
 
@@ -56,7 +56,7 @@ namespace chessgame
             if (x + x_offset >= 0 && y + y_offset < 8 && y + y_offset >= 0 && y + y_offset < 8)
             {
                 // Control if the end cell is not the same color of the current piece
-                if (board[y + y_offset][x + x_offset].getColor() != this->color)
+                if (board[y + y_offset][x + x_offset]->getColor() != this->color)
                 {
                     // If not than add the move to the move vector
                     moves.push_back(Coordinates(x + x_offset, y + y_offset));

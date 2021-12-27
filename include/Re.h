@@ -5,8 +5,8 @@
 
 */
 
-#ifndef PEDONE_H
-#define PEDONE_H
+#ifndef RE_H
+#define RE_H
 
 #include <vector>
 
@@ -20,17 +20,15 @@ namespace chessgame
         this class represents a pedone of the game.
 
     */
-    class Pedone : public Piece
+    class Re : public Piece
     {
-    private:
-        bool is_already_moved;
 
     public:
-        Pedone();
-        Pedone(PieceColor color, const char symbol);
+        Re();
+        Re(PieceColor color, const char symbol);
         vector<Coordinates> getMoves(vector<vector<Piece *>> &board, int x, int y) override;
     };
 
 }
 
-#endif // PEDONE_H
+#endif // RE_H

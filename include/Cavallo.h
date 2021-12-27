@@ -26,7 +26,7 @@ namespace chessgame
     public:
         Cavallo();
         Cavallo(PieceColor color, const char symbol);
-        vector<Coordinates> getMoves(const vector<vector<Piece>> &board, int x, int y) override;
+        vector<Coordinates> getMoves(vector<vector<Piece *>> &board, int x, int y) override;
     };
 
 }
