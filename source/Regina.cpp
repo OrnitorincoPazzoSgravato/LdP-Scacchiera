@@ -56,11 +56,16 @@ namespace chessgame
         int y_offset = 0;
         while (x + x_offset >= 0 && x + x_offset < 8)
         {
-            if (board[y + y_offset][x + x_offset] == nullptr || board[y + y_offset][x + x_offset]->getColor() != this->color)
+            if (board[y + y_offset][x + x_offset] == nullptr)
             {
                 moves.push_back(Coordinates(x + x_offset, y + y_offset));
             }
-            if (board[y + y_offset][x + x_offset] != nullptr && board[y + y_offset][x + x_offset]->getColor() == this->color)
+            else if (board[y + y_offset][x + x_offset]->getColor() != this->color)
+            {
+                moves.push_back(Coordinates(x + x_offset, y + y_offset));
+                break;
+            }
+            else
             {
                 break;
             }
@@ -77,11 +82,16 @@ namespace chessgame
         int y_offset = 0;
         while (y + y_offset >= 0 && y + y_offset < 8)
         {
-            if (board[y + y_offset][x + x_offset] == nullptr || board[y + y_offset][x + x_offset]->getColor() != this->color)
+            if (board[y + y_offset][x + x_offset] == nullptr)
             {
                 moves.push_back(Coordinates(x + x_offset, y + y_offset));
             }
-            if (board[y + y_offset][x + x_offset] != nullptr && board[y + y_offset][x + x_offset]->getColor() == this->color)
+            else if (board[y + y_offset][x + x_offset]->getColor() != this->color)
+            {
+                moves.push_back(Coordinates(x + x_offset, y + y_offset));
+                break;
+            }
+            else
             {
                 break;
             }
