@@ -28,7 +28,7 @@ namespace chessgame
     public:
         Pedone();
         Pedone(PieceColor color, const char symbol);
-        vector<Coordinates> getMoves(vector<vector<Piece *>> &board, int x, int y) override;
+        vector<Coordinates> getMoves(vector<vector<Piece *>> &board, const Coordinates &coord) override;
     };
 
 }

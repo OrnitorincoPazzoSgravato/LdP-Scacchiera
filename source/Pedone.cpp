@@ -19,15 +19,18 @@ namespace chessgame
         while the x_offset is used only for the diagonal movements independently of the color of the piece.
 
         @arg: const vector<vector<Piece>>&  chessboard of the game
-        @arg: const x coordinate x of the current piece
-        @arg: const y coordinate y of the current piece
+        @arg:const Coordinates &coord coordinates of the current piece
 
         @return: vector<Coordinates> of the possible moves of the current piece
 
     */
-    vector<Coordinates> Pedone::getMoves(vector<vector<Piece *>> &board, int x, int y)
+    vector<Coordinates> Pedone::getMoves(vector<vector<Piece *>> &board, const Coordinates &coord)
     {
         vector<Coordinates> moves;
+
+        int x = coord.x;
+        int y = coord.y;
+
         int y_offset = 0;
         int x_offset = 0;
 

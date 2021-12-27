@@ -25,15 +25,17 @@ namespace chessgame
         and they are organized in a matrix made up of all possible combinations of the offsets.
 
         @arg: const vector<vector<Piece>>&  chessboard of the game
-        @arg: const x coordinate x of the current piece
-        @arg: const y coordinate y of the current piece
+        @arg: const Coordinates &coord coordinates of the current piece
 
         @return: vector<Coordinates> of the possible moves of the current piece
 
     */
-    vector<Coordinates> Cavallo::getMoves(vector<vector<Piece *>> &board, int x, int y)
+    vector<Coordinates> Cavallo::getMoves(vector<vector<Piece *>> &board, const Coordinates &coord)
     {
         vector<Coordinates> moves;
+
+        int x = coord.x;
+        int y = coord.y;
 
         // Matrix of the offsets
         int offsets[8][2]{

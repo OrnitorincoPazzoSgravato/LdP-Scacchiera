@@ -24,15 +24,17 @@ namespace chessgame
         and they are calculated in two "for" cicle that scan the adjacent cells of the current piece.
 
         @arg: const vector<vector<Piece>>&  chessboard of the game
-        @arg: const x coordinate x of the current piece
-        @arg: const y coordinate y of the current piece
+        @arg: const Coordinates &coord coordinates of the current piece
 
         @return: vector<Coordinates> of the possible moves of the current piece
 
     */
-    vector<Coordinates> Re::getMoves(vector<vector<Piece *>> &board, int x, int y)
+    vector<Coordinates> Re::getMoves(vector<vector<Piece *>> &board, const Coordinates &coord)
     {
         vector<Coordinates> moves;
+
+        int x = coord.x;
+        int y = coord.y;
 
         for (int i = -1; i < 2; i++)
         {

@@ -2,8 +2,12 @@
 #define UTILITIES_H
 
 #include <stdlib.h>
+#include <string>
+
 namespace chessgame
 {
+    using std::string;
+
     enum PieceColor
     {
         WHITE,
@@ -13,10 +17,12 @@ namespace chessgame
     class Coordinates
     {
     public:
-        Coordinates(int x, int y);
-        Coordinates();
         int x;
         int y;
+        string symbol;
+
+        Coordinates(int x, int y);
+        Coordinates();
     };
 }
 

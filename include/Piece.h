@@ -30,7 +30,7 @@ namespace chessgame
         Piece(PieceColor color, char symbol);
         char getSymbol() const;
         PieceColor getColor() const;
-        virtual vector<Coordinates> getMoves(vector<vector<Piece *>> &board, int x, int y) = 0;
+        virtual vector<Coordinates> getMoves(vector<vector<Piece *>> &board, const Coordinates &coord) = 0;
     };
 }
 
