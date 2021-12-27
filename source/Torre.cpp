@@ -4,16 +4,16 @@
     @date: 2021-12-27
 
 */
-#include "../include/Regina.h"
+#include "../include/Torre.h"
 
 namespace chessgame
 {
 
-    Regina::Regina(PieceColor color, const char symbol) : Piece(color, symbol)
+    Torre::Torre(PieceColor color, const char symbol) : Piece(color, symbol)
     {
     }
 
-    Regina::Regina() : Piece()
+    Torre::Torre() : Piece()
     {
     }
 
@@ -29,7 +29,7 @@ namespace chessgame
         @return: vector<Coordinates> of the possible moves of the current piece
 
     */
-    vector<Coordinates> Regina::getMoves(vector<vector<Piece *>> &board, const Coordinates &coord)
+    vector<Coordinates> Torre::getMoves(vector<vector<Piece *>> &board, const Coordinates &coord)
     {
         vector<Coordinates> moves;
 
@@ -45,22 +45,10 @@ namespace chessgame
         // Horizontal right check
         this->horizontalFinder(board, coord, moves, 1);
 
-        // Diagonal up right check
-        this->diagonalFinder(board, coord, moves, 1, 1);
-
-        // Diagonal down right check
-        this->diagonalFinder(board, coord, moves, 1, -1);
-
-        // Diagonal up left check
-        this->diagonalFinder(board, coord, moves, -1, 1);
-
-        // Diagonal down left check
-        this->diagonalFinder(board, coord, moves, -1, -1);
-
         return moves;
     }
 
-    void Regina::horizontalFinder(vector<vector<Piece *>> &board, const Coordinates &coord, vector<Coordinates> &moves, int versor)
+    void Torre::horizontalFinder(vector<vector<Piece *>> &board, const Coordinates &coord, vector<Coordinates> &moves, int versor)
     {
         int x = coord.x;
         int y = coord.y;
@@ -86,7 +74,7 @@ namespace chessgame
         }
     }
 
-    void Regina::verticalFinder(vector<vector<Piece *>> &board, const Coordinates &coord, vector<Coordinates> &moves, int versor)
+    void Torre::verticalFinder(vector<vector<Piece *>> &board, const Coordinates &coord, vector<Coordinates> &moves, int versor)
     {
         int x = coord.x;
         int y = coord.y;
@@ -109,33 +97,6 @@ namespace chessgame
             }
 
             y_offset += versor;
-        }
-    }
-
-    void Regina::diagonalFinder(vector<vector<Piece *>> &board, const Coordinates &coord, vector<Coordinates> &moves, int h_versor, int v_versor)
-    {
-        int x = coord.x;
-        int y = coord.y;
-        int x_offset = 0;
-        int y_offset = 0;
-        while (x + x_offset >= 0 && x + x_offset < 8 && y + y_offset >= 0 && y + y_offset < 8)
-        {
-            if (board[y + y_offset][x + x_offset] == nullptr)
-            {
-                moves.push_back(Coordinates(x + x_offset, y + y_offset));
-            }
-            else if (board[y + y_offset][x + x_offset]->getColor() != this->color)
-            {
-                moves.push_back(Coordinates(x + x_offset, y + y_offset));
-                break;
-            }
-            else
-            {
-                break;
-            }
-
-            x_offset += h_versor;
-            y_offset += v_versor;
         }
     }
 }
