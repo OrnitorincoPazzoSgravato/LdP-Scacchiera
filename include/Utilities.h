@@ -4,14 +4,10 @@
 #include <stdlib.h>
 namespace chessgame
 {
-    class PieceColor
+    enum PieceColor
     {
-    public:
-        enum Color
-        {
-            WHITE,
-            BLACK
-        };
+        WHITE,
+        BLACK
     };
 
     class Coordinates

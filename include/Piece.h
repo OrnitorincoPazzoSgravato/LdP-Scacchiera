@@ -22,14 +22,15 @@ namespace chessgame
     {
 
     protected:
-        PieceColor::Color color;
+        PieceColor color;
         char symbol;
 
-        Piece();
-        Piece(PieceColor::Color color, char symbol);
-
     public:
-        virtual vector<Coordinates> getMoves(const Chessboard &board);
+        Piece();
+        Piece(PieceColor color, char symbol);
+        char getSymbol() const;
+        PieceColor getColor() const;
+        virtual vector<Coordinates> getMoves(const vector<vector<Piece>> &board, int x, int y) = 0;
     };
 }
 
