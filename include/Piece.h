@@ -12,6 +12,7 @@
 
 #include <vector>
 
+#include "Chessboard.h"
 #include "Utilities.h"
 
 namespace chessgame
@@ -25,12 +26,13 @@ namespace chessgame
         PieceColor color;
         char symbol;
 
-    public:
         Piece();
         Piece(PieceColor color, char symbol);
+
+    public:
         char getSymbol() const;
         PieceColor getColor() const;
-        virtual vector<Coordinates> getMoves(vector<vector<Piece *>> &board, const Coordinates &coord) = 0;
+        virtual vector<Coordinates> getMoves(Chessboard *board, const Coordinates &coord) = 0;
     };
 }
 

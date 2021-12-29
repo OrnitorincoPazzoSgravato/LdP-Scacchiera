@@ -29,7 +29,7 @@ namespace chessgame
         @return: vector<Coordinates> of the possible moves of the current piece
 
     */
-    vector<Coordinates> Re::getMoves(vector<vector<Piece *>> &board, const Coordinates &coord)
+    vector<Coordinates> Re::getMoves(Chessboard *board, const Coordinates &coord)
     {
         vector<Coordinates> moves;
 
@@ -47,10 +47,10 @@ namespace chessgame
                     int y_offset = j;
 
                     // Control if the end cell is in the chessboard
-                    if (x + x_offset >= 0 && y + y_offset < 8 && y + y_offset >= 0 && y + y_offset < 8)
+                    if (x + x_offset >= 0 && x + x_offset < COLUMNS && y + y_offset >= 0 && y + y_offset < ROWS)
                     {
                         // Control if the end cell is not the same color of the current piece
-                        if (board[y + y_offset][x + x_offset]->getColor() != this->color)
+                        if (board->get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->color)
                         {
                             moves.push_back(Coordinates(x + x_offset, y + y_offset));
                         }

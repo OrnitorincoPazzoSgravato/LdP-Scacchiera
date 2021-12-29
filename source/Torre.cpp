@@ -29,7 +29,7 @@ namespace chessgame
         @return: vector<Coordinates> of the possible moves of the current piece
 
     */
-    vector<Coordinates> Torre::getMoves(vector<vector<Piece *>> &board, const Coordinates &coord)
+    vector<Coordinates> Torre::getMoves(Chessboard *board, const Coordinates &coord)
     {
         vector<Coordinates> moves;
 
@@ -48,19 +48,19 @@ namespace chessgame
         return moves;
     }
 
-    void Torre::horizontalFinder(vector<vector<Piece *>> &board, const Coordinates &coord, vector<Coordinates> &moves, int versor)
+    void Torre::horizontalFinder(Chessboard *board, const Coordinates &coord, vector<Coordinates> &moves, int versor)
     {
         int x = coord.x;
         int y = coord.y;
         int x_offset = 0;
         int y_offset = 0;
-        while (x + x_offset >= 0 && x + x_offset < 8)
+        while (x + x_offset >= 0 && x + x_offset < COLUMNS)
         {
-            if (board[y + y_offset][x + x_offset] == nullptr)
+            if (board->get_piece(Coordinates(x + x_offset, y + y_offset)) == nullptr)
             {
                 moves.push_back(Coordinates(x + x_offset, y + y_offset));
             }
-            else if (board[y + y_offset][x + x_offset]->getColor() != this->color)
+            else if (board->get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->color)
             {
                 moves.push_back(Coordinates(x + x_offset, y + y_offset));
                 break;
@@ -74,19 +74,19 @@ namespace chessgame
         }
     }
 
-    void Torre::verticalFinder(vector<vector<Piece *>> &board, const Coordinates &coord, vector<Coordinates> &moves, int versor)
+    void Torre::verticalFinder(Chessboard *board, const Coordinates &coord, vector<Coordinates> &moves, int versor)
     {
         int x = coord.x;
         int y = coord.y;
         int x_offset = 0;
         int y_offset = 0;
-        while (y + y_offset >= 0 && y + y_offset < 8)
+        while (y + y_offset >= 0 && y + y_offset < ROWS)
         {
-            if (board[y + y_offset][x + x_offset] == nullptr)
+            if (board->get_piece(Coordinates(x + x_offset, y + y_offset)) == nullptr)
             {
                 moves.push_back(Coordinates(x + x_offset, y + y_offset));
             }
-            else if (board[y + y_offset][x + x_offset]->getColor() != this->color)
+            else if (board->get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->color)
             {
                 moves.push_back(Coordinates(x + x_offset, y + y_offset));
                 break;

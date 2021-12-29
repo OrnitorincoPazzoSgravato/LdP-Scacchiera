@@ -24,7 +24,7 @@ namespace chessgame
         @return: vector<Coordinates> of the possible moves of the current piece
 
     */
-    vector<Coordinates> Pedone::getMoves(vector<vector<Piece *>> &board, const Coordinates &coord)
+    vector<Coordinates> Pedone::getMoves(Chessboard *board, const Coordinates &coord)
     {
         vector<Coordinates> moves;
 
@@ -44,10 +44,10 @@ namespace chessgame
         }
 
         // Control if the y move is inside the board
-        if (y + y_offset >= 0 && y + y_offset < 8)
+        if (y + y_offset >= 0 && y + y_offset < ROWS)
         {
             // Control if the end position is empty (only vertical movement)
-            if (board[y + y_offset][x + x_offset] == nullptr)
+            if (board->get_piece(Coordinates(x + x_offset, y + y_offset)) == nullptr)
             {
                 moves.push_back(Coordinates(x, y + y_offset));
             }
@@ -55,24 +55,24 @@ namespace chessgame
             x_offset = 1;
 
             // Control if the x move is inside the board (right diagonal movement)
-            if (x + x_offset >= 0 && x + x_offset < 8)
+            if (x + x_offset >= 0 && x + x_offset < COLUMNS)
             {
 
                 // Control if the end position is an enemy (only diagonal movement)
 
-                if (board[y + y_offset][x + x_offset]->getColor() != this->color && board[y + 1][x + x_offset] != NULL)
+                if (board->get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->color && board->get_piece(Coordinates(x + x_offset, y + y_offset)) != nullptr)
                 {
                     moves.push_back(Coordinates(x + x_offset, y + y_offset));
                 }
             }
 
             // Control if the x move is inside the board (left diagonal movement)
-            if (x - 1 >= 0 && x - 1 < 8)
+            if (x - 1 >= 0 && x - 1 < COLUMNS)
             {
 
                 // Control if the end position is an enemy (only diagonal movement)
 
-                if (board[y + y_offset][x - x_offset]->getColor() != this->color && board[y + y_offset][x - x_offset] != NULL)
+                if (board->get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->color && board->get_piece(Coordinates(x + x_offset, y + y_offset)) != nullptr)
                 {
                     moves.push_back(Coordinates(x - 1, y + y_offset));
                 }
