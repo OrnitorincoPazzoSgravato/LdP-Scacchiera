@@ -26,12 +26,12 @@ namespace chessgame
     public:
         Regina();
         Regina(PieceColor color, const char symbol);
-        vector<Coordinates> getMoves(vector<vector<Piece *>> &board, const Coordinates &coord) override;
+        vector<Coordinates> getMoves(Chessboard *board, const Coordinates &coord) override;
 
     private:
-        void horizontalFinder(vector<vector<Piece *>> &board, const Coordinates &coord, vector<Coordinates> &moves, int versor);
-        void verticalFinder(vector<vector<Piece *>> &board, const Coordinates &coord, vector<Coordinates> &moves, int versor);
-        void diagonalFinder(vector<vector<Piece *>> &board, const Coordinates &coord, vector<Coordinates> &moves, int h_versor, int v_versor);
+        void horizontalFinder(Chessboard *board, const Coordinates &coord, vector<Coordinates> &moves, int versor);
+        void verticalFinder(Chessboard *board, const Coordinates &coord, vector<Coordinates> &moves, int versor);
+        void diagonalFinder(Chessboard *board, const Coordinates &coord, vector<Coordinates> &moves, int h_versor, int v_versor);
     };
 
 }
