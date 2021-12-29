@@ -47,7 +47,7 @@ namespace chessgame
                     int y_offset = j;
 
                     // Control if the end cell is in the chessboard
-                    if (x + x_offset >= 0 && y + y_offset < 8 && y + y_offset >= 0 && y + y_offset < 8)
+                    if (x + x_offset >= 0 && x + x_offset < COLUMNS && y + y_offset >= 0 && y + y_offset < ROWS)
                     {
                         // Control if the end cell is not the same color of the current piece
                         if (board->get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->color)

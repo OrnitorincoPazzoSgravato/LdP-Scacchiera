@@ -44,7 +44,7 @@ namespace chessgame
         }
 
         // Control if the y move is inside the board
-        if (y + y_offset >= 0 && y + y_offset < 8)
+        if (y + y_offset >= 0 && y + y_offset < ROWS)
         {
             // Control if the end position is empty (only vertical movement)
             if (board->get_piece(Coordinates(x + x_offset, y + y_offset)) == nullptr)
@@ -55,7 +55,7 @@ namespace chessgame
             x_offset = 1;
 
             // Control if the x move is inside the board (right diagonal movement)
-            if (x + x_offset >= 0 && x + x_offset < 8)
+            if (x + x_offset >= 0 && x + x_offset < COLUMNS)
             {
 
                 // Control if the end position is an enemy (only diagonal movement)
@@ -67,7 +67,7 @@ namespace chessgame
             }
 
             // Control if the x move is inside the board (left diagonal movement)
-            if (x - 1 >= 0 && x - 1 < 8)
+            if (x - 1 >= 0 && x - 1 < COLUMNS)
             {
 
                 // Control if the end position is an enemy (only diagonal movement)
