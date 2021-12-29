@@ -3,7 +3,7 @@
     @author: Enrico Cavinato
     @date: 2021-12-27
 
-    This class represents a chessboard
+    This class represents a chessboard.
 
 */
 
@@ -11,8 +11,8 @@
 #define CHESSBOARD_H
 #include<string>
 #include<vector>
-#include "Utilities.h"
 #include "Piece.h"
+#include "Utilities.h"
 
 
 
@@ -33,10 +33,10 @@ private:
     void initialize_blank_space();
 public:
     Chessboard();                                           //costruttore di default, inizializza la scacchiera
-    void set_piece(const Coordinates, const Piece& p);      //inserisce un pezzo senza controllarne la validità ( compito di game )    
+    void set_piece(const Coordinates, Piece& p);      //inserisce un pezzo senza controllarne la validità ( compito di game )    
     Piece * get_piece(const Coordinates);                   // restituisce il puntatore a un pezzo che si trova nelle coordinate
     std::string& snapshot();                                // esegue lo snapshot della scacchiera
-    ~Chessboard();                                          //distruttore
+    ~Chessboard();                                          //distrut
 };
 }
 
