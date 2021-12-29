@@ -26,9 +26,10 @@ namespace chessgame
         PieceColor color;
         char symbol;
 
-    public:
         Piece();
         Piece(PieceColor color, char symbol);
+
+    public:
         char getSymbol() const;
         PieceColor getColor() const;
         virtual vector<Coordinates> getMoves(Chessboard *board, const Coordinates &coord) = 0;
