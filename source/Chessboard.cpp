@@ -1,14 +1,14 @@
-#include "Utilities.h"
-#include "Piece.h"
-#include "Chessboard.h"
-#include "Alfiere.h"
-#include "Cavallo.h"
-#include "Pedone.h"
-#include "Re.h"
-#include "Regina.h"
-#include "Pedone.h"
-#include "Torre.h"
-
+#include "../include/Piece.h"
+#include "../include/Chessboard.h"
+#include "../include/Alfiere.h"
+#include "../include/Cavallo.h"
+#include "../include/Pedone.h"
+#include "../include/Re.h"
+#include "../include/Regina.h"
+#include "../include/Pedone.h"
+#include "../include/Torre.h"
+#include <string>
+#include "../include/Utilities.h"
 
 namespace chessgame
 
@@ -19,16 +19,31 @@ namespace chessgame
         initialize_blank_space();       
         initialize_white_pieces();        
     }                                        
-    void Chessboard::set_piece(const Coordinates, const Piece& p)
-    {}     
-    Piece * Chessboard::get_piece(const Coordinates)
-    {}                
+    void Chessboard::set_piece(const Coordinates c, Piece& p)
+    {
+        v[c.x][c.y] = &p;
+    }     
+    Piece * Chessboard::get_piece(const Coordinates c)
+    {
+        return v[c.x][c.y];
+    }                
     std::string& Chessboard::snapshot()
     {
-        /*for (auto& rows : v)
+        string s;
+        for (int i = 2; i < 6; i++)
         {
-            for (auto&)
-        }*/
+            /* code */
+            for (int j = 0; i < COLUMNS; j++)
+            {
+                /* code */
+                Piece * p = v[i][j];
+                if (p == nullptr) s += " ";
+                else s += p->getSymbol();
+            }
+            s += "\n";
+            
+        }
+        return s;
     }
     void Chessboard::initialize_black_pieces()
     {
