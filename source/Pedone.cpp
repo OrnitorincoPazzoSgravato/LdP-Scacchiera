@@ -34,7 +34,7 @@ namespace chessgame
         int y_offset = 0;
         int x_offset = 0;
 
-        if (this->color == PieceColor::WHITE)
+        if (this->getColor() == PieceColor::WHITE)
         {
             y_offset = 1;
         }
@@ -60,7 +60,7 @@ namespace chessgame
 
                 // Control if the end position is an enemy (only diagonal movement)
 
-                if (board->get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->color && board->get_piece(Coordinates(x + x_offset, y + y_offset)) != nullptr)
+                if (board->get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor() && board->get_piece(Coordinates(x + x_offset, y + y_offset)) != nullptr)
                 {
                     moves.push_back(Coordinates(x + x_offset, y + y_offset));
                 }
@@ -72,7 +72,7 @@ namespace chessgame
 
                 // Control if the end position is an enemy (only diagonal movement)
 
-                if (board->get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->color && board->get_piece(Coordinates(x + x_offset, y + y_offset)) != nullptr)
+                if (board->get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor() && board->get_piece(Coordinates(x + x_offset, y + y_offset)) != nullptr)
                 {
                     moves.push_back(Coordinates(x - 1, y + y_offset));
                 }

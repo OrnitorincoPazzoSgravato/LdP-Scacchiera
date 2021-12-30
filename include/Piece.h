@@ -22,10 +22,11 @@ namespace chessgame
     class Piece
     {
 
-    protected:
+    private:
         PieceColor color;
         char symbol;
 
+    protected:
         Piece();
         Piece(PieceColor color, char symbol);
 

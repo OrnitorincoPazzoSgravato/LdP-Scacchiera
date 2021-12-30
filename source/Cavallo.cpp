@@ -58,7 +58,7 @@ namespace chessgame
             if (x + x_offset >= 0 && y + y_offset < ROWS && y + y_offset >= 0 && y + y_offset < COLUMNS)
             {
                 // Control if the end cell is not the same color of the current piece
-                if (board->get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->color)
+                if (board->get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor())
                 {
                     // If not than add the move to the move vector
                     moves.push_back(Coordinates(x + x_offset, y + y_offset));

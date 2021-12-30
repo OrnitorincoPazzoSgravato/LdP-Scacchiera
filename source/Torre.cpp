@@ -60,7 +60,7 @@ namespace chessgame
             {
                 moves.push_back(Coordinates(x + x_offset, y + y_offset));
             }
-            else if (board->get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->color)
+            else if (board->get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor())
             {
                 moves.push_back(Coordinates(x + x_offset, y + y_offset));
                 break;
@@ -86,7 +86,7 @@ namespace chessgame
             {
                 moves.push_back(Coordinates(x + x_offset, y + y_offset));
             }
-            else if (board->get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->color)
+            else if (board->get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor())
             {
                 moves.push_back(Coordinates(x + x_offset, y + y_offset));
                 break;
