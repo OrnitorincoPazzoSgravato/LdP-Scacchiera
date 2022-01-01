@@ -19,21 +19,17 @@ namespace chessgame
 {
     using std::vector;
 
-    class Piece
-    {
+    class Piece {
+        protected:
+            Piece();
+            Piece(PieceColor color, char symbol);
 
-    private:
-        PieceColor color;
-        char symbol;
-
-    protected:
-        Piece();
-        Piece(PieceColor color, char symbol);
-
-    public:
-        char getSymbol() const;
-        PieceColor getColor() const;
-        virtual vector<Coordinates> getMoves(Chessboard *board, const Coordinates &coord) = 0;
+        public:
+            PieceColor color;
+            char symbol;
+            char getSymbol() const;
+            PieceColor getColor() const;
+            virtual vector<Coordinates> getMoves(Chessboard *board, const Coordinates &coord) = 0;
     };
 }
 
