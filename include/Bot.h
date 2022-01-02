@@ -10,8 +10,7 @@
 #ifndef BOT_H
 #define BOT_H
 
-#include "Utilities.h"
-#include <array>
+
 #include "Player.h"
 
 
