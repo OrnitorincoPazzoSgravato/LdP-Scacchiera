@@ -21,8 +21,9 @@ namespace chessgame
         int y;
         string symbol;
 
-        Coordinates(int x, int y);
         Coordinates();
+        Coordinates(int x, int y);
+        Coordinates(string symbol);
     };
 }
 
