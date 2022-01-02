@@ -12,4 +12,15 @@ namespace chessgame
 
         this->symbol = col + row;
     }
+
+    Coordinates::Coordinates(string symbol)
+    {
+        this->symbol = symbol;
+
+        char col = symbol[0];
+        char row = symbol[1];
+
+        this->x = col - 'A';
+        this->y = row - '1';
+    }
 }
