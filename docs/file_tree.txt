@@ -1,0 +1,4 @@
+src/ (source for the application)
+lib/ (source for the application library *.cpp *.hpp)
+include/ (interface for the library *.h)
+doc/ (doxygen or any kind of documentation)

@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.8)
 
 set(${PROJECT_NAME} chessboard)
 set(${INCLUDE_DIRS} include)
-set(${SRC_FILES} src/Chessboard.cpp src/Piece.cpp src/Alfiere.cpp src/Cavallo.cpp src/Pedone.cpp src/Re.cpp src/Regina.cpp src/Torre.cpp src/Utilities.cpp)
+set(${SRC_FILES} lib/Chessboard.cpp lib/Piece.cpp lib/Alfiere.cpp lib/Cavallo.cpp lib/Pedone.cpp lib/Re.cpp lib/Regina.cpp lib/Torre.cpp lib/Utilities.cpp)
 
-project(${PROJECT_NAME})
+project(${PROJECT_NAME} VERSION 1.0)
 
 include_directories(${INCLUDE_DIRS})
 
