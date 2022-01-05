@@ -12,6 +12,7 @@
 
 #include "Utilities.h"
 #include <array>
+#include <iostream>
 
 
 
@@ -19,11 +20,12 @@ namespace chessgame
 {
     class Player
     {
-    protected:
         PieceColor pc;
+    protected:
         Player();
     public:
-        virtual std::array<Coordinates,2> think() = 0;
+        Player(const PieceColor&);
+        std::array<Coordinates,2>& think();
     };
     
 }

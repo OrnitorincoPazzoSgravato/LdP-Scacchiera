@@ -42,9 +42,9 @@ private:
     void initialize_blank_space();
 public:
     Chessboard();                                           //costruttore di default, inizializza la scacchiera
-    Piece * set_piece(const Coordinates&, Piece * );      //inserisce un pezzo senza controllarne la validità ( compito di game )    
-    Piece * get_piece(const Coordinates&);                   // restituisce il puntatore a un pezzo che si trova nelle coordinate
-    void capture (const Coordinates&, Piece *);           // permette la cattura di un pezzo, senza check 
+    Piece * set_piece(const Coordinates&, Piece * );        //inserisce un pezzo senza controllarne la validità ( compito di game )    
+    Piece * get_piece(const Coordinates&);                  // restituisce il puntatore a un pezzo che si trova nelle coordinate
+    void capture (const Coordinates&, Piece *);             //permette la cattura di un pezzo, senza check 
     std::string& snapshot();                                // esegue lo snapshot della scacchiera
     ~Chessboard();                                          //distruttore
 };
