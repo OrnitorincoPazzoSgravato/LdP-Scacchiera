@@ -17,13 +17,9 @@
 
 namespace chessgame
 {
-    class Bot : Player
-    {
-    public:
-        Bot(const PieceColor&);
-        std::array<Coordinates,2> think();
+    // note: it doesn't need new attributes and methods, as it inherits them from Player
+    class Bot : Player {
     };
-    
 }
 
 #endif

@@ -1,5 +1,5 @@
 #include "../include/Game.h";
 
-game::Game::Game() {
+chessgame::Game::Game() {
     
 }

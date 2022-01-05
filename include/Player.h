@@ -18,16 +18,13 @@
 
 namespace chessgame
 {
-    class Player
-    {
+    class Player {
         PieceColor pc;
-    protected:
-        Player();
-    public:
-        Player(const PieceColor&);
-        std::array<Coordinates,2>& think();
+        public:
+            Player();
+            Player(const PieceColor&);
+            std::array<Coordinates,2>& think();
     };
-    
 }
 
 #endif
