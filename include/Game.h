@@ -16,7 +16,7 @@ namespace chessgame {
 	/**
 	 * @brief classe che rappresenta lo svolgimento di una partita a scacchi.
 	 * Deve occuparsi dell'inizializzazione della partita, dello svolgimento dei turni,
-	 * del controllo della validià delle mosse e dell'applicazione delle regole speciali.
+	 * del controllo della validità delle mosse e dell'applicazione delle regole speciali.
 	 * Inoltre deve produrre un file di log di riepilogo delle mosse
 	 */
 	class Game {

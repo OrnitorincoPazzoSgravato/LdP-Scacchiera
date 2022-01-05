@@ -3,43 +3,8 @@
 
 namespace chessgame
 
-{
-    Chessboard::Chessboard()
-    {
-        initialize_black_pieces();      
-        initialize_white_pieces();        
-    } 
-        /*
-
-        @arg: Coordinates& c the cell of the matrix we want to occupy
-        @arg: Piece* p the pointer to the Piece we want to set
-
-        @return: Piece * a pointer to the initial content of the cell: if it was empty returns nullptr
-
-    */                                         
-    void Chessboard::set_piece(const Coordinates& c, Piece* p)
-    {
-        v[c.x][c.y].reset(p);
-
-    }
-        /*
-
-        @arg: Coordinates& c the cell of the matrix we want to get
-
-        @return: Piece * a pointer to the Piece in v(x,y), may return nullptr if there's no Piece
-
-    */         
-    Piece * Chessboard::get_piece(const Coordinates& c)
-    {
-        return v[c.x][c.y].get();
-    }
-    /*
-
-        This function create a snapshot of the state of the chessboard 
-
-        @return: string& a reference to a string
-
-    */            
+{                                   
+           
     std::string& Chessboard::snapshot()
     {
         string s;
@@ -63,13 +28,14 @@ namespace chessgame
     }
     /*
 
-        This private function initialize black pieces when the chessboard is created 
+        @brief: This private function initialize black pieces when the chessboard is created 
 
         @return: void
 
     */
     void Chessboard::initialize_black_pieces()
     {
+        // initialize other Pieces in free store 
         v[0][0].reset(new Torre(BLACK,'T'))  ;
         v[0][1].reset(new Cavallo(BLACK,'C'))  ;
         v[0][2].reset(new Alfiere(BLACK ,'A')) ;
@@ -78,9 +44,9 @@ namespace chessgame
         v[0][5].reset(new Alfiere(BLACK,'A'))  ;
         v[0][6].reset(new Cavallo(BLACK,'C'))  ;
         v[0][7].reset(new Torre(BLACK,'T'))  ;
+        //for loop to initialize Pedones
         for (int i = 0; i < COLUMNS; i++)
         {
-            /* code */
             v[1][i].reset(new Pedone(BLACK,'P'));
         }
             
@@ -94,10 +60,9 @@ namespace chessgame
     */
     void Chessboard::initialize_white_pieces()
     {
-        // for loop to inizialize Pedone
+        // for loop to inizialize Pedones
         for (int i = 0; i < COLUMNS; i++)
         {
-            /* code */
             v[6][i].reset(new Pedone(WHITE,'p'));
         }
         // initialize other Pieces in free store 

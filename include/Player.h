@@ -19,11 +19,26 @@
 namespace chessgame
 {
     class Player {
-        public:
+    public:
             PieceColor pc;
             Player();
-            Player(const PieceColor& p_color);
-            std::array<Coordinates,2>& think();
+            Player(const PieceColor& p_color)
+                :pc(p_color)
+            {}
+            /*
+
+            @brief: This function represents the act of thinking a move
+
+            @return: array<Coordinates,2> the original and final coordinates of the piece we want to move
+            */
+
+            std::array<Coordinates,2>& think()
+            {
+                string from,to;
+                std::cin >> from >> to;
+                return std::array<Coordinates,2> {Coordinates(from),Coordinates(to)
+            }
+    };
     };
 }
 
