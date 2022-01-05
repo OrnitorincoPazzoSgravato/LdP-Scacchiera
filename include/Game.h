@@ -20,7 +20,13 @@ namespace chessgame {
 	class Game {
 		chessgame::Chessboard board;
 		int n_moves;
-		chessgame::Player p1, p2;
+		std::unique_ptr<chessgame::Player> p1, p2;
+		/**
+		 * @brief Returns an array of both PieceColor's values in a randomic order
+		 * 
+		 * @return std::array<chessgame::PieceColor&, 2> 
+		 */
+		std::array<chessgame::PieceColor&, 2> getRandColors();
 		public:
 			/**
 			 * @brief Constructs a new Game object and initialize one human player and one bot player

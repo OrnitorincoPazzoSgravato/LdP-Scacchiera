@@ -10,10 +10,8 @@
 namespace chessgame
 {
     using std::array;
-
-    Player::Player(const PieceColor& p) 
-        :pc{p}
-    {}
+    Player::Player() {}
+    Player::Player(const PieceColor& p_color) : pc{p_color} {}
         /*
 
         This function represents the act of thinking a move

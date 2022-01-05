@@ -10,7 +10,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "Utilities.h"
+#include "./Utilities.h"
 #include <array>
 #include <iostream>
 
@@ -19,10 +19,10 @@
 namespace chessgame
 {
     class Player {
-        PieceColor pc;
         public:
+            PieceColor pc;
             Player();
-            Player(const PieceColor&);
+            Player(const PieceColor& p_color);
             std::array<Coordinates,2>& think();
     };
 }

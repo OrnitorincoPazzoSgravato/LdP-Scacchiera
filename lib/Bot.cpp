@@ -9,8 +9,8 @@
 
 namespace chessgame
 {
-    Bot::Bot(const PieceColor& p)
-    {}
+    Bot::Bot() : Player() {}
+    Bot::Bot(const PieceColor& p_color) : Player(p_color) {}
     /*
 
         This function represents the act of thinking a move
@@ -18,6 +18,5 @@ namespace chessgame
 
         @return: array<Coordinates,2> the original and final coordinates of the piece we want to move
     */
-    std::array<Coordinates,2> Bot::think()
-    {}
+    std::array<Coordinates,2>& Bot::think() {}
 }
