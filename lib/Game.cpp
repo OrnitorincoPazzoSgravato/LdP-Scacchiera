@@ -5,6 +5,7 @@
 
 #include <random>
 
+// private methods declaration
 std::array<chessgame::PieceColor&, 2> chessgame::Game::getRandColors() {
     std::array<chessgame::PieceColor&, 2> c_array; // declaration of the returned array
 
@@ -15,16 +16,41 @@ std::array<chessgame::PieceColor&, 2> chessgame::Game::getRandColors() {
     return c_array;
 }
 
-chessgame::Game::Game() {
+bool chessgame::Game::writeLog(const std::string& move) {
+    this->log_file << move << '\n';
+}
+
+bool chessgame::Game::isGameOver() {
+    // TBD
+    return false;
+}
+
+// constructors declaration
+chessgame::Game::Game() : n_moves{0} {
     std::array<chessgame::PieceColor&, 2> a_colors = this->getRandColors();
     this->p1 = std::make_unique<chessgame::Player>(new chessgame::Player(a_colors[0]));
     this->p2 = std::make_unique<chessgame::Player>(new chessgame::Bot(a_colors[1]));
 
     this->board = chessgame::Chessboard();
-    this->n_moves = 0;
 }
 
 chessgame::Game::Game(bool is_bot_match) : Game() {
     if(is_bot_match)
         this->p1.reset(new chessgame::Bot(p1.get()->pc));
+}
+
+// destructor declaration
+chessgame::Game::~Game() {
+    if(this->log_file.is_open()) this->log_file.close();
+}
+
+// public methods declaration
+void chessgame::Game::play() {
+    this->log_file.open("game_log.txt"); // open the log file
+
+    do {
+        // TBD
+    } while(!this->isGameOver());
+
+    this->log_file.close(); // closes the log file
 }
