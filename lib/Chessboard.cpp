@@ -1,14 +1,5 @@
-#include "../include/Piece.h"
+
 #include "../include/Chessboard.h"
-#include "../include/Alfiere.h"
-#include "../include/Cavallo.h"
-#include "../include/Pedone.h"
-#include "../include/Re.h"
-#include "../include/Regina.h"
-#include "../include/Pedone.h"
-#include "../include/Torre.h"
-#include <string>
-#include "../include/Utilities.h"
 
 namespace chessgame
 
@@ -18,33 +9,68 @@ namespace chessgame
         initialize_black_pieces();
         initialize_blank_space();       
         initialize_white_pieces();        
-    }                                        
-    void Chessboard::set_piece(const Coordinates c, Piece& p)
+    } 
+        /*
+
+        @arg: Coordinates& c the cell of the matrix we want to occupy
+        @arg: Piece* p the pointer to the Piece we want to set
+
+        @return: Piece * a pointer to the initial content of the cell: if it was empty returns nullptr
+
+    */                                         
+    Piece * Chessboard::set_piece(const Coordinates& c, Piece* p)
     {
-        v[c.x][c.y] = &p;
-    }     
-    Piece * Chessboard::get_piece(const Coordinates c)
+        Piece * pointer {v[c.x][c.y]};
+        v[c.x][c.y] = p;
+        return pointer;
+
+    }
+        /*
+
+        @arg: Coordinates& c the cell of the matrix we want to get
+
+        @return: Piece * a pointer to the Piece in v(x,y), may return nullptr if there's no Piece
+
+    */         
+    Piece * Chessboard::get_piece(const Coordinates& c)
     {
         return v[c.x][c.y];
-    }                
+    }
+    /*
+
+        This function create a snapshot of the state of the chessboard 
+
+        @return: string& a reference to a string
+
+    */            
     std::string& Chessboard::snapshot()
     {
         string s;
-        for (int i = 2; i < 6; i++)
+        // for loop for rows
+        int num {8};
+        for (int i = 0; i < ROWS; i++)
         {
-            /* code */
+            s += num + " ";
+            // for loop columns
             for (int j = 0; i < COLUMNS; j++)
             {
-                /* code */
                 Piece * p = v[i][j];
-                if (p == nullptr) s += " ";
-                else s += p->getSymbol();
+                if (p) s += p->getSymbol();
+                else s += " ";
             }
             s += "\n";
-            
+            num--;           
         }
+        s += "\nABCDEFGH";
         return s;
     }
+    /*
+
+        This private function initialize black pieces when the chessboard is created 
+
+        @return: void
+
+    */
     void Chessboard::initialize_black_pieces()
     {
         v[0][0] = new Torre(BLACK,'T');
@@ -62,13 +88,22 @@ namespace chessgame
         }
             
     }
+    /*
+
+        This private function initialize white pieces when the chessboard is created 
+
+        @return: void
+
+    */
     void Chessboard::initialize_white_pieces()
     {
+        // for loop to inizialize Pedone
         for (int i = 0; i < COLUMNS; i++)
         {
             /* code */
             v[6][i] = new Pedone(WHITE,'p');
         }
+        // initialize other Pieces in free store 
         v[7][0]  = new Torre(WHITE,'t');
         v[7][1] = new Cavallo(WHITE,'c');
         v[7][2] = new Alfiere(WHITE ,'a');
@@ -79,20 +114,43 @@ namespace chessgame
         v[7][7] = new Torre(WHITE,'t');
         
     }
+    /*
+
+        This private function sets blank space when the chessboard is created 
+
+        @return: void
+
+    */
     void Chessboard::initialize_blank_space()
     {
-        int i {2};
-        for (int j = 0; j < COLUMNS || i<6; j++)
+        // for loop rows, from the third to the sixth
+        for (int i = 2; i < 6 ; i++)
         {
-            /* code */
-            if (j == 7) 
+            // for loop for columns
+            for (int j = 0; j < COLUMNS; j++)
             {
-                j =0;
-                i++;
+                v[i][j] = nullptr;
             }
-            v[i][j] = nullptr;
-
         }
+    }
+    /*
+
+        This function implements the act of capture
+
+        @arg: const Coordinates& c  coordinates of the piece we want to be captured
+        @arg: Piece * pi piece we want to capture
+
+        @return: void
+
+    */
+    void Chessboard::capture(const Coordinates& c , Piece * pi)
+    {
+        // get the pointer to the piece we want to be captured
+        Piece* piece {get_piece(c)};
+        // set the new piece 
+        set_piece(c,pi);
+        // delete the captured piece
+        delete piece;
     }
 
     Chessboard::~Chessboard()
@@ -103,7 +161,8 @@ namespace chessgame
             for (int j = 0; i < COLUMNS; j++)
             {
                 /* code */
-                delete v[i][j]; 
+                Piece * des {v[i][j]};
+                if (des) delete des;
             }
             
         }
