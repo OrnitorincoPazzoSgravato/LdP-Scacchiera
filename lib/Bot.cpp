@@ -19,4 +19,8 @@ namespace chessgame
         @return: array<Coordinates,2> the original and final coordinates of the piece we want to move
     */
     std::array<Coordinates,2>& Bot::think() {}
+    Piece* Bot::getPromotionTarget() {
+        // deve ritornare a caso un pezzo tra quelli possibili per una promozione
+        return nullptr;
+    }
 }

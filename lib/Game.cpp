@@ -1,3 +1,14 @@
+/**
+ * @file Game.cpp
+ * @author Riccardo Zuech
+ * @brief 
+ * @version 0.1
+ * @date 2022-01-06
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
 #include "../include/Game.h";
 
 #include <random>
@@ -33,6 +44,22 @@ namespace gameplay {
         return false; // default return value
     }
 
+    char Game::promotion(const chessgame::Coordinates& coord) {
+        // piece to check for promotion
+        chessgame::Piece *p = this->board.get_piece(coord);
+        // a white paw on the top row or a black paw on the bottom row
+        if((p->getSymbol() == 'p' && coord.x == 0) || (p->getSymbol() == 'P' && coord.x == 7)) {
+
+			p = nullptr; // good practice. Now p isn't needed anymore
+
+			// "asks" the player for the promotion target and proceeds to update the board
+            chessgame::Piece *new_p = (this->current_turn ? this->p1 : this->p2)->getPromotionTarget();
+			this->board.set_piece(coord, new_p);
+			return new_p->getSymbol(); // successful promotion
+        }
+        else return 0; // promotion not required
+    }
+
     // constructors declaration
     Game::Game() : n_moves{0} {
         std::array<chessgame::PieceColor&, 2> a_colors = this->getRandColors();
@@ -57,9 +84,7 @@ namespace gameplay {
         this->log_file.open("game_log.txt"); // open the log file
 
         do {
-            // selected piece to move
-            chessgame::Piece *p;
-            // will hold the string representing the player move
+            // holds the string representing the move to be logged
             std::string log_move;
 
             bool invalid_move = true;
@@ -67,8 +92,8 @@ namespace gameplay {
                 // player's move for its turn
                 std::array<chessgame::Coordinates,2>& move = this->current_turn ? this->p1->think() : this->p2->think();
 
-                // retrieves a pointer to the piece being moved
-                p = this->board.get_piece(move[0]);
+                // selected piece to move
+                chessgame::Piece *p = this->board.get_piece(move[0]);
 
                 // selected piece's default legal moves
                 std::vector<chessgame::Coordinates> legal_moves_vec = p->getMoves(this->board, move[1]);
@@ -85,7 +110,9 @@ namespace gameplay {
                 if(!invalid_move) {
                     log_move = move[0].symbol + ' ' + move[1].symbol;   // generates the log move for the current move
 
-                    // PROMOZIONE TBD
+                    char promotion_input = this->promotion(move[1]); // calls the function that manage the special rule "promotion"
+					if(promotion_input != 0) // successful promotion, as per documentation
+						log_move += ("\n" + promotion_input);
                 }
 
             } while(invalid_move); // this cycle keeps going until a valid move has been entered

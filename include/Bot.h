@@ -33,6 +33,7 @@ namespace chessgame
              */
             Bot(const PieceColor& p_color);
             std::array<Coordinates,2>& think();
+            Piece* getPromotionTarget();
     };
 }
 

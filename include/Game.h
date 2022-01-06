@@ -1,11 +1,16 @@
+/**
+ * @file Game.h
+ * @author Riccardo Zuech
+ * @brief 
+ * @version 0.1
+ * @date 2022-01-06
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
 #ifndef GAME
 #define GAME
-
-/**
- * @author Riccardo Zuech
- * @details TBD
- * 
-*/
 
 #include <fstream>
 
@@ -47,6 +52,13 @@ namespace gameplay {
 		 * @return false if game can continue
 		 */
 		bool isGameOver();
+		/**
+		 * @brief checks if the piece at the provided coordinates is promotable. If it is proceeds to it.
+		 * 
+		 * @param coord coordinate of the piece to check
+		 * @return char representing the promoted piece, null character if the promotion didn't happen
+		 */
+		char promotion(const chessgame::Coordinates& coord);
 		public:
 			/**
 			 * @brief A full bot game is considered invalid after this number of moves without a winner

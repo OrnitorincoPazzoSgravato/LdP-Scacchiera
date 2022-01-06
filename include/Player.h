@@ -11,6 +11,8 @@
 #define PLAYER_H
 
 #include "./Utilities.h"
+#include "./Piece.h"
+
 #include <array>
 #include <iostream>
 
@@ -36,6 +38,7 @@ namespace chessgame
                 std::cin >> from >> to;
                 return std::array<Coordinates,2> {Coordinates(from),Coordinates(to)};
             }
+            Piece* getPromotionTarget();
     };
 }
 
