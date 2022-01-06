@@ -7,12 +7,12 @@
  * 
 */
 
+#include <fstream>
+
 #include <Chessboard.h>
 #include <Player.h>
 
-#include <fstream>
-
-namespace chessgame {
+namespace gameplay {
 	/**
 	 * @brief classe che rappresenta lo svolgimento di una partita a scacchi.
 	 * Deve occuparsi dell'inizializzazione della partita, dello svolgimento dei turni,
