@@ -41,13 +41,18 @@ namespace chessgame {
 		bool writeLog(const std::string& move);
 		/**
 		 * @brief checks the current state of the game to see if the game has ended/should end
+		 * If it's a full bot game, then it always ends in certain amount of moves declared in kBot_moves
 		 * 
 		 * @return true if game over
 		 * @return false if game can continue
 		 */
 		bool isGameOver();
-
 		public:
+			/**
+			 * @brief A full bot game is considered invalid after this number of moves without a winner
+			 * 
+			 */
+			static const int kBot_moves = 100;
 			/**
 			 * @brief Constructs a new Game object and initialize one human player and one bot player
 			 * 
