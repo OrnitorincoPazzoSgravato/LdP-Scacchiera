@@ -18,7 +18,7 @@
 namespace chessgame
 {
     class Player {
-    public:
+        public:
             PieceColor pc;
             Player();
             /*
@@ -42,7 +42,10 @@ namespace chessgame
                 std::cin >> from >> to;
                 return std::array<Coordinates,2> {Coordinates(from),Coordinates(to)};
             }
+<<<<<<< HEAD
     
+=======
+>>>>>>> 030f51f65c4736768c000bfdd29141a0b00d2d02
     };
 }
 

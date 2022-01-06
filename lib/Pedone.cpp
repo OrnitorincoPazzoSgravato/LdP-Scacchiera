@@ -24,7 +24,7 @@ namespace chessgame
         @return: vector<Coordinates> of the possible moves of the current piece
 
     */
-    vector<Coordinates> Pedone::getMoves(Chessboard *board, const Coordinates &coord)
+    vector<Coordinates> Pedone::getMoves(Chessboard &board, const Coordinates &coord)
     {
         vector<Coordinates> moves;
 
@@ -47,7 +47,7 @@ namespace chessgame
         if (y + y_offset >= 0 && y + y_offset < ROWS)
         {
             // Control if the end position is empty (only vertical movement)
-            if (board->get_piece(Coordinates(x + x_offset, y + y_offset)) == nullptr)
+            if (board.get_piece(Coordinates(x + x_offset, y + y_offset)) == nullptr)
             {
                 moves.push_back(Coordinates(x, y + y_offset));
             }
@@ -60,7 +60,7 @@ namespace chessgame
 
                 // Control if the end position is an enemy (only diagonal movement)
 
-                if (board->get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor() && board->get_piece(Coordinates(x + x_offset, y + y_offset)) != nullptr)
+                if (board.get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor() && board.get_piece(Coordinates(x + x_offset, y + y_offset)) != nullptr)
                 {
                     moves.push_back(Coordinates(x + x_offset, y + y_offset));
                 }
@@ -72,7 +72,7 @@ namespace chessgame
 
                 // Control if the end position is an enemy (only diagonal movement)
 
-                if (board->get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor() && board->get_piece(Coordinates(x + x_offset, y + y_offset)) != nullptr)
+                if (board.get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor() && board.get_piece(Coordinates(x + x_offset, y + y_offset)) != nullptr)
                 {
                     moves.push_back(Coordinates(x - 1, y + y_offset));
                 }
