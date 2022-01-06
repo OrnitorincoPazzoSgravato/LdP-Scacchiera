@@ -10,11 +10,10 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "./Utilities.h"
 #include <array>
 #include <iostream>
 
-
+#include "./Utilities.h"
 
 namespace chessgame
 {
@@ -22,6 +21,11 @@ namespace chessgame
     public:
             PieceColor pc;
             Player();
+            /*
+            @brief: copy constructor is disabled : a player must not be cloned
+
+            */
+            Player(Player&) = delete;
             Player(const PieceColor& p_color)
                 :pc(p_color)
             {}
@@ -36,9 +40,9 @@ namespace chessgame
             {
                 string from,to;
                 std::cin >> from >> to;
-                return std::array<Coordinates,2> {Coordinates(from),Coordinates(to)
+                return std::array<Coordinates,2> {Coordinates(from),Coordinates(to)};
             }
-    };
+    
     };
 }
 

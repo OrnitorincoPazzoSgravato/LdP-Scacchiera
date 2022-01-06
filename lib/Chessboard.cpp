@@ -5,7 +5,7 @@ namespace chessgame
 
 {                                   
            
-    std::string& Chessboard::snapshot()
+    string& Chessboard::snapshot()
     {
         string s;
         // for loop rows
