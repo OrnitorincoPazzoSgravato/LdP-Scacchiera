@@ -8,10 +8,9 @@
 #ifndef REPLAY_H
 #define REPLAY_H
 
-#include "Chessboard.h"
 #include <iostream>
-#include <istream>
-#include <string>
+#include "Chessboard.h"
+
 
 namespace chessgame 
 {
@@ -20,7 +19,7 @@ namespace chessgame
         Chessboard cboard;    
     public:
         Replay();
-        void print_onscreen(const std::string&);
+        void print_onscreen(const string&);
         void print_on_file(std::ifstream& ,std::ofstream&);
     };
 }

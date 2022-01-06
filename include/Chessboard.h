@@ -9,6 +9,9 @@
 #ifndef CHESSBOARD_H
 #define CHESSBOARD_H
 
+
+#include <memory>
+
 #include "../include/Alfiere.h"
 #include "../include/Cavallo.h"
 #include "../include/Pedone.h"
@@ -16,10 +19,6 @@
 #include "../include/Regina.h"
 #include "../include/Pedone.h"
 #include "../include/Torre.h"
-#include <string>
-#include <memory>
-
-
 
 namespace chessgame
 
@@ -39,6 +38,13 @@ public:
         initialize_black_pieces();      
         initialize_white_pieces();
     }
+    /*
+    @brief: copy constructor is disabled : why would you need two chessboards?
+
+    */
+
+    Chessboard(Chessboard&) = delete;
+
     /*
         @brief: set the cell [c.x][c.y] with p
 
@@ -71,7 +77,7 @@ public:
         @return: string& a reference to a string
 
     */                   
-    std::string& snapshot();                                
+    string& snapshot();                                
 };
 }
 
