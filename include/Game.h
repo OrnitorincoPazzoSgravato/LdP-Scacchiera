@@ -39,7 +39,7 @@ namespace chessgame {
 		 */
 		bool writeLog(const std::string& move);
 		/**
-		 * @brief checks the current state of the game to see if the game has ended
+		 * @brief checks the current state of the game to see if the game has ended/should end
 		 * 
 		 * @return true if game over
 		 * @return false if game can continue

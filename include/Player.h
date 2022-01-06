@@ -14,12 +14,10 @@
 #include <array>
 #include <iostream>
 
-
-
 namespace chessgame
 {
     class Player {
-    public:
+        public:
             PieceColor pc;
             Player();
             Player(const PieceColor& p_color)
@@ -36,9 +34,8 @@ namespace chessgame
             {
                 string from,to;
                 std::cin >> from >> to;
-                return std::array<Coordinates,2> {Coordinates(from),Coordinates(to)
+                return std::array<Coordinates,2> {Coordinates(from),Coordinates(to)};
             }
-    };
     };
 }
 
