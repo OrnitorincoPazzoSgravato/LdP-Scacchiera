@@ -1,0 +1,4 @@
+1) attenzione all'interazione con il costruttore protected di piece:
+    "A protected constructor means that only derived members can construct instances of the class (and derived instances) using that constructor. This sounds a bit chicken-and-egg, but is sometimes useful when implementing class factories."
+    Questo significa che è ottimo per evitare accidentali istanze, ma bisogna comunque chiamarlo nei costruttori delle classi derivate
+    Inoltre quello di default non può essere protected

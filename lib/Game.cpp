@@ -49,7 +49,18 @@ void chessgame::Game::play() {
     this->log_file.open("game_log.txt"); // open the log file
 
     do {
-        // TBD
+
+        // retrieves the player's move for its turn
+        std::array<chessgame::Coordinates,2>& move = this->current_turn ? this->p1->think() : this->p2->think();
+
+        // retrieves the selected piece
+        chessgame::Piece *p = this->board.get_piece(move[0]);
+
+        // gets the piece's default legal moves
+        p->getMoves(this->board, move[1]);
+
+        this->n_moves++; // increse number of moves
+        this->current_turn = !this->current_turn; // alternates turns
     } while(!this->isGameOver());
 
     this->log_file.close(); // closes the log file

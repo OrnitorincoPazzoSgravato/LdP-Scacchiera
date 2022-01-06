@@ -29,7 +29,7 @@ namespace chessgame
         @return: vector<Coordinates> of the possible moves of the current piece
 
     */
-    vector<Coordinates> Alfiere::getMoves(Chessboard *board, const Coordinates &coord)
+    vector<Coordinates> Alfiere::getMoves(Chessboard &board, const Coordinates &coord)
     {
         vector<Coordinates> moves;
 
@@ -48,7 +48,7 @@ namespace chessgame
         return moves;
     }
 
-    void Alfiere::diagonalFinder(Chessboard *board, const Coordinates &coord, vector<Coordinates> &moves, int h_versor, int v_versor)
+    void Alfiere::diagonalFinder(Chessboard &board, const Coordinates &coord, vector<Coordinates> &moves, int h_versor, int v_versor)
     {
         int x = coord.x;
         int y = coord.y;
@@ -56,11 +56,11 @@ namespace chessgame
         int y_offset = 0;
         while (x + x_offset >= 0 && x + x_offset < COLUMNS && y + y_offset >= 0 && y + y_offset < ROWS)
         {
-            if (board->get_piece(Coordinates(x + x_offset, y + y_offset)) == nullptr)
+            if (board.get_piece(Coordinates(x + x_offset, y + y_offset)) == nullptr)
             {
                 moves.push_back(Coordinates(x + x_offset, y + y_offset));
             }
-            else if (board->get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor())
+            else if (board.get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor())
             {
                 moves.push_back(Coordinates(x + x_offset, y + y_offset));
                 break;

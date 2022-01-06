@@ -26,11 +26,11 @@ namespace chessgame
     public:
         Torre();
         Torre(PieceColor color, const char symbol);
-        vector<Coordinates> getMoves(Chessboard *board, const Coordinates &coord) override;
+        vector<Coordinates> getMoves(Chessboard &board, const Coordinates &coord) override;
 
     private:
-        void horizontalFinder(Chessboard *board, const Coordinates &coord, vector<Coordinates> &moves, int versor);
-        void verticalFinder(Chessboard *board, const Coordinates &coord, vector<Coordinates> &moves, int versor);
+        void horizontalFinder(Chessboard &board, const Coordinates &coord, vector<Coordinates> &moves, int versor);
+        void verticalFinder(Chessboard &board, const Coordinates &coord, vector<Coordinates> &moves, int versor);
     };
 
 }
