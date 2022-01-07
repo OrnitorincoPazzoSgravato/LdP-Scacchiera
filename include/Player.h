@@ -20,16 +20,16 @@ namespace chessgame
 {
     class Player {
         public:
-            PieceColor pc;
+            PieceColor pieceColor;
             Player();
             Player(const PieceColor& p_color)
-                :pc(p_color)
+                :pieceColor(p_color)
             {}
-            /*
-
-            @brief: This function represents the act of thinking a move
-
-            @return: array<Coordinates,2> the original and final coordinates of the piece we want to move
+            /**
+            *
+            *@brief: This function represents the act of thinking a move
+            *   
+            *@return: array<Coordinates,2> the original and final coordinates of the piece we want to move
             */
 
             std::array<Coordinates,2>& think()
