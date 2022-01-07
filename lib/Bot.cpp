@@ -11,16 +11,16 @@ namespace chessgame
 {
     Bot::Bot() : Player() {}
     Bot::Bot(const PieceColor& p_color) : Player(p_color) {}
-    /*
+    /**
 
-        This function represents the act of thinking a move
-        Overloads the function Player::think() and randomize it
-
+        @brief: This function represents the act of thinking a move. Overloads the function Player::think() and randomize it
         @return: array<Coordinates,2> the original and final coordinates of the piece we want to move
     */
     std::array<Coordinates,2>& Bot::think() {}
     Piece* Bot::getPromotionTarget() {
-        // deve ritornare a caso un pezzo tra quelli possibili per una promozione
-        return nullptr;
+        char c = '0';
+        if (pieceColor == WHITE) c = 'd';
+        else c = 'D'; 
+        return new Regina(pieceColor,c);
     }
 }
