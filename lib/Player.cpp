@@ -18,10 +18,10 @@ namespace chessgame {
     Piece* Player::getPromotionTarget() {
         // array that stores the allowed target promotion symbols
         std::array<char, 4> allowed_symbols;
-        if(this->pc == PieceColor::BLACK) {
-            allowed_symbols = {'T', 'C', 'A', 'Q'};
+        if(this->pieceColor == PieceColor::BLACK) {
+            allowed_symbols = {'T', 'C', 'A', 'D'};
         } else {
-            allowed_symbols = {'t', 'c', 'a', 'q'};
+            allowed_symbols = {'t', 'c', 'a', 'd'};
         }
         // used later to promote to the correct derived class of Piece
         int target_index;
@@ -42,13 +42,13 @@ namespace chessgame {
         // switch statement used to return the choosen derived class of Piece
         switch(target_index) {
             case 0:
-                return new Torre(this->pc, allowed_symbols[target_index]);
+                return new Torre(this->pieceColor, allowed_symbols[target_index]);
             case 1:
-                return new Cavallo(this->pc, allowed_symbols[target_index]);
+                return new Cavallo(this->pieceColor, allowed_symbols[target_index]);
             case 2:
-                return new Alfiere(this->pc, allowed_symbols[target_index]);
+                return new Alfiere(this->pieceColor, allowed_symbols[target_index]);
             case 3:
-                return new Regina(this->pc, allowed_symbols[target_index]);
+                return new Regina(this->pieceColor, allowed_symbols[target_index]);
             default:
                 return nullptr; // defaults to nullptr for error-checking
         }
