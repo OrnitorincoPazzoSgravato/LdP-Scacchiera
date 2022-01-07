@@ -78,6 +78,12 @@ namespace gameplay {
 		 * @return std::string the move to be logged
 		 */
 		std::string legalTurnCleanUp(std::array<chessgame::Coordinates, 2> move, chessgame::Piece& p_coord1, chessgame::Piece* p_coord2);
+		/**
+		 * @brief updates the has_already_moved attribute of a paw, king or tower
+		 * 
+		 * @param p the piece to update, it can be a nullptr
+		 */
+		void updateFirstMove(chessgame::Piece* p);
 
 		public:
 			/**

@@ -82,6 +82,15 @@ namespace gameplay {
 		return 0; // promotion not required
     }
 
+	void Game::updateFirstMove(chessgame::Piece* p) {
+		if(p == nullptr) return;
+		// symbol of the piece to update
+		const char kPiece_symbol = p->getSymbol();
+		if(kPiece_symbol == 'r' || kPiece_symbol == 'R') dynamic_cast<chessgame::Re*>(p)->has_already_moved = true;
+		else if(kPiece_symbol == 'p' || kPiece_symbol == 'P') dynamic_cast<chessgame::Pedone*>(p)->has_already_moved = true;
+		else if(kPiece_symbol == 't' || kPiece_symbol == 'T') dynamic_cast<chessgame::Torre*>(p)->has_already_moved = true;
+	}
+
 	std::string Game::legalTurnCleanUp(std::array<chessgame::Coordinates, 2> move, chessgame::Piece& p) {
 		return this->legalTurnCleanUp(move, p, nullptr);
 	}
@@ -98,12 +107,8 @@ namespace gameplay {
 		this->board.set_piece(move[0], p_coord2);
 
 		// updates "has_already_moved" attribute for paws, kings and towers
-		if(kPiece_symbol == 'r' || kPiece_symbol == 'R') dynamic_cast<chessgame::Re&>(p_coord1).has_already_moved = true;
-		else if(kPiece_symbol == 'p' || kPiece_symbol == 'P') dynamic_cast<chessgame::Pedone&>(p_coord1).has_already_moved = true;
-		else if(kPiece_symbol == 't' || kPiece_symbol == 'T') dynamic_cast<chessgame::Torre&>(p_coord1).has_already_moved = true;
-
-		// non serve aggiornare la variabile "has_already_moved" della torre, in quanto viene comunque aggiornata quella del re per impedire altri arrocchi"
-		// viceversa torre -> re
+		this->updateFirstMove(&p_coord1);
+		this->updateFirstMove(p_coord2);
 
 		char promotion_input = this->promotion(move[1]); // calls the function that manage the special rule "promotion"
 		if(promotion_input != 0) // successful promotion, as per documentation
@@ -145,14 +150,41 @@ namespace gameplay {
 					if(invalid_move) {
 						// TBD
 
-						// per l'arrocco verificare sel il re è mosso nella posizione della torre
-						// o la torre nella posizione del re
-						// inoltre controllo se ci stanno altri pezzi in mezzo
-						// se non si sono mossi ovviamente stanno nelle posizioni originali (+ check nel caso siano tornati)
+						// destination's piece
+               			chessgame::Piece *dest_p = this->board.get_piece(move[1]);
+						// special rule: "arrocco"
+						if(dest_p != nullptr && p->getColor() == dest_p->getColor()) { // not a nullptr and same color
+							const char kDest_p_symbol = dest_p->getSymbol();
+							bool p_Is_King = kPiece_symbol == 'r' || kPiece_symbol == 'R';
+							bool p_Is_Tower = kPiece_symbol == 't' || kPiece_symbol == 'T';
+							bool dest_Is_King = kDest_p_symbol == 'r' || kDest_p_symbol == 'R';
+							bool dest_Is_Tower = kDest_p_symbol == 't' || kDest_p_symbol == 'r';
 
+							bool king_in_tower = p_Is_King && dest_Is_Tower;
+							bool tower_in_king = p_Is_Tower && dest_Is_King;
+
+							if(king_in_tower || tower_in_king) {
+								bool is_tower_first_move = dynamic_cast<chessgame::Torre*>(dest_p)->has_already_moved;
+								bool is_king_first_move = dynamic_cast<chessgame::Re*>(dest_p)->has_already_moved;
+								if(is_king_first_move && is_tower_first_move) {
+									const int kX = move[0].x; // same row as they still have to make a move
+
+									bool obstacles = false;
+									int index = move[0].y < move[1].y ? move[0].y : move[1].y;
+									int end_index = move[0].y < move[1].y ? move[1].y : move[0].y;
+									for(; index <= end_index && !obstacles; index++) {
+										if(this->board.get_piece(chessgame::Coordinates(kX, index)) != nullptr) obstacles == true;
+									}
+									
+									// if there are no obstacles then the "arrocco" is legal
+									if(!obstacles) this->legalTurnCleanUp(move, *p, dest_p);
+								}
+							}
+						}
 						
+						dest_p = nullptr; // clears dest_p pointer after use
 					}
-					p = nullptr;
+					p = nullptr; // clears p pointer after use
 				}
 
             } while(invalid_move); // this cycle keeps going until a valid move has been entered
