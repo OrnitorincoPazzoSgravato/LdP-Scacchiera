@@ -30,7 +30,7 @@ namespace gameplay {
 
     Game::Game(bool is_bot_match) : Game() {
         if(is_bot_match)
-            this->p1.reset(new chessgame::Bot(p1.get()->pc));
+            this->p1.reset(new chessgame::Bot(p1.get()->pieceColor));
     }
 
     // destructor declaration
