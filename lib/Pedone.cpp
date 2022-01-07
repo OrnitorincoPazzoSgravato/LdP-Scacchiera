@@ -9,9 +9,6 @@
 
 namespace chessgame
 {
-    Pedone::Pedone(PieceColor color, const char symbol) : Piece(color, symbol)
-    {
-    }
 
     /*
         This method returns the possible moves of the piece.

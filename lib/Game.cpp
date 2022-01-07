@@ -18,6 +18,25 @@
 
 
 namespace gameplay {
+	
+    // constructors declaration
+    Game::Game() : n_moves{0} {
+        std::array<chessgame::PieceColor&, 2> a_colors = this->getRandColors();
+        this->p1 = std::make_unique<chessgame::Player>(new chessgame::Player(a_colors[0]));
+        this->p2 = std::make_unique<chessgame::Player>(new chessgame::Bot(a_colors[1]));
+
+        this->board = chessgame::Chessboard();
+    }
+
+    Game::Game(bool is_bot_match) : Game() {
+        if(is_bot_match)
+            this->p1.reset(new chessgame::Bot(p1.get()->pc));
+    }
+
+    // destructor declaration
+    Game::~Game() {
+        if(this->log_file.is_open()) this->log_file.close();
+    }
 
     // private methods declaration
     std::array<chessgame::PieceColor&, 2> Game::getRandColors() {
@@ -55,29 +74,43 @@ namespace gameplay {
 			// "asks" the player for the promotion target and proceeds to update the board
             chessgame::Piece *new_p = (this->current_turn ? this->p1 : this->p2)->getPromotionTarget();
 			this->board.set_piece(coord, new_p);
+
+			new_p = nullptr;
 			return new_p->getSymbol(); // successful promotion
         }
-        else return 0; // promotion not required
+		p = nullptr;
+		return 0; // promotion not required
     }
 
-    // constructors declaration
-    Game::Game() : n_moves{0} {
-        std::array<chessgame::PieceColor&, 2> a_colors = this->getRandColors();
-        this->p1 = std::make_unique<chessgame::Player>(new chessgame::Player(a_colors[0]));
-        this->p2 = std::make_unique<chessgame::Player>(new chessgame::Bot(a_colors[1]));
+	std::string Game::legalTurnCleanUp(std::array<chessgame::Coordinates, 2> move, chessgame::Piece& p) {
+		return this->legalTurnCleanUp(move, p, nullptr);
+	}
 
-        this->board = chessgame::Chessboard();
-    }
+	std::string Game::legalTurnCleanUp(std::array<chessgame::Coordinates, 2> move, chessgame::Piece& p_coord1, chessgame::Piece* p_coord2) {
+		// the log move for the current move
+		std::string log_move = move[0].symbol + ' ' + move[1].symbol;
 
-    Game::Game(bool is_bot_match) : Game() {
-        if(is_bot_match)
-            this->p1.reset(new chessgame::Bot(p1.get()->pc));
-    }
+		// symbol of the piece to move
+		const char kPiece_symbol = p_coord1.getSymbol();
+		
+		// here the piece is finally moved
+		this->board.set_piece(move[1], &p_coord1);
+		this->board.set_piece(move[0], p_coord2);
 
-    // destructor declaration
-    Game::~Game() {
-        if(this->log_file.is_open()) this->log_file.close();
-    }
+		// updates "has_already_moved" attribute for paws, kings and towers
+		if(kPiece_symbol == 'r' || kPiece_symbol == 'R') dynamic_cast<chessgame::Re&>(p_coord1).has_already_moved = true;
+		else if(kPiece_symbol == 'p' || kPiece_symbol == 'P') dynamic_cast<chessgame::Pedone&>(p_coord1).has_already_moved = true;
+		else if(kPiece_symbol == 't' || kPiece_symbol == 'T') dynamic_cast<chessgame::Torre&>(p_coord1).has_already_moved = true;
+
+		// non serve aggiornare la variabile "has_already_moved" della torre, in quanto viene comunque aggiornata quella del re per impedire altri arrocchi"
+		// viceversa torre -> re
+
+		char promotion_input = this->promotion(move[1]); // calls the function that manage the special rule "promotion"
+		if(promotion_input != 0) // successful promotion, as per documentation
+			log_move += ("\n" + promotion_input);
+
+		return log_move;
+	}
 
     // public methods declaration
     void Game::play() {
@@ -95,25 +128,32 @@ namespace gameplay {
                 // selected piece to move
                 chessgame::Piece *p = this->board.get_piece(move[0]);
 
-                // selected piece's default legal moves
-                std::vector<chessgame::Coordinates> legal_moves_vec = p->getMoves(this->board, move[1]);
-                for(int i = 0; i < legal_moves_vec.size(); i++) {
-                    if(move[1] == legal_moves_vec[i]) invalid_move = false; // if the move has been found, then it must be valid
-                }
+				// if we're trying to move a non-existing piece obviously it's an invalid move
+				if(p != nullptr) {
+					// symbol of the piece to move
+					const char kPiece_symbol = p->getSymbol();
 
-                // the block below checks for potential special rules moves if it's *not* a defaultly  allowed one
-                if(invalid_move) {
-                    // TBD
-                }
+					// selected piece's default legal moves
+					std::vector<chessgame::Coordinates> legal_moves_vec = p->getMoves(this->board, move[1]);
+					for(int i = 0; i < legal_moves_vec.size(); i++) {
+						if(move[1] == legal_moves_vec[i]) invalid_move = false; // if the move has been found, then it must be valid
+					}
 
-                // block used to call "clean-up functions": functions to be called only when a move is finally valid
-                if(!invalid_move) {
-                    log_move = move[0].symbol + ' ' + move[1].symbol;   // generates the log move for the current move
+					if(!invalid_move) log_move = this->legalTurnCleanUp(move, *p); // valid call as we are sure that p is not a nullptr
 
-                    char promotion_input = this->promotion(move[1]); // calls the function that manage the special rule "promotion"
-					if(promotion_input != 0) // successful promotion, as per documentation
-						log_move += ("\n" + promotion_input);
-                }
+					// the block below checks for potential special rules moves if it's *not* a defaultly  allowed one
+					if(invalid_move) {
+						// TBD
+
+						// per l'arrocco verificare sel il re è mosso nella posizione della torre
+						// o la torre nella posizione del re
+						// inoltre controllo se ci stanno altri pezzi in mezzo
+						// se non si sono mossi ovviamente stanno nelle posizioni originali (+ check nel caso siano tornati)
+
+						
+					}
+					p = nullptr;
+				}
 
             } while(invalid_move); // this cycle keeps going until a valid move has been entered
 

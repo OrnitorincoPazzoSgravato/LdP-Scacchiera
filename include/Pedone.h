@@ -22,12 +22,11 @@ namespace chessgame
     */
     class Pedone : public Piece
     {
-    private:
-        bool is_already_moved;
 
     public:
-        Pedone();
-        Pedone(PieceColor color, const char symbol);
+        bool has_already_moved;
+        Pedone() : has_already_moved{false}, Piece() {};
+        Pedone(PieceColor color, const char symbol) : has_already_moved{false}, Piece(color, symbol) {}
         vector<Coordinates> getMoves(Chessboard &board, const Coordinates &coord) override;
     };
 

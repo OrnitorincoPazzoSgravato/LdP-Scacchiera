@@ -24,8 +24,9 @@ namespace chessgame
     {
 
     public:
-        Torre();
-        Torre(PieceColor color, const char symbol);
+        bool has_already_moved;
+        Torre() : has_already_moved{false}, Piece() {};
+        Torre(PieceColor color, const char symbol) : has_already_moved{false}, Piece(color, symbol) {}
         vector<Coordinates> getMoves(Chessboard &board, const Coordinates &coord) override;
 
     private:

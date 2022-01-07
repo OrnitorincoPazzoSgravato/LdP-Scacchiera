@@ -7,16 +7,7 @@
 #include "../include/Re.h"
 
 namespace chessgame
-{
-
-    Re::Re(PieceColor color, const char symbol) : Piece(color, symbol)
-    {
-    }
-
-    Re::Re() : Piece()
-    {
-    }
-
+{   
     /*
 
         This method returns the possible moves of the piece.

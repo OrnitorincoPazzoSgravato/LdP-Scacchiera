@@ -9,14 +9,6 @@
 namespace chessgame
 {
 
-    Torre::Torre(PieceColor color, const char symbol) : Piece(color, symbol)
-    {
-    }
-
-    Torre::Torre() : Piece()
-    {
-    }
-
     /*
 
         This method returns the possible moves of the piece.

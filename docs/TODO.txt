@@ -4,3 +4,4 @@
     Inoltre quello di default non può essere protected
 
 2) utile avvisare Bot se la mossa che ha provato a fare è fallita
+

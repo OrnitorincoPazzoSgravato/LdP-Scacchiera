@@ -24,8 +24,9 @@ namespace chessgame
     {
 
     public:
-        Re();
-        Re(PieceColor color, const char symbol);
+        bool has_already_moved;
+        Re() : has_already_moved{false}, Piece() {};
+        Re(PieceColor color, const char symbol) : has_already_moved{false}, Piece(color, symbol) {}
         vector<Coordinates> getMoves(Chessboard &board, const Coordinates &coord) override;
     };
 
