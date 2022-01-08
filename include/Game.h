@@ -38,7 +38,7 @@ namespace gameplay {
 		 * 
 		 * @return std::array<chessgame::PieceColor&, 2> 
 		 */
-		std::array<chessgame::PieceColor&, 2> getRandColors();
+		std::array<chessgame::PieceColor, 2>& getRandColors();
 		/**
 		 * @brief Writes a move to the game's log file
 		 * 

@@ -21,14 +21,14 @@ namespace gameplay {
 	
     // constructors declaration
     Game::Game() : n_moves{0}, en_passante_coord{nullptr}, board{chessgame::Chessboard()} {
-        std::array<chessgame::PieceColor&, 2> a_colors = this->getRandColors();
+        std::array<chessgame::PieceColor, 2> a_colors = this->getRandColors();
         this->p1 = chessgame::Player(a_colors[0]);
         this->p2 = chessgame::Bot(a_colors[1]);
     }
 
     Game::Game(bool is_bot_match) : Game() {
         if(is_bot_match)
-            this->p1 = chessgame::Bot(this->p1.pieceColor);
+            this->p1 = chessgame::Bot(this->p1.getColor());
     }
 
     // destructor declaration
@@ -37,8 +37,8 @@ namespace gameplay {
     }
 
     // private methods declaration
-    std::array<chessgame::PieceColor&, 2> Game::getRandColors() {
-        std::array<chessgame::PieceColor&, 2> c_array; // declaration of the returned array
+    std::array<chessgame::PieceColor, 2>& Game::getRandColors() {
+        std::array<chessgame::PieceColor, 2> c_array; // declaration of the returned array
 
         double rand_num = std::rand();  // std library rand function to get a random number between 0 and 1
         // based on rand_num c_array is initialized with different values (just two possible outcomes, so an if-else is enough to cover them)

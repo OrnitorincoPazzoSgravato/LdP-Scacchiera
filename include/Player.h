@@ -22,8 +22,9 @@
 namespace chessgame
 {
     class Player {
-        public:
+        protected:
             PieceColor pieceColor;
+        public:
             Player();
             /**
             *
@@ -47,6 +48,9 @@ namespace chessgame
                 return std::array<Coordinates,2> {Coordinates(from),Coordinates(to)};
             }
             Piece* getPromotionTarget();
+            PieceColor getColor() {
+                return this->pieceColor;
+            }
     };
 }
 
