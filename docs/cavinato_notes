@@ -1,3 +1,6 @@
 Nella classe Chessboard non ho implementato costruttore di copia e di move perchè viene creata una sola istanza di Chessboard
 https://google.github.io/styleguide/cppguide.html#:~:text=Define%20functions%20inline%20only%20when%20they%20are%20small%2C%20say%2C%2010%20lines%20or%20fewer
     Ho seguito questa indicazione 
+
+
+Domanda da fare: gestione degli unique_ptr: è saggio restituire un puntatore detenuto da unique_ptr

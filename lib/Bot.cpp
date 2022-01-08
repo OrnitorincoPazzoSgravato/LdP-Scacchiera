@@ -13,20 +13,22 @@
 
 namespace chessgame
 {
-    Bot::Bot() : Player() {}
-    Bot::Bot(const PieceColor& p_color) : Player(p_color) 
-    {}
     std::array<Coordinates,2>& Bot::think(Chessboard& board) 
     {
-        // generate the coordinates of a random cell we want to inspectionate
+        // generate the coordinates of a random cell we want to visit
         int row {std::rand() % ROWS};
         int column {std::rand() % COLUMNS};
+        // number of visited cells set to 0
+        int visited_cells {0};
         // while loop visit every piece of given color and considers its possible moves
         bool done {false};
         while (!done)
         {
             // get almost random Coordinates of a piece of given color
-            Coordinates from {board.get(pieceColor,row,column,0)};
+            // count is passed by reference because we want get() function to modify it
+            Coordinates from {board.get(pieceColor,Coordinates(column,row),visited_cells)};
+            // check if we visited all pieces
+            if (from.x == -1) done;
             // get the possible moves
             std::vector<Coordinates> possible_moves {board.get_piece(from)->getMoves(board,from)};
             // if a possible move does not exist
