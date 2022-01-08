@@ -20,12 +20,10 @@
 namespace gameplay {
 	
     // constructors declaration
-    Game::Game() : n_moves{0}, en_passante_coord{nullptr} {
+    Game::Game() : n_moves{0}, en_passante_coord{nullptr}, board{chessgame::Chessboard()} {
         std::array<chessgame::PieceColor&, 2> a_colors = this->getRandColors();
         this->p1 = std::make_unique<chessgame::Player>(new chessgame::Player(a_colors[0]));
         this->p2 = std::make_unique<chessgame::Player>(new chessgame::Bot(a_colors[1]));
-
-        this->board = chessgame::Chessboard();
     }
 
     Game::Game(bool is_bot_match) : Game() {
@@ -74,9 +72,10 @@ namespace gameplay {
 			// "asks" the player for the promotion target and proceeds to update the board
             chessgame::Piece *new_p = (this->current_turn ? this->p1 : this->p2)->getPromotionTarget();
 			this->board.set_piece(coord, new_p);
-
-			new_p = nullptr;
-			return new_p->getSymbol(); // successful promotion
+			
+			char new_symbol = new_p->getSymbol();
+			p = nullptr;
+			return new_symbol; // successful promotion
         }
 		p = nullptr;
 		return 0; // promotion not required
@@ -202,6 +201,8 @@ namespace gameplay {
             } while(invalid_move); // this cycle keeps going until a valid move has been entered
 
             this->log_file << log_move << '\n'; // outputs move to the log file
+
+			std::cout << this->board.snapshot() << '\n';
 
             this->n_moves++; // increse number of moves
 

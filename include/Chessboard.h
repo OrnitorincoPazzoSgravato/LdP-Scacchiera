@@ -70,7 +70,7 @@ namespace chessgame
         *@return The Coordinates of a piece of given color
         *
         */
-        Coordinates& get(const PieceColor pc ,const Coordinates& from ,int& visited_cells);
+        Coordinates& get_random(const PieceColor pc ,const Coordinates& from ,int& visited_cells);
         /**
         *@brief This function returns the pointer to the piece in [c.y][c.x]
         *

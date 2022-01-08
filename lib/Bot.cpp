@@ -26,7 +26,7 @@ namespace chessgame
         {
             // get almost random Coordinates of a piece of given color
             // count is passed by reference because we want get() function to modify it
-            Coordinates from {board.get(pieceColor,Coordinates(column,row),visited_cells)};
+            Coordinates from {board.get_random(pieceColor,Coordinates(column,row),visited_cells)};
             // check if we visited all pieces
             if (from.x == -1) done;
             // get the possible moves
