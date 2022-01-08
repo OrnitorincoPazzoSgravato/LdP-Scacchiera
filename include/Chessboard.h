@@ -61,16 +61,16 @@ namespace chessgame
            v[c.y][c.x].reset(p);
         }
         /**
-        *@brief: This function returns the Coordinates of an almost random piece of the chessboard
+        *@brief This function returns the Coordinates of an almost random piece of the chessboard
         *
         *@param pc the color of the Piece
         *@param from the Coordinates we start the iteration from
         *@param visited_cells the number of the cells we visited in the previous iterations
         * 
-        *@return The Coordinates of a piece of given color
+        *@return Coordinates of a piece of given color
         *
         */
-        Coordinates& get(const PieceColor pc ,const Coordinates& from ,int& visited_cells);
+        Coordinates& get_random(const PieceColor pc ,const Coordinates& from ,int& visited_cells);
         /**
         *@brief This function returns the pointer to the piece in [c.y][c.x]
         *
