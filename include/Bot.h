@@ -32,7 +32,22 @@ namespace chessgame
              * 
              */
             Bot(const PieceColor& p_color);
-            std::array<Coordinates,2>& think();
+            /**
+            * 
+            *@brief: This function represents the act of thinking a move. Overloads the function Player::think() and randomize it
+            *
+            *@param: the chessboard of the game this bot belongs to
+            *
+            *@return: array<Coordinates,2> the original and final coordinates of the piece we want to move
+            */
+            std::array<Coordinates,2>& think(Chessboard&);
+            /** 
+            *
+            * @brief: This method implements promotion in bot class
+            * 
+            * @return: a pointer to the piece we want to replace the Pedone
+            *  
+            */
             Piece* getPromotionTarget();
     };
 }
