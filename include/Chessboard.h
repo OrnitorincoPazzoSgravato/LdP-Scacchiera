@@ -91,7 +91,21 @@ namespace chessgame
         *@return the string of the state
         *
         */                   
-        std::string& snapshot();                                
+        std::string& snapshot();
+        /**
+         * @brief it swaps the content of a cell at [from.y][from.x] and [to.y][to.x]
+         * 
+         * @param from description
+         * 
+         * @param to description
+         */
+        void swap_positions(const Coordinates& from,const Coordinates& to)
+        {
+            Piece * p1  {v[from.y][from.x].release()};
+            Piece * p2 {v[to.y][to.x].release()};
+            v[from.y][from.x].reset(p1);
+            v[to.y][to.x].reset(p2);
+        }                          
 };
 }
 
