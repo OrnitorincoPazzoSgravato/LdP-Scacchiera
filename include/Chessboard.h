@@ -15,15 +15,16 @@
 #include <string>
 #include <memory>
 
-#include "../include/Alfiere.h"
-#include "../include/Cavallo.h"
-#include "../include/Pedone.h"
-#include "../include/Re.h"
-#include "../include/Regina.h"
-#include "../include/Pedone.h"
-#include "../include/Torre.h"
-#include "../include/Utilities.h"
-#include "../include/Piece.h"
+#include "Alfiere.h"
+#include "Cavallo.h"
+#include "Pedone.h"
+#include "Re.h"
+#include "Regina.h"
+#include "Pedone.h"
+#include "Torre.h"
+#include "Utilities.h"
+#include "Piece.h"
+
 
 
 
@@ -31,8 +32,9 @@
 namespace chessgame
 
 {
-    constexpr int ROWS {8};
-    constexpr int COLUMNS {8};
+    constexpr unsigned int ROWS {8};
+    constexpr unsigned int COLUMNS {8};
+    constexpr unsigned int CELLS {64};
     /**
 	 * @brief Classe che rappresenta una scacchiera.
 	 * Si occupa della sua inizializzazione, di settare e restituire le pedine, senza check
@@ -46,7 +48,7 @@ namespace chessgame
         /**
         *@brief: set the cell [c.x][c.y] with p
         *
-        *@arg: Coordinates& c the cell of the matrix we want to occupy
+        *@param: Coordinates& c the cell of the matrix we want to occupy
         *@arg: Piece* p the pointer to the Piece we want to set
         *
         */                                            
@@ -54,6 +56,15 @@ namespace chessgame
         {
            v[c.x][c.y].reset(p);
         }
+        /**
+        *@brief: This function returns the pointer to the piece in [c.x][c.y]
+        *
+        *@param: color of the Piece we want to move
+        * 
+        *@return: The coordinates of a piece of given color
+        *
+        */
+        Coordinates& get(const PieceColor,unsigned int,unsigned int,unsigned int);
         /**
         *@brief: This function returns the pointer to the piece in [c.x][c.y]
         *
