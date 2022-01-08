@@ -28,7 +28,7 @@ namespace gameplay {
 		chessgame::Chessboard board;
 		int n_moves;
 		bool current_turn; // true if p1's turn, false if p2's turn
-		std::unique_ptr<chessgame::Player> p1, p2;
+		chessgame::Player p1, p2;
 		std::ofstream log_file;
 		
 		chessgame::Coordinates* en_passante_coord;

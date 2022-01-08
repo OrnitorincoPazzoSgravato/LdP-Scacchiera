@@ -48,6 +48,6 @@ namespace chessgame
         char c = '0';
         if (pieceColor == WHITE) c = 'd';
         else c = 'D'; 
-        return new Regina(pieceColor,c);
+        return &Regina(pieceColor,c);
     }
 }
