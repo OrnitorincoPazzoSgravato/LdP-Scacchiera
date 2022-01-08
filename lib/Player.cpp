@@ -42,13 +42,13 @@ namespace chessgame {
         // switch statement used to return the choosen derived class of Piece
         switch(target_index) {
             case 0:
-                return new Torre(this->pieceColor, allowed_symbols[target_index]);
+                return &Torre(this->pieceColor, allowed_symbols[target_index]);
             case 1:
-                return new Cavallo(this->pieceColor, allowed_symbols[target_index]);
+                return &Cavallo(this->pieceColor, allowed_symbols[target_index]);
             case 2:
-                return new Alfiere(this->pieceColor, allowed_symbols[target_index]);
+                return &Alfiere(this->pieceColor, allowed_symbols[target_index]);
             case 3:
-                return new Regina(this->pieceColor, allowed_symbols[target_index]);
+                return &Regina(this->pieceColor, allowed_symbols[target_index]);
             default:
                 return nullptr; // defaults to nullptr for error-checking
         }

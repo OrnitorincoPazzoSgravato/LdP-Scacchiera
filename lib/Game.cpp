@@ -22,8 +22,8 @@ namespace gameplay {
     // constructors declaration
     Game::Game() : n_moves{0}, en_passante_coord{nullptr}, board{chessgame::Chessboard()} {
         std::array<chessgame::PieceColor&, 2> a_colors = this->getRandColors();
-        this->p1 = std::make_unique<chessgame::Player>(new chessgame::Player(a_colors[0]));
-        this->p2 = std::make_unique<chessgame::Player>(new chessgame::Bot(a_colors[1]));
+        this->p1 = std::make_unique<chessgame::Player>(chessgame::Player(a_colors[0]));
+        this->p2 = std::make_unique<chessgame::Player>(chessgame::Bot(a_colors[1]));
     }
 
     Game::Game(bool is_bot_match) : Game() {
