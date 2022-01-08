@@ -46,43 +46,49 @@ namespace chessgame
     public:
         Chessboard();
         /**
-        *@brief: set the cell [c.x][c.y] with p
+        *@brief copy constructor disabled, why would you need two Chessboards ?
+        */  
+        Chessboard(Chessboard& c) = delete;
+        /**
+        *@brief set the cell [c.y][c.x] with p
         *
-        *@param: Coordinates& c the cell of the matrix we want to occupy
-        *@arg: Piece* p the pointer to the Piece we want to set
+        *@param c the cell of the matrix we want to set
+        *@param p  the pointer to the Piece we want to set
         *
         */                                            
         void set_piece(const Coordinates& c , Piece * p)
         {
-           v[c.x][c.y].reset(p);
+           v[c.y][c.x].reset(p);
         }
         /**
-        *@brief: This function returns the pointer to the piece in [c.x][c.y]
+        *@brief: This function returns the Coordinates of an almost random piece of the chessboard
         *
-        *@param: color of the Piece we want to move
+        *@param pc the color of the Piece
+        *@param from the Coordinates we start the iteration from
+        *@param visited_cells the number of the cells we visited in the previous iterations
         * 
-        *@return: The coordinates of a piece of given color
+        *@return The Coordinates of a piece of given color
         *
         */
-        Coordinates& get(const PieceColor,unsigned int,unsigned int,unsigned int);
+        Coordinates& get(const PieceColor pc ,const Coordinates& from ,int& visited_cells);
         /**
-        *@brief: This function returns the pointer to the piece in [c.x][c.y]
+        *@brief This function returns the pointer to the piece in [c.y][c.x]
         *
-        @arg: Coordinates& c the cell of the matrix we want to ispectionate
+        *@param c the cell of the matrix we want to ispectionate
         *
-        *@return: Piece * a pointer to the Piece in v(x,y)
-        *@return nullptr if there's no Piece in that cell
+        *@return  a pointer to the Piece in v(x,y)
+        *@return  nullptr if there's no Piece in that cell
         *
         */               
         Piece * get_piece(const Coordinates& c)
         {
-            return v[c.x][c.y].get();
+            return v[c.y][c.x].get();
         }
         /**
         * 
-        *@brief: This function create a snapshot of the state of the chessboard 
+        *@brief This function create a snapshot of the state of the chessboard 
         *
-        *@return: string& a reference to a string
+        *@return the string of the state
         *
         */                   
         std::string& snapshot();                                
