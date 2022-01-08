@@ -13,7 +13,7 @@
 
 namespace chessgame
 {
-    std::array<Coordinates,2>& Bot::think(Chessboard& board) 
+    std::array<Coordinates,2>& Bot::think( Chessboard& board) 
     {
         // generate the coordinates of a random cell we want to visit
         int row {std::rand() % ROWS};
@@ -26,7 +26,7 @@ namespace chessgame
         {
             // get almost random Coordinates of a piece of given color
             // count is passed by reference because we want get() function to modify it
-            Coordinates from {board.get(pieceColor,Coordinates(column,row),visited_cells)};
+            Coordinates from {board.get_random(pieceColor,Coordinates(column,row),visited_cells)};
             // check if we visited all pieces
             if (from.x == -1) done;
             // get the possible moves

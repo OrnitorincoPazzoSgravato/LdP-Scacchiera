@@ -16,11 +16,12 @@
 namespace chessgame
 
 {    
+    using namespace std;
 
     Chessboard::Chessboard()
     {
         // initialize black Pieces  
-        v[0][0].reset(new Torre( BLACK,'T' ) )  ;
+        v[0][0] = std::make_unique<Torre>( BLACK, 'T' );
         v[0][1].reset(new Cavallo( BLACK,' C ') )  ;
         v[0][2].reset(new Alfiere( BLACK , ' A ' ) ) ;
         v[0][3].reset(new Regina( BLACK, ' D ' ) )  ;
