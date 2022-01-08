@@ -20,7 +20,7 @@
 namespace gameplay {
 	
     // constructors declaration
-    Game::Game() : n_moves{0} {
+    Game::Game() : n_moves{0}, en_passante_coord{nullptr} {
         std::array<chessgame::PieceColor&, 2> a_colors = this->getRandColors();
         this->p1 = std::make_unique<chessgame::Player>(new chessgame::Player(a_colors[0]));
         this->p2 = std::make_unique<chessgame::Player>(new chessgame::Bot(a_colors[1]));
@@ -148,10 +148,22 @@ namespace gameplay {
 
 					// the block below checks for potential special rules moves if it's *not* a defaultly  allowed one
 					if(invalid_move) {
-						// TBD
+						// special rule: en_passant
+						bool p_is_paw = kPiece_symbol == 'p' || kPiece_symbol == 'P';
+						// it's a paw trying to capture another pow that previously moved by two tiles
+						if(this->en_passante_coord != nullptr && p_is_paw && move[1] == *(this->en_passante_coord)) {
+							log_move = this->legalTurnCleanUp(move, *p);
+						}
+						// it's a paw that has already to move and should be moved by two tiles
+						if(p_is_paw && !(dynamic_cast<chessgame::Pedone*>(p)->has_already_moved) && move[0].x == move[1].x && std::abs(move[0].y - move[1].y) == 2) {
+							log_move = this->legalTurnCleanUp(move, *p);
+							this->en_passante_coord = &move[1];
+						}
+						else this->en_passante_coord = nullptr; // used to reset at the next turn
 
 						// destination's piece
                			chessgame::Piece *dest_p = this->board.get_piece(move[1]);
+
 						// special rule: "arrocco"
 						if(dest_p != nullptr && p->getColor() == dest_p->getColor()) { // not a nullptr and same color
 							const char kDest_p_symbol = dest_p->getSymbol();
@@ -167,17 +179,17 @@ namespace gameplay {
 								bool is_tower_first_move = dynamic_cast<chessgame::Torre*>(dest_p)->has_already_moved;
 								bool is_king_first_move = dynamic_cast<chessgame::Re*>(dest_p)->has_already_moved;
 								if(is_king_first_move && is_tower_first_move) {
-									const int kX = move[0].x; // same row as they still have to make a move
+									const int kY = move[0].y; // same row as they still have to make a move
 
 									bool obstacles = false;
-									int index = move[0].y < move[1].y ? move[0].y : move[1].y;
-									int end_index = move[0].y < move[1].y ? move[1].y : move[0].y;
+									int index = move[0].x < move[1].x ? move[0].x : move[1].x;
+									int end_index = move[0].x < move[1].x ? move[1].x : move[0].x;
 									for(; index <= end_index && !obstacles; index++) {
-										if(this->board.get_piece(chessgame::Coordinates(kX, index)) != nullptr) obstacles == true;
+										if(this->board.get_piece(chessgame::Coordinates(kY, index)) != nullptr) obstacles == true;
 									}
-									
+
 									// if there are no obstacles then the "arrocco" is legal
-									if(!obstacles) this->legalTurnCleanUp(move, *p, dest_p);
+									if(!obstacles) log_move = this->legalTurnCleanUp(move, *p, dest_p);
 								}
 							}
 						}
