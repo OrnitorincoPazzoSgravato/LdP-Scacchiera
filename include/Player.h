@@ -25,6 +25,7 @@ namespace chessgame
         protected:
             PieceColor pieceColor;
         public:
+            bool is_human;
             Player();
             /**
             *
@@ -32,7 +33,8 @@ namespace chessgame
             */
             Player(const Player&) = delete;
             Player(const PieceColor& p_color)
-                :pieceColor(p_color)
+                :pieceColor(p_color),
+                is_human(true)
             {}
             /**
             *
