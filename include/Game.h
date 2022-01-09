@@ -61,31 +61,27 @@ namespace gameplay {
 		 * @return char representing the promoted piece, null character if the promotion didn't happen
 		 */
 		char promotion(const chessgame::Coordinates& coord);
-		
+
+
+
+
+
 		/**
 		 * @brief Function to be called when a successful move has been recognized. It's role is to do everything that needs to be done
 		 * at the end of a turn
 		 * 
-		 * @param p the piece moved
-		 * @param move the array representation of the move, where (?)
-		 * @return std::string the move to be logged
+		 * @param move the array representation of the move
+		 * @param is_swap disables the capture function
+		 * @return std::string string representation of the move to be logged
 		 */
-		std::string legalTurnCleanUp(std::array<chessgame::Coordinates, 2> move, chessgame::Piece& p);
-		/**
-		 * @brief special overloading of legalTurnCleanUp that implements a swap between pieces (used for special rule "arrocco")
-		 * 
-		 * @param move the array representation of the move, where (?)
-		 * @param p_coord1 the first piece to swap
-		 * @param p_coord2 the second piece to swap
-		 * @return std::string the move to be logged
-		 */
-		std::string legalTurnCleanUp(std::array<chessgame::Coordinates, 2> move, chessgame::Piece& p_coord1, chessgame::Piece* p_coord2);
+		std::string legalTurnCleanUp(const std::array<chessgame::Coordinates, 2>& move, bool is_swap = false);
+		
 		/**
 		 * @brief updates the has_already_moved attribute of a paw, king or tower
 		 * 
-		 * @param p the piece to update, it can be a nullptr
+		 * @param coord the coordinate of the piece that's about to move
 		 */
-		void updateFirstMove(chessgame::Piece* p);
+		void updateFirstMove(const chessgame::Coordinates& coord);
 		/**
 		 * @brief asks the player to input a move
 		 * 

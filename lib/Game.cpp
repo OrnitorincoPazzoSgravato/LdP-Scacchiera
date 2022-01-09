@@ -81,7 +81,8 @@ namespace gameplay {
 		return 0; // promotion not required
     }
 
-	void Game::updateFirstMove(chessgame::Piece* p) {
+	void Game::updateFirstMove(const chessgame::Coordinates& coord) {
+		chessgame::Piece* p = this->board.get_piece(coord);
 		if(p == nullptr) return;
 		// symbol of the piece to update
 		const char kPiece_symbol = p->getSymbol();
@@ -90,24 +91,19 @@ namespace gameplay {
 		else if(kPiece_symbol == 't' || kPiece_symbol == 'T') dynamic_cast<chessgame::Torre*>(p)->has_already_moved = true;
 	}
 
-	std::string Game::legalTurnCleanUp(std::array<chessgame::Coordinates, 2> move, chessgame::Piece& p) {
-		return this->legalTurnCleanUp(move, p, nullptr);
-	}
-
-	std::string Game::legalTurnCleanUp(std::array<chessgame::Coordinates, 2> move, chessgame::Piece& p_coord1, chessgame::Piece* p_coord2) {
+	std::string Game::legalTurnCleanUp(const std::array<chessgame::Coordinates, 2>& move, bool is_swap = false) {
 		// the log move for the current move
 		std::string log_move = move[0].symbol + ' ' + move[1].symbol;
-
-		// symbol of the piece to move
-		const char kPiece_symbol = p_coord1.getSymbol();
 		
+		if(!is_swap && this->board.get_piece(move[1]) != nullptr) { // this is a capture movement
+			this->board.set_piece(move[1], nullptr);
+		}
 		// here the piece is finally moved
-		this->board.set_piece(move[1], &p_coord1);
-		this->board.set_piece(move[0], p_coord2);
+		this->board.swap_positions(move[0], move[1]);
 
 		// updates "has_already_moved" attribute for paws, kings and towers
-		this->updateFirstMove(&p_coord1);
-		this->updateFirstMove(p_coord2);
+		this->updateFirstMove(move[1]);
+		this->updateFirstMove(move[0]);
 
 		char promotion_input = this->promotion(move[1]); // calls the function that manage the special rule "promotion"
 		if(promotion_input != 0) // successful promotion, as per documentation
@@ -147,7 +143,7 @@ namespace gameplay {
 						if(move[1] == legal_moves_vec[i]) invalid_move = false; // if the move has been found, then it must be valid
 					}
 
-					if(!invalid_move) log_move = this->legalTurnCleanUp(move, *p); // valid call as we are sure that p is not a nullptr
+					if(!invalid_move) log_move = this->legalTurnCleanUp(move); // valid call as we are sure that p is not a nullptr
 					// the block below is a series of if else checks for potential special rules moves
 					else {
 						// special rule: en_passant
@@ -156,14 +152,16 @@ namespace gameplay {
 						if(this->en_passante_coord != nullptr) {
 							// it's a paw trying to capture another paw that previously moved by two tiles
 							if(p_is_paw && move[1] == *(this->en_passante_coord)) {
-								log_move = this->legalTurnCleanUp(move, *p);
+								log_move = this->legalTurnCleanUp(move);
 								invalid_move = false;
 							}
 							this->en_passante_coord = nullptr; // used to reset at the turn after two tiles movement of a paw
 						}
-						// it's a paw that has already to move and should be moved by two tiles
-						else if(p_is_paw && !(dynamic_cast<chessgame::Pedone*>(p)->has_already_moved) && move[0].x == move[1].x && std::abs(move[0].y - move[1].y) == 2) {
-							log_move = this->legalTurnCleanUp(move, *p);
+						// it's a paw that has already to move and should be moved by two tiles (note: illegal if the destination tile is already occupied)
+						else if(p_is_paw && !(dynamic_cast<chessgame::Pedone*>(p)->has_already_moved) &&
+						move[0].x == move[1].x && std::abs(move[0].y - move[1].y) == 2 &&
+						this->board.get_piece(move[1]) == nullptr) {
+							log_move = this->legalTurnCleanUp(move);
 							this->en_passante_coord = &move[1];
 							invalid_move = false;
 						}
@@ -198,7 +196,7 @@ namespace gameplay {
 
 										// if there are no obstacles then the special rule is legal
 										if(!obstacles) {
-											log_move = this->legalTurnCleanUp(move, *p, dest_p);
+											log_move = this->legalTurnCleanUp(move, true);
 											invalid_move = false;
 										}
 									}
