@@ -10,6 +10,7 @@
 
 #include <vector>
 
+#include "Chessboard.h"
 #include "Piece.h"
 
 namespace chessgame

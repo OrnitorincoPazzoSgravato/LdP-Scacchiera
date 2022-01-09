@@ -27,7 +27,7 @@ namespace chessgame
              * 
              */
             Bot(const PieceColor& p_color,Chessboard& cboard)
-                :Player(p_color)
+                : Player(p_color)
             {}
 
             /**

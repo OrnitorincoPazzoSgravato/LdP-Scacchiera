@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "Piece.h"
+#include "Chessboard.h"
 
 namespace chessgame
 {

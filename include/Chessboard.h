@@ -43,14 +43,16 @@ namespace chessgame
     private: 
     
         std::unique_ptr<Piece> v[ROWS][COLUMNS];
+        std::unique_ptr<Piece> limbo;
+        Coordinates respawn_point; 
     public:
         Chessboard();
         /**
         *@brief copy constructor disabled, why would you need two Chessboards ?
         */  
-        //Chessboard(Chessboard& c) = delete;
+        //Chessboard(Chessboard& c) = delete; 
         /**
-        *@brief set the cell [c.y][c.x] with p
+        *@brief set the cell [c.y][c.x] with p, set limbo to the overridden piece and respawn_place to c
         *
         *@param c the cell of the matrix we want to set
         *@param p  the pointer to the Piece we want to set
@@ -58,7 +60,15 @@ namespace chessgame
         */                                            
         void set_piece(const Coordinates& c , Piece * p)
         {
-           v[c.y][c.x].reset(p);
+            // saves in limbo last deleted piece 
+            limbo.reset(v[c.y][c.x].release());
+
+            // sets respawn_point
+            respawn_point = Coordinates(c.x, c.y);
+
+            // sets the coordinates
+            v[c.y][c.x].reset(p);
+
         }
         /**
         *@brief This function returns the Coordinates of an almost random piece of the chessboard
@@ -105,7 +115,15 @@ namespace chessgame
             Piece * p2 {v[to.y][to.x].release()};
             v[from.y][from.x].reset(p1);
             v[to.y][to.x].reset(p2);
-        }                          
+        }
+        /**
+         * @brief undo the previous setPiece
+         * 
+         */
+        void restore()
+        {
+
+        }
 };
 }
 
