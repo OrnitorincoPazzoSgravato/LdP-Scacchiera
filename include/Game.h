@@ -25,10 +25,11 @@ namespace gameplay {
 	 * Inoltre deve produrre un file di log di riepilogo delle mosse
 	 */
 	class Game {
-		chessgame::Chessboard board;
+		chessgame::Chessboard& board;
 		int n_moves;
 		bool current_turn; // true if p1's turn, false if p2's turn
 		chessgame::Player p1, p2;
+		chessgame::Coordinates p1_king_coord, p2_king_coord;
 		std::ofstream log_file;
 		
 		chessgame::Coordinates* en_passante_coord;
@@ -88,6 +89,44 @@ namespace gameplay {
 		 * @return std::array<chessgame::Coordinates,2>& first coordinate: coordinate of the piece to move, second: where it moves to
 		 */
 		std::array<chessgame::Coordinates,2>& askMove();
+
+		/**
+		 * @brief checks if the player's king is in check
+		 * 
+		 * @return true 
+		 * @return false 
+		 */
+		bool isKingInCheck();
+
+		bool isPawTwoTilesMovement(std::array<chessgame::Coordinates, 2>& move);
+
+		bool isEnPassant(char piece_symbol, const chessgame::Coordinates& to);
+		/**
+		 * @brief 
+		 * 
+		 * @param p 
+		 * @param dest_p 
+		 * @return true 
+		 * @return false 
+		 */
+		bool isMoveArrocco(const std::array<chessgame::Coordinates, 2>& move);
+		/**
+		 * @brief 
+		 * 
+		 * @param p 
+		 * @param to 
+		 * @return true 
+		 * @return false 
+		 */
+		bool canDefaultlyMove(chessgame::Piece& p, const chessgame::Coordinates& to);
+		/**
+		 * @brief manage the state of check for a king, return if the passed move solves it or not
+		 * 
+		 * @param move 
+		 * @return true 
+		 * @return false 
+		 */
+		bool manageCheckState(std::array<chessgame::Coordinates, 2>& move);
 
 		public:
 			/**
