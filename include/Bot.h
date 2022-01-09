@@ -28,9 +28,7 @@ namespace chessgame
              */
             Bot(const PieceColor& p_color)
                 : Player(p_color)
-            {
-                is_human = false;
-            }
+            {}
             /**
             * 
             *@brief This function represents the act of thinking a move. Overloads the function Player::think() and randomize it

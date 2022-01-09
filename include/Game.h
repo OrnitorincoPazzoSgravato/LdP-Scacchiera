@@ -28,7 +28,10 @@ namespace gameplay {
 		chessgame::Chessboard board;
 		int n_moves;
 		bool current_turn; // true if p1's turn, false if p2's turn
-		chessgame::Player p1, p2;
+		chessgame::Player p1, p2; 
+
+		chessgame::Coordinates p1_king_coord, p2_king_coord;
+
 		std::ofstream log_file;
 		
 		chessgame::Coordinates* en_passante_coord;
@@ -62,10 +65,6 @@ namespace gameplay {
 		 */
 		char promotion(const chessgame::Coordinates& coord);
 
-
-
-
-
 		/**
 		 * @brief Function to be called when a successful move has been recognized. It's role is to do everything that needs to be done
 		 * at the end of a turn
@@ -88,6 +87,23 @@ namespace gameplay {
 		 * @return std::array<chessgame::Coordinates,2>& first coordinate: coordinate of the piece to move, second: where it moves to
 		 */
 		std::array<chessgame::Coordinates,2>& askMove();
+
+		/**
+		 * @brief checks if the player's king is in check
+		 * 
+		 * @return true 
+		 * @return false 
+		 */
+		bool isKingInCheck();
+
+		/**
+		 * @brief manage the state of check for a king, return if the passed move solves it or not
+		 * 
+		 * @param move 
+		 * @return true 
+		 * @return false 
+		 */
+		bool manageCheck(const std::array<chessgame::Coordinates, 2>& move);
 
 		public:
 			/**
