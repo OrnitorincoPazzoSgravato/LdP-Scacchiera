@@ -9,7 +9,7 @@
  * 
  */
 #include <string>
-#include <istream>
+#include <fstream>
 
 #include "../include/Replay.h"
 
@@ -17,8 +17,21 @@ namespace chessgame
 {
     void print_onscreen(const std::string& input_file)
     {
-        // TBD
-        // std::ifstream ist(input_file);
-        // if (!ist) std::runtime_error("Can't open input file");
+        // opens the input file
+        std::ifstream ist { input_file };
+        //if the name is invalid TBD
+        if (!ist) ; 
+
+        // questa cosa inizializza ?
+        Chessboard c;
+        std::cout << c.snapshot();
+        while(!ist.eof())
+        {
+            
+        }
+
+
+
+        ist.close();
     }
 }

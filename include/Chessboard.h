@@ -48,7 +48,7 @@ namespace chessgame
         /**
         *@brief copy constructor disabled, why would you need two Chessboards ?
         */  
-        Chessboard(Chessboard& c) = delete;
+        //Chessboard(Chessboard& c) = delete;
         /**
         *@brief set the cell [c.y][c.x] with p
         *
