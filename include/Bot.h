@@ -26,20 +26,17 @@ namespace chessgame
              * 
              * 
              */
-            Bot(const PieceColor& p_color)
+            Bot(const PieceColor& p_color,const Chessboard& cboard)
                 : Player(p_color)
             {
-                is_human = false;
             }
             /**
             * 
             *@brief This function represents the act of thinking a move. Overloads the function Player::think() and randomize it
             *
-            *@param board chessboard of the game this bot belongs to
-            *
             *@return  original and final coordinates of the piece we want to move
             */
-            std::array<Coordinates,2>& think(Chessboard& board);
+            std::array<Coordinates,2>& think();
             /** 
             *
             * @brief: This method implements promotion in bot class
@@ -48,6 +45,8 @@ namespace chessgame
             *  
             */
             Piece* getPromotionTarget();
+        private:
+        Chessboard board;
     };
 }
 
