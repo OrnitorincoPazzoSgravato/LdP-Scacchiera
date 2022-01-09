@@ -25,12 +25,11 @@ namespace chessgame
         protected:
             PieceColor pieceColor;
         public:
-            Player();
             /**
             *
             *@brief: Copy constructor disabled: we want players to be as unique as possible
             */
-            Player(const Player&) = delete;
+            Player(Player&) = delete;
             Player(const PieceColor& p_color)
                 :pieceColor(p_color)
             {}
