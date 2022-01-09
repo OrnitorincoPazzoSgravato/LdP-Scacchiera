@@ -26,10 +26,10 @@ namespace chessgame
              * 
              * 
              */
-            Bot(const PieceColor& p_color,const Chessboard& cboard)
-                : Player(p_color)
-            {
-            }
+            Bot(const PieceColor& p_color,Chessboard& cboard)
+                :Player(p_color)
+            {}
+
             /**
             * 
             *@brief This function represents the act of thinking a move. Overloads the function Player::think() and randomize it
