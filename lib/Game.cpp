@@ -116,6 +116,10 @@ namespace gameplay {
 		return log_move;
 	}
 
+	std::array<chessgame::Coordinates,2>& Game::askMove() {
+		return this->current_turn ? this->p1.think() : this->p2.think(); // temporaneo, da implementare poi con l'eventuale scacchiera puntatore
+	}
+
     // public methods declaration
     void Game::play() {
         this->log_file.open("game_log.txt"); // open the log file
@@ -127,7 +131,7 @@ namespace gameplay {
             bool invalid_move = true;
             do {
                 // player's move for its turn
-                std::array<chessgame::Coordinates,2>& move = this->current_turn ? this->p1.think() : this->p2.think();
+                std::array<chessgame::Coordinates,2>& move = askMove();
 
                 // selected piece to move
                 chessgame::Piece *p = this->board.get_piece(move[0]);
@@ -144,56 +148,64 @@ namespace gameplay {
 					}
 
 					if(!invalid_move) log_move = this->legalTurnCleanUp(move, *p); // valid call as we are sure that p is not a nullptr
-
-					// the block below checks for potential special rules moves if it's *not* a defaultly  allowed one
-					if(invalid_move) {
+					// the block below is a series of if else checks for potential special rules moves
+					else {
 						// special rule: en_passant
 						bool p_is_paw = kPiece_symbol == 'p' || kPiece_symbol == 'P';
-						// it's a paw trying to capture another pow that previously moved by two tiles
-						if(this->en_passante_coord != nullptr && p_is_paw && move[1] == *(this->en_passante_coord)) {
-							log_move = this->legalTurnCleanUp(move, *p);
+						// en_passant is appliable
+						if(this->en_passante_coord != nullptr) {
+							// it's a paw trying to capture another paw that previously moved by two tiles
+							if(p_is_paw && move[1] == *(this->en_passante_coord)) {
+								log_move = this->legalTurnCleanUp(move, *p);
+								invalid_move = false;
+							}
+							this->en_passante_coord = nullptr; // used to reset at the turn after two tiles movement of a paw
 						}
 						// it's a paw that has already to move and should be moved by two tiles
-						if(p_is_paw && !(dynamic_cast<chessgame::Pedone*>(p)->has_already_moved) && move[0].x == move[1].x && std::abs(move[0].y - move[1].y) == 2) {
+						else if(p_is_paw && !(dynamic_cast<chessgame::Pedone*>(p)->has_already_moved) && move[0].x == move[1].x && std::abs(move[0].y - move[1].y) == 2) {
 							log_move = this->legalTurnCleanUp(move, *p);
 							this->en_passante_coord = &move[1];
+							invalid_move = false;
 						}
-						else this->en_passante_coord = nullptr; // used to reset at the next turn
-
-						// destination's piece
-               			chessgame::Piece *dest_p = this->board.get_piece(move[1]);
-
 						// special rule: "arrocco"
-						if(dest_p != nullptr && p->getColor() == dest_p->getColor()) { // not a nullptr and same color
-							const char kDest_p_symbol = dest_p->getSymbol();
-							bool p_Is_King = kPiece_symbol == 'r' || kPiece_symbol == 'R';
-							bool p_Is_Tower = kPiece_symbol == 't' || kPiece_symbol == 'T';
-							bool dest_Is_King = kDest_p_symbol == 'r' || kDest_p_symbol == 'R';
-							bool dest_Is_Tower = kDest_p_symbol == 't' || kDest_p_symbol == 'r';
+						else {
+							// destination's piece
+							chessgame::Piece *dest_p = this->board.get_piece(move[1]);
 
-							bool king_in_tower = p_Is_King && dest_Is_Tower;
-							bool tower_in_king = p_Is_Tower && dest_Is_King;
+							if(dest_p != nullptr && p->getColor() == dest_p->getColor()) { // not a nullptr and same color
+								const char kDest_p_symbol = dest_p->getSymbol();
+								bool p_Is_King = kPiece_symbol == 'r' || kPiece_symbol == 'R';
+								bool p_Is_Tower = kPiece_symbol == 't' || kPiece_symbol == 'T';
+								bool dest_Is_King = kDest_p_symbol == 'r' || kDest_p_symbol == 'R';
+								bool dest_Is_Tower = kDest_p_symbol == 't' || kDest_p_symbol == 'r';
 
-							if(king_in_tower || tower_in_king) {
-								bool is_tower_first_move = dynamic_cast<chessgame::Torre*>(dest_p)->has_already_moved;
-								bool is_king_first_move = dynamic_cast<chessgame::Re*>(dest_p)->has_already_moved;
-								if(is_king_first_move && is_tower_first_move) {
-									const int kY = move[0].y; // same row as they still have to make a move
+								bool king_in_tower = p_Is_King && dest_Is_Tower;
+								bool tower_in_king = p_Is_Tower && dest_Is_King;
 
-									bool obstacles = false;
-									int index = move[0].x < move[1].x ? move[0].x : move[1].x;
-									int end_index = move[0].x < move[1].x ? move[1].x : move[0].x;
-									for(; index <= end_index && !obstacles; index++) {
-										if(this->board.get_piece(chessgame::Coordinates(kY, index)) != nullptr) obstacles == true;
+								if(king_in_tower || tower_in_king) {
+									// the conditional operator is used to differentiate between king or tower istance as the object pointed by p (and so dest_p)
+									bool is_tower_first_move = dynamic_cast<chessgame::Torre*>(king_in_tower ? dest_p : p)->has_already_moved;
+									bool is_king_first_move = dynamic_cast<chessgame::Re*>(king_in_tower ? p : dest_p)->has_already_moved;
+									if(is_king_first_move && is_tower_first_move) {
+										const int kY = move[0].y; // same row as they still have to make a move
+
+										bool obstacles = false;
+										int index = move[0].x < move[1].x ? move[0].x : move[1].x;
+										int end_index = move[0].x < move[1].x ? move[1].x : move[0].x;
+										for(; index <= end_index && !obstacles; index++) {
+											if(this->board.get_piece(chessgame::Coordinates(kY, index)) != nullptr) obstacles == true;
+										}
+
+										// if there are no obstacles then the special rule is legal
+										if(!obstacles) {
+											log_move = this->legalTurnCleanUp(move, *p, dest_p);
+											invalid_move = false;
+										}
 									}
-
-									// if there are no obstacles then the "arrocco" is legal
-									if(!obstacles) log_move = this->legalTurnCleanUp(move, *p, dest_p);
 								}
 							}
+							dest_p = nullptr; // clears dest_p pointer after use
 						}
-						
-						dest_p = nullptr; // clears dest_p pointer after use
 					}
 					p = nullptr; // clears p pointer after use
 				}

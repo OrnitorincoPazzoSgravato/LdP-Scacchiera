@@ -86,6 +86,12 @@ namespace gameplay {
 		 * @param p the piece to update, it can be a nullptr
 		 */
 		void updateFirstMove(chessgame::Piece* p);
+		/**
+		 * @brief asks the player to input a move
+		 * 
+		 * @return std::array<chessgame::Coordinates,2>& first coordinate: coordinate of the piece to move, second: where it moves to
+		 */
+		std::array<chessgame::Coordinates,2>& askMove();
 
 		public:
 			/**
