@@ -22,11 +22,6 @@ namespace chessgame
         
         public:
             /**
-             * @brief Calls the constructor of the superclass Player, additional operations TBD
-             * 
-             */
-            Bot();
-            /**
              * @brief Calls the constructor of the superclass Player, assigning the specified player color.
              * 
              * 
