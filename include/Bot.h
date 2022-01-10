@@ -49,6 +49,8 @@ namespace chessgame
             *  
             */
             Piece* getPromotionTarget();
+        private:
+        Chessboard& board;
     };
 }
 
