@@ -57,8 +57,7 @@ namespace gameplay {
             std::cout << "The full-bot game has reached its maximum amount of moves without ending {" << Game::kBot_moves << "}. Please try again." << std::endl;
             return true;
         }
-        // TBD
-        return false; // default return value
+        return isKingInCheck(); // scacco matto (TBD)
     }
 
     char Game::promotion(const chessgame::Coordinates& coord) {
@@ -122,7 +121,7 @@ namespace gameplay {
 			for(int x = 0; x < 8; x++) {
 				chessgame::Coordinates piece_coord = chessgame::Coordinates(x, y);
 				chessgame::Piece* p = this->board.get_piece(piece_coord);
-				if(p != nullptr) {
+				if(p != nullptr && p->getColor() != (this->current_turn ? this->p1.getColor() : this->p2.getColor())) {
 					std::vector<chessgame::Coordinates> moves_vec = p->getMoves(this->board, piece_coord);
 					for(auto it = moves_vec.begin(); it == moves_vec.end(); it++) {
 						if(*it == king_coord) return true;
@@ -211,37 +210,31 @@ namespace gameplay {
 		return false;
 	}
 	
-	// the idea is to keep asking for moves until one resolves the check:
-	// 1) the king can move away
-	// 2) an obstacle can be created
-	// 3) the piece checking the king can be captured
-	// Solution: try moving, check if it resolves the check and then apply the proper cleanup
 	bool Game::manageCheckState(std::array<chessgame::Coordinates, 2>& move) {
 
 		chessgame::Piece* p = this->board.get_piece(move[0]);
 		if(p == nullptr) return false;
 
-		/*
-		possibili mosse:
-		spostamento a casella vuota x
-		arrocco x
-		en passant x
-		cattura x
-		*/
 		bool is_default = this->canDefaultlyMove(*p, move[1]);
 		bool is_paw_movement = this->isPawTwoTilesMovement(move);
 		bool is_arrocco = this->isMoveArrocco(move);
+		bool is_passant = this->isEnPassant(p->getSymbol(), move[1]);
 
-		bool is_capture = (is_default && this->board.get_piece(move[1]) != nullptr) || this->isEnPassant(p->getSymbol(), move[1]);
-		chessgame::Piece* captured_p = nullptr;
+		bool is_capture = (is_default && this->board.get_piece(move[1]) != nullptr) || is_passant;
 
 		if(is_default || is_arrocco || is_paw_movement) {
 			this->board.swap_positions(move[0], move[1]);
-			if(is_capture && !is_arrocco) {
-				this->board.set_piece(move[0], nullptr); // questo però elimina il pezzo
-			}
-		}
+			if(is_capture) this->board.set_piece(move[0], nullptr);
 
+			bool check_resolved = this->isKingInCheck();
+
+			if(is_capture) this->board.restore();
+			this->board.swap_positions(move[1], move[0]);
+
+			if(check_resolved) this->legalTurnCleanUp(move, is_arrocco);
+			
+			return check_resolved;
+		}
 		return false;
 	}
 
@@ -267,31 +260,29 @@ namespace gameplay {
 
 					// block used to manage a possible king check
 					if(this->isKingInCheck()) {
-
-						invalid_move = manageCheckState(move);
-						if(!invalid_move) log_move = move[0].symbol + ' ' + move[1].symbol;
-						// TBD
+						invalid_move = !manageCheckState(move);
+						if(!invalid_move) {
+							log_move = move[0].symbol + ' ' + move[1].symbol;
+						}
 					}
-					else {
-						// default rules or en passant or paw two tiles movement
-						if(this->canDefaultlyMove(*p, move[1]) || this->isEnPassant(piece_symbol, move[1]) || isPawTwoTilesMovement(move)) {
-							invalid_move = false;
-							log_move = this->legalTurnCleanUp(move);
+					// default rules or en passant or paw two tiles movement
+					else if(this->canDefaultlyMove(*p, move[1]) || this->isEnPassant(piece_symbol, move[1]) || isPawTwoTilesMovement(move)) {
+						invalid_move = false;
+						log_move = this->legalTurnCleanUp(move);
+					}
+					// special rule arrocco
+					else if(this->isMoveArrocco(move)) {
+						invalid_move = false;
+						log_move = this->legalTurnCleanUp(move, true);
+						if(piece_symbol == 't' || piece_symbol == 'T') {
+							// updates the king position
+							this->current_turn ? this->p1_king_coord = move[0] : this->p2_king_coord = move[0];
 						}
-						// special rule arrocco
-						else if(this->isMoveArrocco(move)) {
-							invalid_move = false;
-							log_move = this->legalTurnCleanUp(move, true);
-							if(piece_symbol == 't' || piece_symbol == 'T') {
-								// updates the king position
-								this->current_turn ? this->p1_king_coord = move[0] : this->p2_king_coord = move[0];
-							}
-						}
-						
-						// updates the player's king position if it has been moved
-						if(!invalid_move && (piece_symbol == 'r' || piece_symbol == 'R')) {
-							this->current_turn ? this->p1_king_coord = move[1] : this->p2_king_coord = move[1];
-						}
+					}
+					
+					// updates the player's king position if it has been moved
+					if(!invalid_move && (piece_symbol == 'r' || piece_symbol == 'R')) {
+						this->current_turn ? this->p1_king_coord = move[1] : this->p2_king_coord = move[1];
 					}
 
 					p = nullptr; // clears p pointer after use

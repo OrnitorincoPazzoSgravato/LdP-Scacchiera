@@ -97,12 +97,25 @@ namespace gameplay {
 		 * @return false 
 		 */
 		bool isKingInCheck();
-
+		/**
+		 * @brief manages the two-tiles movement of a first time moving paw, return if the provided move is a case of it.
+		 * 
+		 * @param move 
+		 * @return true 
+		 * @return false 
+		 */
 		bool isPawTwoTilesMovement(std::array<chessgame::Coordinates, 2>& move);
-
+		/**
+		 * @brief manages the special rule "en passant", returns if it is a case of "en passant"
+		 * 
+		 * @param piece_symbol 
+		 * @param to 
+		 * @return true 
+		 * @return false 
+		 */
 		bool isEnPassant(char piece_symbol, const chessgame::Coordinates& to);
 		/**
-		 * @brief 
+		 * @brief manages the special rule "arrocco", returns if the provided move is a case of "arrocco"
 		 * 
 		 * @param p 
 		 * @param dest_p 
@@ -111,7 +124,7 @@ namespace gameplay {
 		 */
 		bool isMoveArrocco(const std::array<chessgame::Coordinates, 2>& move);
 		/**
-		 * @brief 
+		 * @brief manages base movement rules, returns if the provided piece can defaultly move to the specified tile
 		 * 
 		 * @param p 
 		 * @param to 
@@ -120,7 +133,7 @@ namespace gameplay {
 		 */
 		bool canDefaultlyMove(chessgame::Piece& p, const chessgame::Coordinates& to);
 		/**
-		 * @brief manage the state of check for a king, return if the passed move solves it or not
+		 * @brief manages the state of check for a king, returns if the provided move solves it or not
 		 * 
 		 * @param move 
 		 * @return true 
