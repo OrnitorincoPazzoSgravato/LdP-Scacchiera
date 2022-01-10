@@ -31,6 +31,7 @@ namespace gameplay {
 		chessgame::Player p1, p2;
 		chessgame::Coordinates p1_king_coord, p2_king_coord;
 		std::ofstream log_file;
+        int stall_counter;
 		
 		chessgame::Coordinates* en_passante_coord;
 

@@ -21,7 +21,7 @@
 namespace gameplay {
 	
     // constructors declaration
-    Game::Game() : n_moves{0}, en_passante_coord{nullptr}, board{chessgame::Chessboard()} {
+    Game::Game() : n_moves{0}, en_passante_coord{nullptr}, board{chessgame::Chessboard()}, stall_counter{0} {
         std::array<chessgame::PieceColor, 2> a_colors = this->getRandColors();
         this->p1 = chessgame::Player(a_colors[0]);
         this->p2 = chessgame::Bot(a_colors[1], this->board);
@@ -184,6 +184,7 @@ namespace gameplay {
 		
 		if(!is_swap && this->board.get_piece(move[1]) != nullptr) { // this is a capture movement
 			this->board.set_piece(move[1], nullptr);
+            this->stall_counter = 0;
 		}
 		// here the piece is finally moved
 		this->board.swap_positions(move[0], move[1]);
@@ -246,6 +247,10 @@ namespace gameplay {
                 else if(is_paw_2_tiles_movement) {
                     this->en_passante_coord = new chessgame::Coordinates(move[0]);
                 }
+
+                if(piece_symbol == 'p' || piece_symbol == 'R') {
+                    this->stall_counter = 0;
+                }
                 
                 // updates the player's king position if it has been moved (applied also to special rule: arrocco)
                 if(piece_symbol == 'r' || piece_symbol == 'R') {
@@ -295,9 +300,13 @@ namespace gameplay {
 
     bool Game::isGameOver() {
         // block used to check if a bot game has reached its max amount of moves (game ending condition)
-        if(this->n_moves <= Game::kBot_moves) {
+        if(this->n_moves >= Game::kBot_moves) {
             std::cout << "The full-bot game has reached its maximum amount of moves without ending {" << Game::kBot_moves << "}. Please try again." << std::endl;
-            return false;
+            return true;
+        }
+        if(this->stall_counter >= 50) {
+            std::cout << "The game ended as 50 consecutive moves has been made without moving a paw or capturing a piece." << std::endl;
+            return true;
         }
         if(!isPlayerKingInCheck(!this->current_turn)) {
             // block used to check for stalemate
@@ -363,6 +372,7 @@ namespace gameplay {
 			std::cout << this->board.snapshot() << '\n';
 
             this->n_moves++; // increse number of moves
+            this->stall_counter++;
 
             this->current_turn = !this->current_turn; // alternates turns
         } while(!isGameOver());
