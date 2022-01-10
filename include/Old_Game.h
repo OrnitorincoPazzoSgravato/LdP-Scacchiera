@@ -9,15 +9,15 @@
  * 
  */
 
-#ifndef GAME
-#define GAME
+#ifndef OLD_GAME
+#define OLD_GAME
 
 #include <fstream>
 
 #include <Chessboard.h>
 #include <Player.h>
 
-namespace gameplay {
+namespace gameplay_old {
 	/**
 	 * @brief classe che rappresenta lo svolgimento di una partita a scacchi.
 	 * Deve occuparsi dell'inizializzazione della partita, dello svolgimento dei turni,
@@ -39,7 +39,7 @@ namespace gameplay {
 		 * 
 		 * @return std::array<chessgame::PieceColor&, 2> 
 		 */
-		std::array<chessgame::PieceColor, 2> getRandColors();
+		std::array<chessgame::PieceColor, 2>& getRandColors();
 		/**
 		 * @brief Writes a move to the game's log file
 		 * 
@@ -47,32 +47,26 @@ namespace gameplay {
 		 * @return bool true if the write op succedeed, fale if it failed
 		 */
 		bool writeLog(const std::string& move);
-        /**
-		 * @brief checks if the current player's king is in check
+		/**
+		 * @brief checks the current state of the game to see if the game has ended/should end
+		 * If it's a full bot game, then it always ends in certain amount of moves declared in kBot_moves
 		 * 
-         * @param player_identifier true if p1, false is p2
-		 * @return true 
-		 * @return false 
+		 * @return true if game over
+		 * @return false if game can continue
 		 */
-		bool isPlayerKingInCheck(bool player_identifier);
-        /**
-         * @brief check if the provided move is valid, if yes it is executed
-         * 
-         */
-        bool playerMove(bool player_identifier, std::array<chessgame::Coordinates, 2>& move);
-        /**
+		bool isGameOver();
+		/**
 		 * @brief checks if the piece at the provided coordinates is promotable. If it is proceeds to it.
 		 * 
 		 * @param coord coordinate of the piece to check
 		 * @return char representing the promoted piece, null character if the promotion didn't happen
 		 */
 		char promotion(const chessgame::Coordinates& coord);
-        /**
-		 * @brief updates the has_already_moved attribute of a paw, king or tower
-		 * 
-		 * @param coord the coordinate of the piece that's about to move
-		 */
-		void updateFirstMove(const chessgame::Coordinates& coord);
+
+
+
+
+
 		/**
 		 * @brief Function to be called when a successful move has been recognized. It's role is to do everything that needs to be done
 		 * at the end of a turn
@@ -82,14 +76,35 @@ namespace gameplay {
 		 * @return std::string string representation of the move to be logged
 		 */
 		std::string legalTurnCleanUp(const std::array<chessgame::Coordinates, 2>& move, bool is_swap = false);
-        /**
+		
+		/**
+		 * @brief updates the has_already_moved attribute of a paw, king or tower
+		 * 
+		 * @param coord the coordinate of the piece that's about to move
+		 */
+		void updateFirstMove(const chessgame::Coordinates& coord);
+		/**
+		 * @brief asks the player to input a move
+		 * 
+		 * @return std::array<chessgame::Coordinates,2>& first coordinate: coordinate of the piece to move, second: where it moves to
+		 */
+		std::array<chessgame::Coordinates,2>& askMove();
+
+		/**
+		 * @brief checks if the player's king is in check
+		 * 
+		 * @return true 
+		 * @return false 
+		 */
+		bool isKingInCheck();
+		/**
 		 * @brief manages the two-tiles movement of a first time moving paw, return if the provided move is a case of it.
 		 * 
 		 * @param move 
 		 * @return true 
 		 * @return false 
 		 */
-		bool isPawTwoTilesMovement(const std::array<chessgame::Coordinates, 2>& move);
+		bool isPawTwoTilesMovement(std::array<chessgame::Coordinates, 2>& move);
 		/**
 		 * @brief manages the special rule "en passant", returns if it is a case of "en passant"
 		 * 
@@ -107,7 +122,7 @@ namespace gameplay {
 		 * @return true 
 		 * @return false 
 		 */
-		bool isArrocco(const std::array<chessgame::Coordinates, 2>& move);
+		bool isMoveArrocco(const std::array<chessgame::Coordinates, 2>& move);
 		/**
 		 * @brief manages base movement rules, returns if the provided piece can defaultly move to the specified tile
 		 * 
@@ -116,19 +131,17 @@ namespace gameplay {
 		 * @return true 
 		 * @return false 
 		 */
-		bool isDefaultMove(chessgame::Piece& p, const chessgame::Coordinates& to);
-        /**
-		 * @brief checks the current state of the game to see if the game has ended/should end
-		 * If it's a full bot game, then it always ends in certain amount of moves declared in kBot_moves
+		bool canDefaultlyMove(chessgame::Piece& p, const chessgame::Coordinates& to);
+		/**
+		 * @brief manages the state of check for a king, returns if the provided move solves it or not
 		 * 
-		 * @return true if game over
-		 * @return false if game can continue
+		 * @param move 
+		 * @return true 
+		 * @return false 
 		 */
-		bool isGameOver();
+		bool manageCheckState(std::array<chessgame::Coordinates, 2>& move);
 
-        bool isStalemate();
-
-        std::vector<chessgame::Coordinates> getPieceMovesAll(const chessgame::Coordinates& piece_coord);
+		std::vector<chessgame::Coordinates> checkStateAllowedMoves();
 
 		public:
 			/**
