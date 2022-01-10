@@ -29,36 +29,37 @@ namespace chessgame
     Chessboard::Chessboard()
     {
         // initialize black Pieces  
-        v[0][0] = make_unique<Torre>( BLACK, 'T' );
-        v[0][1]= make_unique<Cavallo>( BLACK,'C')  ;
-        v[0][2]= make_unique<Alfiere>( BLACK,'A')  ;
-        v[0][3]= make_unique<Regina>( BLACK,'D')  ;
-        v[0][4]= make_unique<Re>( BLACK,'R')  ;
-        v[0][5]= make_unique<Alfiere>( BLACK,'A')  ;
-        v[0][6]= make_unique<Cavallo>( BLACK,'C')  ;
-        v[0][7] = make_unique<Torre>( BLACK, 'T' );
-        //for loop to initialize black Pedones
+        this->v[0][0]= make_unique<Torre>( BLACK, 'T' );
+        this->v[0][1]= make_unique<Cavallo>( BLACK,'C')  ;
+        this->v[0][2]= make_unique<Alfiere>( BLACK,'A')  ;
+        this->v[0][3]= make_unique<Regina>( BLACK,'D')  ;
+        this->v[0][4]= make_unique<Re>( BLACK,'R')  ;
+        this->v[0][5]= make_unique<Alfiere>( BLACK,'A')  ;
+        this->v[0][6]= make_unique<Cavallo>( BLACK,'C')  ;
+        this->v[0][7] = make_unique<Torre>( BLACK, 'T' );
+
+        //for loop to initialize black Paws
         for (int i = 0; i < COLUMNS; i++)
         {
-            v[1][i]= make_unique<Pedone>( BLACK, 'P' );
+            this->v[1][i]= make_unique<Pedone>( BLACK, 'P' );
         }
 
         //initialize white Pieces
 
-        // for loop to inizialize white Pedones
+        // for loop to inizialize white Paws
         for (int i = 0; i < COLUMNS; i++)
         {
-            v[6][i]= make_unique<Pedone>( WHITE, 'p' );
+            this->v[6][i]= make_unique<Pedone>( WHITE, 'p' );
         }
         // initialize other white Pieces
-        v[7][0]= make_unique<Torre>( WHITE, 't' );
-        v[7][1]= make_unique<Cavallo>( WHITE, 'c' );
-        v[7][2]= make_unique<Alfiere>( WHITE, 'a' );
-        v[7][3]= make_unique<Regina>( WHITE, 'd' );
-        v[7][4]= make_unique<Re>( WHITE, 'r' );
-        v[7][5]= make_unique<Alfiere>( WHITE, 'a' );
-        v[7][6]= make_unique<Cavallo>( WHITE, 'c' );
-        v[7][7]= make_unique<Torre>( WHITE, 't' );
+        this->v[7][0]= make_unique<Torre>( WHITE, 't' );
+        this->v[7][1]= make_unique<Cavallo>( WHITE, 'c' );
+        this->v[7][2]= make_unique<Alfiere>( WHITE, 'a' );
+        this->v[7][3]= make_unique<Regina>( WHITE, 'd' );
+        this->v[7][4]= make_unique<Re>( WHITE, 'r' );
+        this->v[7][5]= make_unique<Alfiere>( WHITE, 'a' );
+        this->v[7][6]= make_unique<Cavallo>( WHITE, 'c' );
+        this->v[7][7]= make_unique<Torre>( WHITE, 't' );
 
     }                               
            
@@ -73,7 +74,7 @@ namespace chessgame
             // for loop columns
             for ( int j = 0; i < COLUMNS; j++ )
             {
-                Piece * p  {v[i][j].get()} ;
+                Piece * p  {this->v[i][j].get()} ;
                 if (p) s += p->getSymbol() ;
                 else s += " ";
             }
@@ -101,14 +102,37 @@ namespace chessgame
             // if we finished to visit the matrix, we start from (0,0)
             if (row == ROWS) row = 0;
             // if the piece in the considered cell contains a piece of given color
-            if ( v[row][column].get()->getColor() == pc )
+            if ( this->v[row][column].get()->getColor() == pc )
             {
-                return Coordinates(column,row);
+                Coordinates c {column,row};
+                return c;
             }
             column++;
         }
         // if a valid piece does not exist
-        return Coordinates(-1,-1);
+        Coordinates c {-1,-1};
+        return c;
         
     }
+    void Chessboard::set_piece(const Coordinates& c , Piece * p)
+        {
+            // saves in limbo last deleted piece 
+            this->limbo.reset(v[c.y][c.x].release());
+
+            // sets respawn_point
+            this->respawn_point = Coordinates(c.x, c.y);
+
+            // sets the coordinates
+            this->v[c.y][c.x].reset(p);
+        }
+    void Chessboard::swap_positions(const Coordinates& from,const Coordinates& to)
+        {
+            //Release pointers 
+            Piece * p1  {v[from.y][from.x].release()};
+            Piece * p2 {v[to.y][to.x].release()};
+
+            //Reset pointers
+            this->v[from.y][from.x].reset(p1);
+            this->v[to.y][to.x].reset(p2);
+        }
 }

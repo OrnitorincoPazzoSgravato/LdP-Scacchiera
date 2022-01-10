@@ -1,13 +1,4 @@
-/**
- * @file Chessboard.h
- * @author Enrico Cavinato
- * @brief 
- * @version 0.1
- * @date 2022-12-27
- * 
- * @copyright Copyright (c) 2022
- * 
- */
+
 
 #ifndef CHESSBOARD_H
 #define CHESSBOARD_H
@@ -41,16 +32,6 @@ namespace chessgame
      *  
 	 */
     class Chessboard {
-    private: 
-
-        //This variable implements the matrix: chessgame::Chesboard guarantees an incapsulation of this bidimensional array
-        unique_ptr<Piece> v[ROWS][COLUMNS];
-
-        //Limbo is the variable which owns a Piece* when it is removed from the chessboard: we want to implement the posibility of restore the remotion
-        unique_ptr<Piece> limbo;
-
-        //This Coordinates represents the cell where the Piece* owned by limbo was
-        Coordinates respawn_point; 
     public:
         /**
          * @brief Construct a new Chessboard object
@@ -64,17 +45,7 @@ namespace chessgame
         *@param c the cell of the matrix we want to set
         *@param p  the pointer to the Piece we want to set
         */                                            
-        void set_piece(const Coordinates& c , Piece * p)
-        {
-            // saves in limbo last deleted piece 
-            limbo.reset(v[c.y][c.x].release());
-
-            // sets respawn_point
-            respawn_point = Coordinates(c.x, c.y);
-
-            // sets the coordinates
-            v[c.y][c.x].reset(p);
-        }
+        void set_piece(const Coordinates& c , Piece * p);
         /**
         *@brief This function returns the Coordinates of an almost random piece of the chessboard
         *
@@ -94,8 +65,7 @@ namespace chessgame
         *@return  nullptr if there's no Piece* in that cell
         *
         */               
-        Piece * get_piece(const Coordinates& c)
-        {
+        Piece * get_piece(const Coordinates& c){
             return v[c.y][c.x].get();
         }
         /**
@@ -112,23 +82,23 @@ namespace chessgame
          * 
          * @param to  Coordinates of second piece
          */
-        void swap_positions(const Coordinates& from,const Coordinates& to)
-        {
-            //Release pointers 
-            Piece * p1  {v[from.y][from.x].release()};
-            Piece * p2 {v[to.y][to.x].release()};
-
-            //Reset pointers
-            v[from.y][from.x].reset(p1);
-            v[to.y][to.x].reset(p2);
-        }
+        void swap_positions(const Coordinates& from,const Coordinates& to);
         /**
          * @brief Undo the last setPiece(). Be careful when you use it!
          */
-        void restore_setPiece()
-        {
-            v[respawn_point.y][respawn_point.x].reset(limbo.release());
+        void restore_setPiece(){
+            this->v[respawn_point.y][respawn_point.x].reset(limbo.release());
         }
+    private: 
+
+        //This variable implements the matrix: chessgame::Chesboard guarantees an incapsulation of this bidimensional array
+        unique_ptr<Piece> v[ROWS][COLUMNS];
+
+        //Limbo is the variable which owns a Piece* when it is removed from the chessboard: we want to implement the posibility of restore the remotion
+        unique_ptr<Piece> limbo;
+
+        //This Coordinates represents the cell where the Piece* owned by limbo was
+        Coordinates respawn_point; 
 };
 }
 
