@@ -126,6 +126,10 @@ namespace gameplay {
 		 */
 		bool isGameOver();
 
+        bool isStalemate();
+
+        std::vector<chessgame::Coordinates> getPieceMovesAll(const chessgame::Coordinates& piece_coord);
+
 		public:
 			/**
 			 * @brief A full bot game is considered invalid after this number of moves without a winner

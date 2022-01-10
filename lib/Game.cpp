@@ -258,53 +258,72 @@ namespace gameplay {
         return false;
     }
 
+    std::vector<chessgame::Coordinates> Game::getPieceMovesAll(const chessgame::Coordinates& piece_coord) {
+		chessgame::Piece* p = this->board.get_piece(piece_coord);
+        if(p == nullptr) return std::vector<chessgame::Coordinates> {};
+
+        // vector containing all possible moves this piece can do (for the king the special move arrocco has been removed, as it has already been considered for an appliable tower)
+        std::vector<chessgame::Coordinates> moves_vec = p->getMoves(this->board, piece_coord);
+
+        char p_symbol = p->getSymbol();
+
+        bool p_is_paw = p_symbol == 'p' || p_symbol == 'P';
+        bool p_is_tower = p_symbol == 't' || p_symbol == 'T';
+        // two tiles movement of a first time moving paw
+        if(p_is_paw && !dynamic_cast<chessgame::Pedone*>(p)->has_already_moved) {
+            int offset = p->getColor() == chessgame::WHITE ? 2 : -2;
+            moves_vec.push_back(chessgame::Coordinates(piece_coord.x, piece_coord.y + offset));
+        }
+        // en passant capture
+        else if(p_is_paw && this->en_passante_coord != nullptr) {
+            int offset = p->getColor() == chessgame::WHITE ? 1 : -1;
+            bool left_capturable = *(this->en_passante_coord) == chessgame::Coordinates(piece_coord.x - 1, piece_coord.y + offset);
+            bool right_capturable = *(this->en_passante_coord) == chessgame::Coordinates(piece_coord.x + 1, piece_coord.y + offset);
+            if(left_capturable) moves_vec.push_back(chessgame::Coordinates(piece_coord.x - 1, piece_coord.y + offset));
+            else if(right_capturable) moves_vec.push_back(chessgame::Coordinates(piece_coord.x + 1, piece_coord.y + offset));
+        }
+        // tower in king arrocco
+        else if(p_is_tower && !dynamic_cast<chessgame::Torre*>(p)->has_already_moved) {
+            chessgame::Coordinates king_coord = p->getColor() == this->p1.getColor() ? p1_king_coord : p2_king_coord;
+            if(!dynamic_cast<chessgame::Re*>(this->board.get_piece(king_coord))->has_already_moved) {
+                moves_vec.push_back(king_coord);
+            }
+        }
+        // king in tower arrocco has been skipped as it's the same as a tower in king arrocco
+        return moves_vec;
+    }
+
     bool Game::isGameOver() {
         // block used to check if a bot game has reached its max amount of moves (game ending condition)
         if(this->n_moves <= Game::kBot_moves) {
             std::cout << "The full-bot game has reached its maximum amount of moves without ending {" << Game::kBot_moves << "}. Please try again." << std::endl;
             return false;
         }
-        if(!isPlayerKingInCheck(!this->current_turn))
-            return false; // not a checkmate if we aren't in check at all
-        
+        if(!isPlayerKingInCheck(!this->current_turn)) {
+            // block used to check for stalemate
+            for(int y = 0; y < 8; y++) {
+                for(int x = 0; x < 8; x++) {
+                    chessgame::Coordinates piece_coord = chessgame::Coordinates(x, y);
+                    chessgame::Piece* p = this->board.get_piece(piece_coord);
+                    if(p != nullptr && p->getColor() == (this->current_turn ? this->p2.getColor() : this->p1.getColor())) {
+                        if(this->getPieceMovesAll(piece_coord).size() != 0) return false;
+                    }
+                }
+            }
+        }
+            
+        // check is it's checkmate
         for(int y = 0; y < 8; y++) {
 			for(int x = 0; x < 8; x++) {
 				chessgame::Coordinates piece_coord = chessgame::Coordinates(x, y);
 				chessgame::Piece* p = this->board.get_piece(piece_coord);
                 
 				if(p != nullptr && p->getColor() == (this->current_turn ? this->p2.getColor() : this->p1.getColor())) {
-                    // vector containing all possible moves this piece can do (for the king the special move arrocco has been removed, as it has already been considered for an appliable tower)
-                    std::vector<chessgame::Coordinates> moves_vec = p->getMoves(this->board, piece_coord);
-
-                    char p_symbol = p->getSymbol();
-
-                    bool p_is_paw = p_symbol == 'p' || p_symbol == 'P';
-                    bool p_is_tower = p_symbol == 't' || p_symbol == 'T';
-                    // two tiles movement of a first time moving paw
-                    if(p_is_paw && !dynamic_cast<chessgame::Pedone*>(p)->has_already_moved) {
-                        int offset = p->getColor() == chessgame::WHITE ? 2 : -2;
-                        moves_vec.push_back(chessgame::Coordinates(piece_coord.x, piece_coord.y + offset));
-                    }
-                    // en passant capture
-                    else if(p_is_paw && this->en_passante_coord != nullptr) {
-                        int offset = p->getColor() == chessgame::WHITE ? 1 : -1;
-                        bool left_capturable = *(this->en_passante_coord) == chessgame::Coordinates(piece_coord.x - 1, piece_coord.y + offset);
-                        bool right_capturable = *(this->en_passante_coord) == chessgame::Coordinates(piece_coord.x + 1, piece_coord.y + offset);
-                        if(left_capturable) moves_vec.push_back(chessgame::Coordinates(piece_coord.x - 1, piece_coord.y + offset));
-                        else if(right_capturable) moves_vec.push_back(chessgame::Coordinates(piece_coord.x + 1, piece_coord.y + offset));
-                    }
-                    // tower in king arrocco
-                    else if(p_is_tower && !dynamic_cast<chessgame::Torre*>(p)->has_already_moved) {
-                        chessgame::Coordinates king_coord = p->getColor() == this->p1.getColor() ? p1_king_coord : p2_king_coord;
-                        if(!dynamic_cast<chessgame::Re*>(this->board.get_piece(king_coord))->has_already_moved) {
-                            moves_vec.push_back(king_coord);
-                        }
-                    }
-                    // king in tower arrocco has been skipped as it's the same as a tower in king arrocco
+                    std::vector<chessgame::Coordinates> moves_vec = this->getPieceMovesAll(piece_coord);
 
                     for(auto it = moves_vec.begin(); it != moves_vec.end(); ++it) {
                         
-                        bool is_capture = this->board.get_piece(*it)->getSymbol() != p_symbol; // surely not nullptr by how the code is structored
+                        bool is_capture = this->board.get_piece(*it)->getSymbol() != p->getSymbol(); // surely not nullptr by how the code is structored
 
                         this->board.swap_positions(piece_coord, *it);
                         if(is_capture) this->board.set_piece(piece_coord, nullptr);
