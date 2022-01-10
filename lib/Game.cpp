@@ -225,7 +225,7 @@ namespace gameplay {
 
                     is_valid_move = !this->isPlayerKingInCheck(player_identifier); // checks if the player is still in check
 
-                    if(is_capture) this->board.restore();
+                    if(is_capture) this->board.restore_setPiece();
                     this->board.swap_positions(move[1], move[0]);
 
                     if(!is_valid_move) return false; // move doesn't resolve the check state, so it's illegal
@@ -330,7 +330,7 @@ namespace gameplay {
 
                         bool check_resolved = !this->isPlayerKingInCheck(!this->current_turn); // checks if the player is still in check
 
-                        if(is_capture) this->board.restore();
+                        if(is_capture) this->board.restore_setPiece();
                         this->board.swap_positions(*it, piece_coord);
 
                         if(check_resolved) return false; // move doesn't resolve the check state, so it's illegal

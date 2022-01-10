@@ -9,8 +9,8 @@
  * 
  */
 
-#ifndef OLD_GAME
-#define OLD_GAME
+#ifndef OLD_GAME_H
+#define OLD_GAME_H
 
 #include <fstream>
 
