@@ -9,30 +9,38 @@
  */
 
 #include <memory>
+#include <string>
 
 #include "../include/Utilities.h"
 #include "../include/Chessboard.h"
+#include "../include/Cavallo.h"
+#include "../include/Alfiere.h"
+#include "../include/Regina.h"
+#include "../include/Re.h"
+#include "../include/Pedone.h"
+#include "../include/Torre.h"
 
 namespace chessgame
 
 {    
-    using namespace std;
+    using std::make_unique;
+    using std::string;
 
     Chessboard::Chessboard()
     {
         // initialize black Pieces  
-        v[0][0] = std::make_unique<Torre>( BLACK, 'T' );
-        v[0][1].reset(new Cavallo( BLACK,' C ') )  ;
-        v[0][2].reset(new Alfiere( BLACK , ' A ' ) ) ;
-        v[0][3].reset(new Regina( BLACK, ' D ' ) )  ;
-        v[0][4].reset(new Re(BLACK,'R'))  ;
-        v[0][5].reset(new Alfiere(BLACK,'A'))  ;
-        v[0][6].reset(new Cavallo(BLACK,'C'))  ;
-        v[0][7].reset(new Torre(BLACK,'T'))  ;
+        v[0][0] = make_unique<Torre>( BLACK, 'T' );
+        v[0][1]= make_unique<Cavallo>( BLACK,'C')  ;
+        v[0][2]= make_unique<Alfiere>( BLACK,'A')  ;
+        v[0][3]= make_unique<Regina>( BLACK,'D')  ;
+        v[0][4]= make_unique<Re>( BLACK,'R')  ;
+        v[0][5]= make_unique<Alfiere>( BLACK,'A')  ;
+        v[0][6]= make_unique<Cavallo>( BLACK,'C')  ;
+        v[0][7] = make_unique<Torre>( BLACK, 'T' );
         //for loop to initialize black Pedones
         for (int i = 0; i < COLUMNS; i++)
         {
-            v[1][i].reset(new Pedone(BLACK,'P'));
+            v[1][i]= make_unique<Pedone>( BLACK, 'P' );
         }
 
         //initialize white Pieces
@@ -40,17 +48,17 @@ namespace chessgame
         // for loop to inizialize white Pedones
         for (int i = 0; i < COLUMNS; i++)
         {
-            v[6][i].reset(new Pedone(WHITE,'p'));
+            v[6][i]= make_unique<Pedone>( WHITE, 'p' );
         }
         // initialize other white Pieces
-        v[7][0].reset(new Torre(WHITE,'t'));
-        v[7][1].reset(new Cavallo(WHITE,'c'));
-        v[7][2].reset(new Alfiere(WHITE ,'a'));
-        v[7][3].reset(new Regina(WHITE,'d')) ;
-        v[7][4].reset(new Re(WHITE,'r')) ;
-        v[7][5].reset(new Alfiere(WHITE,'a')) ;
-        v[7][6].reset(new Cavallo(WHITE,'c')) ;
-        v[7][7].reset(new Torre(WHITE,'t'));
+        v[7][0]= make_unique<Torre>( WHITE, 't' );
+        v[7][1]= make_unique<Cavallo>( WHITE, 'c' );
+        v[7][2]= make_unique<Alfiere>( WHITE, 'a' );
+        v[7][3]= make_unique<Regina>( WHITE, 'd' );
+        v[7][4]= make_unique<Re>( WHITE, 'r' );
+        v[7][5]= make_unique<Alfiere>( WHITE, 'a' );
+        v[7][6]= make_unique<Cavallo>( WHITE, 'c' );
+        v[7][7]= make_unique<Torre>( WHITE, 't' );
 
     }                               
            
@@ -65,7 +73,7 @@ namespace chessgame
             // for loop columns
             for ( int j = 0; i < COLUMNS; j++ )
             {
-                Piece * p = v[i][j].get() ;
+                Piece * p  {v[i][j].get()} ;
                 if (p) s += p->getSymbol() ;
                 else s += " ";
             }

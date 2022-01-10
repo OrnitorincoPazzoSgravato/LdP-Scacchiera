@@ -17,17 +17,21 @@
 
 namespace chessgame
 {
-    // note: no need to redefine the public interface of Player, just the methods to be overridden (and the constructor)
+    /**
+     * @brief This class represents a Bot
+     * 
+     */
     class Bot : public Player {
-        
+        private:
+        Chessboard& board;
         public:
             /**
              * @brief Calls the constructor of the superclass Player, assigning the specified player color.
              * 
              * 
              */
-            Bot(const PieceColor& p_color,Chessboard& cboard)
-                : Player(p_color)
+            Bot(const PieceColor& p_color, Chessboard& cboard)
+                : Player {p_color}, board {cboard}
             {}
 
             /**
@@ -45,8 +49,6 @@ namespace chessgame
             *  
             */
             Piece* getPromotionTarget();
-        private:
-        Chessboard board;
     };
 }
 

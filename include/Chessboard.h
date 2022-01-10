@@ -25,38 +25,44 @@
 #include "Utilities.h"
 #include "Piece.h"
 
-
-
-
-
 namespace chessgame
 
 {
+    using std::unique_ptr;
+
+    // constants of the chessboard: number of rows,columns and cells
     constexpr unsigned int ROWS {8};
     constexpr unsigned int COLUMNS {8};
     constexpr unsigned int CELLS {64};
+
+
     /**
-	 * @brief Classe che rappresenta una scacchiera.
-	 * Si occupa della sua inizializzazione, di settare e restituire le pedine, senza check
+	 * @brief This class implements a chessboard
+     *  
 	 */
     class Chessboard {
     private: 
-    
-        std::unique_ptr<Piece> v[ROWS][COLUMNS];
-        std::unique_ptr<Piece> limbo;
+
+        //This variable implements the matrix: chessgame::Chesboard guarantees an incapsulation of this bidimensional array
+        unique_ptr<Piece> v[ROWS][COLUMNS];
+
+        //Limbo is the variable which owns a Piece* when it is removed from the chessboard: we want to implement the posibility of restore the remotion
+        unique_ptr<Piece> limbo;
+
+        //This Coordinates represents the cell where the Piece* owned by limbo was
         Coordinates respawn_point; 
     public:
+        /**
+         * @brief Construct a new Chessboard object
+         * 
+         */
         Chessboard();
+
         /**
-        *@brief copy constructor disabled, why would you need two Chessboards ?
-        */  
-        //Chessboard(Chessboard& c) = delete; 
-        /**
-        *@brief set the cell [c.y][c.x] with p, set limbo to the overridden piece and respawn_place to c
+        *@brief Set the cell [c.y][c.x] with p, reset limbo with p and set respawn_place to c
         *
         *@param c the cell of the matrix we want to set
         *@param p  the pointer to the Piece we want to set
-        *
         */                                            
         void set_piece(const Coordinates& c , Piece * p)
         {
@@ -68,7 +74,6 @@ namespace chessgame
 
             // sets the coordinates
             v[c.y][c.x].reset(p);
-
         }
         /**
         *@brief This function returns the Coordinates of an almost random piece of the chessboard
@@ -78,7 +83,6 @@ namespace chessgame
         *@param visited_cells the number of the cells we visited in the previous iterations
         * 
         *@return Coordinates of a piece of given color
-        *
         */
         Coordinates& get_random(const PieceColor pc ,const Coordinates& from ,int& visited_cells);
         /**
@@ -87,7 +91,7 @@ namespace chessgame
         *@param c the cell of the matrix we want to ispectionate
         *
         *@return  a pointer to the Piece in v(x,y)
-        *@return  nullptr if there's no Piece in that cell
+        *@return  nullptr if there's no Piece* in that cell
         *
         */               
         Piece * get_piece(const Coordinates& c)
@@ -99,30 +103,31 @@ namespace chessgame
         *@brief This function create a snapshot of the state of the chessboard 
         *
         *@return the string of the state
-        *
         */                   
         std::string& snapshot();
         /**
-         * @brief it swaps the content of a cell at [from.y][from.x] and [to.y][to.x]
+         * @brief Swap the content of a cell at [from.y][from.x] and [to.y][to.x]
          * 
-         * @param from description
+         * @param from Coordinates of first piece
          * 
-         * @param to description
+         * @param to  Coordinates of second piece
          */
         void swap_positions(const Coordinates& from,const Coordinates& to)
         {
+            //Release pointers 
             Piece * p1  {v[from.y][from.x].release()};
             Piece * p2 {v[to.y][to.x].release()};
+
+            //Reset pointers
             v[from.y][from.x].reset(p1);
             v[to.y][to.x].reset(p2);
         }
         /**
-         * @brief undo the previous setPiece
-         * 
+         * @brief Undo the last setPiece(). Be careful when you use it!
          */
-        void restore()
+        void restore_setPiece()
         {
-
+            v[respawn_point.y][respawn_point.x].reset(limbo.release());
         }
 };
 }
