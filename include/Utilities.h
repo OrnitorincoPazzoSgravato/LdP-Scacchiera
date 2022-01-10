@@ -26,10 +26,10 @@ namespace chessgame
         Coordinates();
         Coordinates(int x, int y);
         Coordinates(string symbol);
-        bool Coordinates::operator==(const Coordinates& other_coord) const {
+        bool operator==(const Coordinates& other_coord) const {
             return this->x == other_coord.x && this->y == other_coord.y;
         }
-        bool Coordinates::operator!=(const Coordinates& other__coord) const {
+        bool operator!=(const Coordinates& other__coord) const {
             return !(*this == other__coord);
         }
     };
