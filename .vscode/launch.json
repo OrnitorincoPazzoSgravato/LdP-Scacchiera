@@ -7,7 +7,7 @@
     
         {
             "name": "Debug Scacchiera",
-            "program": "${fileDirname}\\..\\build\\scacchiera.exe",
+            "program": "C:\\Users\\Zuech\\Documents\\GitHub\\LdP-Scacchiera\\build\\scacchiera.exe",
             "request": "launch",
             "cwd": "${fileDirname}",
             "type": "cppdbg",
