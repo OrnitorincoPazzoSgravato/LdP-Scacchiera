@@ -27,8 +27,8 @@ namespace chessgame
         PieceColor pieceColor;
 
     public:
-        Player();
-        explicit Player(const PieceColor &p_color)
+        Player() {}
+        Player(const PieceColor &p_color)
             : pieceColor(p_color)
         {
         }
@@ -45,7 +45,7 @@ namespace chessgame
             std::cin >> from >> to;
             return std::array<Coordinates, 2>{Coordinates(from), Coordinates(to)};
         }
-        Piece *getPromotionTarget();
+        Piece* getPromotionTarget();
         PieceColor getColor()
         {
             return this->pieceColor;

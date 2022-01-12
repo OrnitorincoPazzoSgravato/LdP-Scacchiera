@@ -14,9 +14,7 @@ namespace chessgame
     {
     }
 
-    Cavallo::Cavallo() : Piece()
-    {
-    }
+    Cavallo::Cavallo() {}
 
     /*
 

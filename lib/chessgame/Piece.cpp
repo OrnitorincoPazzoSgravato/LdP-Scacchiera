@@ -4,12 +4,12 @@ namespace chessgame
 {
     Piece::Piece(PieceColor color, const char symbol) : color(color), symbol(symbol) {}
 
-    char Piece::getSymbol() const
+    char Piece::getSymbol()
     {
         return this->symbol;
     }
 
-    PieceColor Piece::getColor() const
+    PieceColor Piece::getColor()
     {
         return this->color;
     }

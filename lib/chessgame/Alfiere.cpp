@@ -13,9 +13,7 @@ namespace chessgame
     {
     }
 
-    Alfiere::Alfiere() : Piece()
-    {
-    }
+    Alfiere::Alfiere() {}
 
     /*
 

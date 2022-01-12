@@ -23,7 +23,7 @@ namespace chessgame
         int y;
         string symbol;
 
-        Coordinates();
+        Coordinates() {};
         Coordinates(int x, int y);
         Coordinates(string symbol);
         bool operator==(const Coordinates& other_coord) const {

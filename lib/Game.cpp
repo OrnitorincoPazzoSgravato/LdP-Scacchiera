@@ -13,9 +13,11 @@
 
 #include <random>
 
+#include "../include/chessgame/Player.h"
 #include "../include/chessgame/Bot.h"
 #include "../include/chessgame/Utilities.h"
 #include "../include/chessgame/Chessboard.h"
+#include "../include/chessgame/Piece.h"
 
 namespace gameplay
 {
@@ -26,6 +28,7 @@ namespace gameplay
         std::array<chessgame::PieceColor, 2> a_colors = this->getRandColors();
         this->p1 = chessgame::Player(a_colors[0]);
         this->p2 = chessgame::Bot(a_colors[1], this->board);
+        std::cout << "Game start!" << std::endl;
     }
 
     Game::Game(bool is_bot_match) : Game()
@@ -431,7 +434,8 @@ namespace gameplay
         this->log_file.open("game_log.txt"); // open the log file
 
         do
-        {
+        {   
+            std::cout << this->board.snapshot() << std::endl;
             bool invalid_move = true;
             do
             {
