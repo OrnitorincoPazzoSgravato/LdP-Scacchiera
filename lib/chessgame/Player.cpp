@@ -9,18 +9,18 @@
  * 
  */
 
-#include "../../include/chessgame/Player.h";
+#include "../../include/chessgame/Player.h"
 
-#include "../../include/chessgame/Piece.h";
-#include "../../include/chessgame/Utilities.h";
-#include "../../include/chessgame/Torre.h";
-#include "../../include/chessgame/Regina.h";
-#include "../../include/chessgame/Cavallo.h";
-#include "../../include/chessgame/Alfiere.h";
+#include "../../include/chessgame/Piece.h"
+#include "../../include/chessgame/Utilities.h"
+#include "../../include/chessgame/Torre.h"
+#include "../../include/chessgame/Regina.h"
+#include "../../include/chessgame/Cavallo.h"
+#include "../../include/chessgame/Alfiere.h"
 
 namespace chessgame
 {
-    Piece *Player::getPromotionTarget()
+    Piece* Player::getPromotionTarget()
     {
         // array that stores the allowed target promotion symbols
         std::array<char, 4> allowed_symbols;
@@ -55,13 +55,13 @@ namespace chessgame
         switch (target_index)
         {
         case 0:
-            return &Torre(this->pieceColor, allowed_symbols[target_index]);
+            return new Torre(this->pieceColor, allowed_symbols[target_index]);
         case 1:
-            return &Cavallo(this->pieceColor, allowed_symbols[target_index]);
+            return new Cavallo(this->pieceColor, allowed_symbols[target_index]);
         case 2:
-            return &Alfiere(this->pieceColor, allowed_symbols[target_index]);
+            return new Alfiere(this->pieceColor, allowed_symbols[target_index]);
         case 3:
-            return &Regina(this->pieceColor, allowed_symbols[target_index]);
+            return new Regina(this->pieceColor, allowed_symbols[target_index]);
         default:
             return nullptr; // defaults to nullptr for error-checking
         }

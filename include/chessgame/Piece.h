@@ -26,7 +26,7 @@ namespace chessgame
         char symbol;
 
     protected:
-        Piece();
+        Piece() {}
         Piece(PieceColor color, char symbol);
 
     public:

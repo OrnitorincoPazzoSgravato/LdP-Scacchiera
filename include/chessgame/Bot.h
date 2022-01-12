@@ -22,13 +22,13 @@ namespace chessgame
     {
 
     public:
+        Bot() = delete;
         /**
              * @brief Calls the constructor of the superclass Player, assigning the specified player color.
              * 
              * 
              */
-        Bot(const PieceColor &p_color, Chessboard &cboard)
-            : Player{p_color}, board{cboard}
+        Bot(const PieceColor &p_color, Chessboard &cboard): Player{p_color}, board{cboard}
         {
         }
 

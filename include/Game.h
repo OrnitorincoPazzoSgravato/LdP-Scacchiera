@@ -16,6 +16,7 @@
 
 #include "./chessgame/Chessboard.h"
 #include "./chessgame/Player.h"
+#include "./chessgame/Utilities.h"
 
 namespace gameplay
 {

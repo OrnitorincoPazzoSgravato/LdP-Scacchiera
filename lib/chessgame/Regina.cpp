@@ -13,9 +13,7 @@ namespace chessgame
     {
     }
 
-    Regina::Regina() : Piece()
-    {
-    }
+    Regina::Regina() {}
 
     /*
 

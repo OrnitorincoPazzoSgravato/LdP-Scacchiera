@@ -4,7 +4,15 @@
     // Per altre informazioni, visitare: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        
+    
+        {
+            "name": "Debug Scacchiera",
+            "program": "${fileDirname}\\..\\build\\scacchiera.exe",
+            "request": "launch",
+            "cwd": "${fileDirname}",
+            "type": "cppdbg",
+            "args": ["pc"],
+        },
         {
             "name": "g++.exe - Compila ed esegui il debug del file attivo",
             "type": "cppdbg",
