@@ -43,10 +43,14 @@ namespace chessgame
             *
             * @brief: This method implements promotion in bot class
             * 
-            * @return: a pointer to the piece we want to replace the Pedone
+            * @return a charachter, d or D
             *  
             */
-        Piece *getPromotionTarget();
+        char getPromotionTarget()
+        {
+            if (pieceColor == WHITE)    return 'd';
+            else    return 'D';
+        }
 
     private:
         Chessboard &board;
