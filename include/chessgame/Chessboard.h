@@ -99,6 +99,13 @@ namespace chessgame
         void restore_setPiece(){
             this->v[this->respawn_point.y][this->respawn_point.x].reset(limbo.release());
         }
+        /**
+         * @brief Incapsulate the creation of the piece we want to promote
+         * 
+         * @param taget_index the charachter of the piece 
+         * @param coord the coordinates where the paw get promoted
+         */
+        void promote(char target_index,const Coordinates& coord);
     private: 
 
         //This variable implements the matrix: chessgame::Chesboard guarantees an incapsulation of this bidimensional array
