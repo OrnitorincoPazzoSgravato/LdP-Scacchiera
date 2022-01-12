@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.8)
 
 set(PROJECT_NAME chessboard)
 set(INCLUDE_DIRS include)
-set(SRC_FILES lib/Chessboard.cpp lib/Piece.cpp lib/Alfiere.cpp lib/Cavallo.cpp lib/Pedone.cpp lib/Re.cpp lib/Regina.cpp lib/Torre.cpp lib/Utilities.cpp)
-set(HEADER_FILES include/Chessboard.h include/Piece.h include/Alfiere.h include/Cavallo.h include/Pedone.h include/Re.h include/Regina.h include/Torre.h include/Utilities.h)
+set(SRC_FILES lib/chessgame/Chessboard.cpp lib/chessgame/Piece.cpp lib/chessgame/Alfiere.cpp lib/chessgame/Cavallo.cpp lib/chessgame/Pedone.cpp lib/chessgame/Re.cpp lib/chessgame/Regina.cpp lib/chessgame/Torre.cpp lib/chessgame/Utilities.cpp)
+set(HEADER_FILES include/chessgame/Chessboard.h include/chessgame/Piece.h include/chessgame/Alfiere.h include/chessgame/Cavallo.h include/chessgame/Pedone.h include/chessgame/Re.h include/chessgame/Regina.h include/chessgame/Torre.h include/chessgame/Utilities.h)
 
 project(${PROJECT_NAME} VERSION 1.0)
 
