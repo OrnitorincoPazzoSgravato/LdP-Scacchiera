@@ -11,6 +11,8 @@
 #include <memory>
 #include <string>
 #include <stdexcept>
+#include <iostream>
+#include <array>
 
 #include "../../include/chessgame/Utilities.h"
 #include "../../include/chessgame/Chessboard.h"
@@ -149,5 +151,41 @@ namespace chessgame
     {
         if (coord.x >= COLUMNS || coord.y >= ROWS || coord.x < 0  || coord.y < 0 )
             throw std::invalid_argument( "Out of bound Coordinate" );
+    }
+    
+    void Chessboard::promote(char target_index,const Coordinates& coord)
+    {
+        // switch statement used to return the choosen derived class of Piece
+        switch (target_index)
+        {
+        case 'C':
+            v[coord.y][coord.x] = std::make_unique<Cavallo>(BLACK, 'C');
+            break;
+        case 'A':
+            v[coord.y][coord.x] = std::make_unique<Alfiere>(BLACK, 'A');
+            break;
+        case 'D':
+            v[coord.y][coord.x] = std::make_unique<Regina>(BLACK, 'D');
+            break;
+        case 'T':
+            v[coord.y][coord.x] = std::make_unique<Torre>(BLACK, 'T');
+            break;
+        case 'a':
+            v[coord.y][coord.x] = std::make_unique<Alfiere>(WHITE, 'a');
+            break;
+        case 'c':
+            v[coord.y][coord.x] = std::make_unique<Cavallo>(WHITE, 'c');
+            break;
+        case 'd':
+            v[coord.y][coord.x] = std::make_unique<Regina>(WHITE, 'd');
+            break;
+        case 't':
+            v[coord.y][coord.x] = std::make_unique<Torre>(WHITE, 't');
+            break;
+        default:
+            return;
+        }
+
+
     }
 }
