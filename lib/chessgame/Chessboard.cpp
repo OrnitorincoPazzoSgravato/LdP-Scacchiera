@@ -68,7 +68,7 @@ namespace chessgame
         {
             s += num + " ";
             // for loop columns
-            for (int j = 0; i < COLUMNS; j++)
+            for (int j = 0; j < COLUMNS; j++)
             {
                 Piece *p{this->v[i][j].get()};
                 if (p)
