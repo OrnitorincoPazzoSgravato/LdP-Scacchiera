@@ -47,7 +47,7 @@ namespace chessgame
          * 
          * @return Piece* a pointer to the target
          */
-        virtual Piece* getPromotionTarget() =0;
+        virtual char getPromotionTarget() =0;
         /**
          * @brief Get the Color object
          * 
