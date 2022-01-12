@@ -12,24 +12,27 @@
 
 #include <vector>
 
-#include "Chessboard.h"
+//#include "Chessboard.h"
 #include "Utilities.h"
 
 namespace chessgame
 {
     using std::vector;
 
-    class Piece {
+    class Chessboard;
+    class Piece
+    {
         PieceColor color;
         char symbol;
-        protected:
-            Piece();
-            Piece(PieceColor color, char symbol);
 
-        public:
-            char getSymbol() const;
-            PieceColor getColor() const;
-            virtual vector<Coordinates> getMoves(Chessboard &board, const Coordinates &coord) = 0;
+    protected:
+        Piece();
+        Piece(PieceColor color, char symbol);
+
+    public:
+        char getSymbol() const;
+        PieceColor getColor() const;
+        virtual vector<Coordinates> getMoves(Chessboard &board, const Coordinates &coord) = 0;
     };
 }
 
