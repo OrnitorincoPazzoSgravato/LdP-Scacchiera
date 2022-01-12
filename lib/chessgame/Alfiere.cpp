@@ -4,7 +4,7 @@
     @date: 2021-12-27
 
 */
-#include "../include/Alfiere.h"
+#include "../../include/chessgame/Alfiere.h"
 
 namespace chessgame
 {

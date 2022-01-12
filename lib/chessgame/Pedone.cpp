@@ -5,7 +5,7 @@
 
 */
 
-#include "../include/Pedone.h"
+#include "../../include/chessgame/Pedone.h"
 
 namespace chessgame
 {
@@ -21,7 +21,7 @@ namespace chessgame
         @return: vector<Coordinates> of the possible moves of the current piece
 
     */
-    vector<Coordinates> Pedone::getMoves(Chessboard &board, const Coordinates &coord)
+    std::vector<Coordinates> Pedone::getMoves(Chessboard &board, const Coordinates &coord)
     {
         vector<Coordinates> moves;
 

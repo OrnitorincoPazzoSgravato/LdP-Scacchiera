@@ -5,7 +5,7 @@
 
 */
 
-#include "../include/Cavallo.h"
+#include "../../include/chessgame/Cavallo.h"
 
 namespace chessgame
 {

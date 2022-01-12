@@ -4,10 +4,10 @@
     @date: 2021-12-27
 
 */
-#include "../include/Re.h"
+#include "../../include/chessgame/Re.h"
 
 namespace chessgame
-{   
+{
     /*
 
         This method returns the possible moves of the piece.

@@ -1,4 +1,4 @@
-#include "../include/Utilities.h"
+#include "../../include/chessgame/Utilities.h"
 
 namespace chessgame
 {
