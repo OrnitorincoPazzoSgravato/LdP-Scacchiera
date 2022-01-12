@@ -14,6 +14,7 @@
 #include <random>
 
 #include "../include/chessgame/Player.h"
+#include "../include/chessgame/Human.h"
 #include "../include/chessgame/Bot.h"
 #include "../include/chessgame/Utilities.h"
 #include "../include/chessgame/Chessboard.h"
@@ -26,15 +27,16 @@ namespace gameplay
     Game::Game() : n_moves{0}, en_passante_coord{nullptr}, board{chessgame::Chessboard()}, stall_counter{0}
     {
         std::array<chessgame::PieceColor, 2> a_colors = this->getRandColors();
-        this->p1 = chessgame::Player(a_colors[0]);
-        this->p2 = chessgame::Bot(a_colors[1], this->board);
+        this->p1 = new chessgame::Human(a_colors[0]);
+        this->p2 = new chessgame::Bot(a_colors[1], this->board);
         std::cout << "Game start!" << std::endl;
     }
 
     Game::Game(bool is_bot_match) : Game()
     {
         if (is_bot_match)
-            this->p1 = chessgame::Bot(this->p1.getColor(), this->board);
+            delete this->p1;
+            this->p1 = new chessgame::Bot(this->p1->getColor(), this->board);
     }
 
     // destructor declaration
@@ -43,6 +45,10 @@ namespace gameplay
         if (this->log_file.is_open())
             this->log_file.close();
         delete this->en_passante_coord;
+        delete this->p1;
+        delete this->p2;
+        this->p1 = nullptr;
+        this->p2 = nullptr;
         this->en_passante_coord = nullptr;
     }
 
@@ -74,7 +80,7 @@ namespace gameplay
             {
                 chessgame::Coordinates piece_coord = chessgame::Coordinates(x, y);
                 chessgame::Piece *p = this->board.get_piece(piece_coord);
-                if (p != nullptr && p->getColor() == (player_identifier ? this->p2.getColor() : this->p1.getColor()))
+                if (p != nullptr && p->getColor() == (player_identifier ? this->p2->getColor() : this->p1->getColor()))
                 {
                     std::vector<chessgame::Coordinates> moves_vec = p->getMoves(this->board, piece_coord);
                     for (auto it = moves_vec.begin(); it != moves_vec.end(); ++it)
@@ -206,10 +212,8 @@ namespace gameplay
             p = nullptr; // good practice. Now p isn't needed anymore
 
             // "asks" the player for the promotion target and proceeds to update the board
-            chessgame::Piece *new_p = (this->current_turn ? this->p1 : this->p2).getPromotionTarget();
-            this->board.set_piece(coord, new_p);
+            char new_symbol = (this->current_turn ? this->p1 : this->p2)->getPromotionTarget();
 
-            char new_symbol = new_p->getSymbol();
             p = nullptr;
             return new_symbol; // successful promotion
         }
@@ -350,7 +354,7 @@ namespace gameplay
         // tower in king arrocco
         else if (p_is_tower && !dynamic_cast<chessgame::Torre *>(p)->has_already_moved)
         {
-            chessgame::Coordinates king_coord = p->getColor() == this->p1.getColor() ? p1_king_coord : p2_king_coord;
+            chessgame::Coordinates king_coord = p->getColor() == this->p1->getColor() ? p1_king_coord : p2_king_coord;
             if (!dynamic_cast<chessgame::Re *>(this->board.get_piece(king_coord))->has_already_moved)
             {
                 moves_vec.push_back(king_coord);
@@ -382,7 +386,7 @@ namespace gameplay
                 {
                     chessgame::Coordinates piece_coord = chessgame::Coordinates(x, y);
                     chessgame::Piece *p = this->board.get_piece(piece_coord);
-                    if (p != nullptr && p->getColor() == (this->current_turn ? this->p2.getColor() : this->p1.getColor()))
+                    if (p != nullptr && p->getColor() == (this->current_turn ? this->p2->getColor() : this->p1->getColor()))
                     {
                         if (this->getPieceMovesAll(piece_coord).size() != 0)
                             return false;
@@ -399,7 +403,7 @@ namespace gameplay
                 chessgame::Coordinates piece_coord = chessgame::Coordinates(x, y);
                 chessgame::Piece *p = this->board.get_piece(piece_coord);
 
-                if (p != nullptr && p->getColor() == (this->current_turn ? this->p2.getColor() : this->p1.getColor()))
+                if (p != nullptr && p->getColor() == (this->current_turn ? this->p2->getColor() : this->p1->getColor()))
                 {
                     std::vector<chessgame::Coordinates> moves_vec = this->getPieceMovesAll(piece_coord);
 
@@ -440,7 +444,7 @@ namespace gameplay
             do
             {
                 // player's move for its turn
-                std::array<chessgame::Coordinates, 2> move = this->current_turn ? this->p1.think() : this->p2.think();
+                std::array<chessgame::Coordinates, 2> move = this->current_turn ? this->p1->think() : this->p2->think();
                 invalid_move = this->playerMove(this->current_turn, move);
 
             } while (invalid_move); // this cycle keeps going until a valid move has been entered

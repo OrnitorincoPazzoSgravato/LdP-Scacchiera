@@ -48,7 +48,7 @@ namespace chessgame
          * 
          * @return Piece* a pointer to the piece we want to replace the paw with
          */
-        Piece* getPromotionTarget();        
+        char getPromotionTarget();        
 
     }; 
 }

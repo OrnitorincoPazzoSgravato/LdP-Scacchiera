@@ -55,4 +55,11 @@ namespace chessgame
             return std::array<Coordinates, 2>{from, to};
         }
     }
+    char Bot::getPromotionTarget()
+    {
+        char c = '0';
+        if (this->pieceColor == WHITE) c = 'd';
+        else c = 'D';
+        return c;
+    }
 }

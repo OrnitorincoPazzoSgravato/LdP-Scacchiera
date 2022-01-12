@@ -21,7 +21,7 @@
 
 namespace chessgame
 {
-    Piece* Human::getPromotionTarget()
+    char Human::getPromotionTarget()
     {
         // array that stores the allowed target promotion symbols
         std::array<char, 4> allowed_symbols;
@@ -52,19 +52,6 @@ namespace chessgame
                 }
             }
         } while (!correct_symbol_entered);
-        // switch statement used to return the choosen derived class of Piece
-        switch (target_index)
-        {
-        case 0:
-            return new Torre(this->pieceColor, allowed_symbols[target_index]);
-        case 1:
-            return new Cavallo(this->pieceColor, allowed_symbols[target_index]);
-        case 2:
-            return new Alfiere(this->pieceColor, allowed_symbols[target_index]);
-        case 3:
-            return new Regina(this->pieceColor, allowed_symbols[target_index]);
-        default:
-            return nullptr; // defaults to nullptr for error-checking
-        }
+        return allowed_symbols[target_index];
     }
 }

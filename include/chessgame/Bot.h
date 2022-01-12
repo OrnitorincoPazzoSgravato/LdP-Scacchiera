@@ -46,11 +46,7 @@ namespace chessgame
             * @return a charachter, d or D
             *  
             */
-        char getPromotionTarget()
-        {
-            if (pieceColor == WHITE)    return 'd';
-            else    return 'D';
-        }
+        char getPromotionTarget();
 
     private:
         Chessboard &board;

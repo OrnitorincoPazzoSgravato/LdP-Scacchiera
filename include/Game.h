@@ -31,7 +31,7 @@ namespace gameplay
 		chessgame::Chessboard board;
 		int n_moves;
 		bool current_turn; // true if p1's turn, false if p2's turn
-		chessgame::Player p1, p2;
+		chessgame::Player *p1, *p2;
 		chessgame::Coordinates p1_king_coord, p2_king_coord;
 		std::ofstream log_file;
 		int stall_counter;
