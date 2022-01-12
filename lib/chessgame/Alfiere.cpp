@@ -13,8 +13,6 @@ namespace chessgame
     {
     }
 
-    Alfiere::Alfiere() {}
-
     /*
 
         This method returns the possible moves of the piece.

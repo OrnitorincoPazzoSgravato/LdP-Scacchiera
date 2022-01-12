@@ -26,7 +26,7 @@ namespace chessgame
 
     public:
         bool has_already_moved;
-        Pedone() : has_already_moved{false}, Piece() {};
+        Pedone() = delete;
         Pedone(PieceColor color, const char symbol) : has_already_moved{false}, Piece(color, symbol) {}
         vector<Coordinates> getMoves(Chessboard &board, const Coordinates &coord) override;
     };

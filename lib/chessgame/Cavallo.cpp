@@ -14,8 +14,6 @@ namespace chessgame
     {
     }
 
-    Cavallo::Cavallo() {}
-
     /*
 
         This method returns the possible moves of the piece.

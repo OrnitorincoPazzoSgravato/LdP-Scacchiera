@@ -26,7 +26,7 @@ namespace chessgame
 
     public:
         bool has_already_moved;
-        Torre() : has_already_moved{false}, Piece() {};
+        Torre() = delete;
         Torre(PieceColor color, const char symbol) : has_already_moved{false}, Piece(color, symbol) {}
         vector<Coordinates> getMoves(Chessboard &board, const Coordinates &coord) override;
 

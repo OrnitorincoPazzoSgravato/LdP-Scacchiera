@@ -25,7 +25,7 @@ namespace chessgame
     {
 
     public:
-        Alfiere();
+        Alfiere() = delete;
         Alfiere(PieceColor color, const char symbol);
         vector<Coordinates> getMoves(Chessboard &board, const Coordinates &coord) override;
 

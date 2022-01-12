@@ -25,7 +25,7 @@ namespace chessgame
     {
 
     public:
-        Regina();
+        Regina() = delete;
         Regina(PieceColor color, const char symbol);
         vector<Coordinates> getMoves(Chessboard &board, const Coordinates &coord) override;
 
