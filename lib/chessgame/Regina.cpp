@@ -13,8 +13,6 @@ namespace chessgame
     {
     }
 
-    Regina::Regina() {}
-
     /*
 
         This method returns the possible moves of the piece.
