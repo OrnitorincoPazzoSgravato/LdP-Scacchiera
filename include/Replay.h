@@ -47,6 +47,11 @@ namespace chessgame
          * 
          */
         void print_on_file(const std::string& input_file,const std::string& output_file);
+        /**
+         * @brief Destroy the Replay object
+         * 
+         */
+        ~Replay();
     };
 }
 

@@ -1,5 +1,4 @@
 
-
 #ifndef CHESSBOARD_H
 #define CHESSBOARD_H
 
@@ -19,7 +18,7 @@
 namespace chessgame
 
 {
-    using std::unique_ptr;
+    class Piece;
 
     // constants of the chessboard: number of rows,columns and cells
     constexpr unsigned int ROWS {8};
@@ -55,7 +54,7 @@ namespace chessgame
         * 
         *@return Coordinates of a piece of given color
         */
-        Coordinates& get_random(const PieceColor pc ,const Coordinates& from ,int& visited_cells);
+        Coordinates get_random(const PieceColor pc ,const Coordinates& from ,int& visited_cells);
         /**
         *@brief This function returns the pointer to the piece in [c.y][c.x]
         *
@@ -74,7 +73,7 @@ namespace chessgame
         *
         *@return the string of the state
         */                   
-        std::string& snapshot();
+        std::string snapshot();
         /**
          * @brief Swap the content of a cell at [from.y][from.x] and [to.y][to.x]
          * 
@@ -87,17 +86,17 @@ namespace chessgame
          * @brief Undo the last setPiece(). Be careful when you use it!
          */
         void restore_setPiece(){
-            this->v[respawn_point.y][respawn_point.x].reset(limbo.release());
+            this->v[this->respawn_point.y][this->respawn_point.x].reset(limbo.release());
         }
     private: 
 
         //This variable implements the matrix: chessgame::Chesboard guarantees an incapsulation of this bidimensional array
-        unique_ptr<Piece> v[ROWS][COLUMNS];
+        std::unique_ptr<Piece> v[ROWS][COLUMNS];
 
         //Limbo is the variable which owns a Piece* when it is removed from the chessboard: we want to implement the posibility of restore the remotion
-        unique_ptr<Piece> limbo;
+        std::unique_ptr<Piece> limbo;
 
-        //This Coordinates represents the cell where the Piece* owned by limbo was
+        //This Coordinates represents the cell where the Piece* owned by limbo was before the remotion
         Coordinates respawn_point; 
 };
 }

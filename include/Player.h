@@ -26,7 +26,7 @@ namespace chessgame
             PieceColor pieceColor;
         public:
             Player();
-            Player(const PieceColor& p_color)
+            explicit Player(const PieceColor& p_color)
                 :pieceColor(p_color)
             {}
             /**
@@ -36,7 +36,7 @@ namespace chessgame
             *@return: array<Coordinates,2> the original and final coordinates of the piece we want to move
             */
 
-            std::array<Coordinates,2>& think()
+            std::array<Coordinates,2> think()
             {
                 std::string from,to;
                 std::cin >> from >> to;
