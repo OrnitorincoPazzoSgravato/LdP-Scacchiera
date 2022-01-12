@@ -1,7 +1,9 @@
 #include <iostream>
+#include "../include/Game.h"
 
 // Riccardo Zuech
 
-int main() {
+int main()
+{
     return 0;
 }

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include "../include/Chessboard.h"
+#include "../include/chessgame/Chessboard.h"
 
 int main(int argc, char const *argv[])
 {

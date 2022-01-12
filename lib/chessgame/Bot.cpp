@@ -14,7 +14,7 @@
 
 namespace chessgame
 {
-    std::array<Coordinates, 2> &Bot::think()
+    std::array<Coordinates, 2> Bot::think()
     {
         // generate the coordinates of a random cell we want to visit
         int row{std::rand() % ROWS};
