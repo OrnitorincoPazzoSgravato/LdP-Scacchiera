@@ -10,6 +10,7 @@
 
 #include <memory>
 #include <string>
+#include <stdexcept>
 
 #include "../../include/chessgame/Utilities.h"
 #include "../../include/chessgame/Chessboard.h"
@@ -23,7 +24,7 @@
 namespace chessgame
 
 {
-    Chessboard::Chessboard()
+    Chessboard::Chessboard() : respawn_point{-1,-1},limbo{nullptr}
     {
         // initialize black Pieces
         this->v[0][0] = std::make_unique<Torre>(BLACK, 'T');
@@ -66,7 +67,7 @@ namespace chessgame
         int num{8};
         for (int i = 0; i < ROWS; i++)
         {
-            s += num + " ";
+            s += std::to_string(num) + " ";
             // for loop columns
             for (int j = 0; j < COLUMNS; j++)
             {
@@ -79,7 +80,7 @@ namespace chessgame
             s += "\n";
             num--;
         }
-        s += "\nABCDEFGH";
+        s += "  ABCDEFGH";
         return s;
     }
     Coordinates Chessboard::get_random(const PieceColor pc, const Coordinates &from, int &count)
@@ -133,5 +134,11 @@ namespace chessgame
         //Reset pointers
         this->v[from.y][from.x].reset(p1);
         this->v[to.y][to.x].reset(p2);
+    }
+
+    void Chessboard::check_coordinates(int x, int y )
+    {
+        if (x >= COLUMNS || y >= ROWS || x < 0  || y < 0 )
+            throw std::invalid_argument( "Out of bound parameter" );
     }
 }
