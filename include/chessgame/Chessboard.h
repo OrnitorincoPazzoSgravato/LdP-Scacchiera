@@ -1,3 +1,13 @@
+/**
+ * @file Chessboard.h
+ * @author Enrico Cavinato
+ * @brief 
+ * @version 0.1
+ * @date 2022-01-12
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 
 #ifndef CHESSBOARD_H
 #define CHESSBOARD_H
@@ -65,6 +75,7 @@ namespace chessgame
         *
         */               
         Piece * get_piece(const Coordinates& c){
+            this->check_coordinates(c);
             return v[c.y][c.x].get();
         }
         /**
@@ -98,10 +109,12 @@ namespace chessgame
 
         //This Coordinates represents the cell where the Piece* owned by limbo was before the remotion
         Coordinates respawn_point;
-
-        //checks if the coordinates are out of bounds
-
-        void check_coordinates(int x, int y ); 
+        /**
+         * @brief check if coordinates are in chessboard
+         * 
+         * @param coord
+         */
+        void check_coordinates(const Coordinates& coord); 
 };
 }
 

@@ -85,6 +85,10 @@ namespace chessgame
     }
     Coordinates Chessboard::get_random(const PieceColor pc, const Coordinates &from, int &count)
     {
+        // check input
+        this->check_coordinates(from);
+
+
         int row{from.y};
         int column{from.x};
         // while loop inspects at worst every cell one time and stops if a valid move does not exist
@@ -115,6 +119,7 @@ namespace chessgame
     }
     void Chessboard::set_piece(const Coordinates &c, Piece *p)
     {
+        this->check_coordinates(c);
         // saves in limbo last deleted piece or nullptr il the cell is empty
         // the deallocation of Piece * which was in limbo take place when we use setpiece()
         this->limbo.reset(v[c.y][c.x].release());
@@ -127,6 +132,10 @@ namespace chessgame
     }
     void Chessboard::swap_positions(const Coordinates &from, const Coordinates &to)
     {
+        // check validity
+        this->check_coordinates(from);
+        this->check_coordinates(to);
+
         //Release pointers
         Piece *p1{v[from.y][from.x].release()};
         Piece *p2{v[to.y][to.x].release()};
@@ -136,9 +145,9 @@ namespace chessgame
         this->v[to.y][to.x].reset(p2);
     }
 
-    void Chessboard::check_coordinates(int x, int y )
+    void Chessboard::check_coordinates(const Coordinates& coord)
     {
-        if (x >= COLUMNS || y >= ROWS || x < 0  || y < 0 )
-            throw std::invalid_argument( "Out of bound parameter" );
+        if (coord.x >= COLUMNS || coord.y >= ROWS || coord.x < 0  || coord.y < 0 )
+            throw std::invalid_argument( "Out of bound Coordinate" );
     }
 }
