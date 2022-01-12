@@ -97,7 +97,11 @@ namespace chessgame
         std::unique_ptr<Piece> limbo;
 
         //This Coordinates represents the cell where the Piece* owned by limbo was before the remotion
-        Coordinates respawn_point; 
+        Coordinates respawn_point;
+
+        //checks if the coordinates are out of bounds
+
+        void check_coordinates(int x, int y ); 
 };
 }
 
