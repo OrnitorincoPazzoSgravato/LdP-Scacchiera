@@ -15,7 +15,12 @@ namespace chessgame
         WHITE,
         BLACK
     };
-
+    /**
+     * @brief This class represent a pair of coordinates
+     * 
+     * @param x the column
+     * @param y the row 
+     */
     class Coordinates
     {
     public:

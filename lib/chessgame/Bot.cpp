@@ -11,6 +11,8 @@
 
 #include "../../include/chessgame/Bot.h"
 #include "../../include/chessgame/Chessboard.h"
+#include "../../include/chessgame/Player.h"
+#include "../../include/chessgame/Regina.h"
 
 namespace chessgame
 {
