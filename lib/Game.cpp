@@ -208,13 +208,10 @@ namespace gameplay
         // a white paw on the top row or a black paw on the bottom row
         if ((p->getSymbol() == 'p' && coord.x == 0) || (p->getSymbol() == 'P' && coord.x == 7))
         {
-
-            p = nullptr; // good practice. Now p isn't needed anymore
-
             // "asks" the player for the promotion target and proceeds to update the board
             char new_symbol = (this->current_turn ? this->p1 : this->p2)->getPromotionTarget();
+            this->board.promote(new_symbol, coord);
 
-            p = nullptr;
             return new_symbol; // successful promotion
         }
         p = nullptr;
