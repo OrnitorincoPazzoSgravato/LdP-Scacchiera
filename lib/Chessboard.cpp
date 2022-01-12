@@ -23,25 +23,22 @@
 namespace chessgame
 
 {    
-    using std::make_unique;
-    using std::string;
-
     Chessboard::Chessboard()
     {
         // initialize black Pieces  
-        this->v[0][0]= make_unique<Torre>( BLACK, 'T' );
-        this->v[0][1]= make_unique<Cavallo>( BLACK,'C')  ;
-        this->v[0][2]= make_unique<Alfiere>( BLACK,'A')  ;
-        this->v[0][3]= make_unique<Regina>( BLACK,'D')  ;
-        this->v[0][4]= make_unique<Re>( BLACK,'R')  ;
-        this->v[0][5]= make_unique<Alfiere>( BLACK,'A')  ;
-        this->v[0][6]= make_unique<Cavallo>( BLACK,'C')  ;
-        this->v[0][7] = make_unique<Torre>( BLACK, 'T' );
+        this->v[0][0]= std::make_unique<Torre>( BLACK, 'T' );
+        this->v[0][1]= std::make_unique<Cavallo>( BLACK,'C')  ;
+        this->v[0][2]= std::make_unique<Alfiere>( BLACK,'A')  ;
+        this->v[0][3]= std::make_unique<Regina>( BLACK,'D')  ;
+        this->v[0][4]= std::make_unique<Re>( BLACK,'R')  ;
+        this->v[0][5]= std::make_unique<Alfiere>( BLACK,'A')  ;
+        this->v[0][6]= std::make_unique<Cavallo>( BLACK,'C')  ;
+        this->v[0][7] = std::make_unique<Torre>( BLACK, 'T' );
 
         //for loop to initialize black Paws
         for (int i = 0; i < COLUMNS; i++)
         {
-            this->v[1][i]= make_unique<Pedone>( BLACK, 'P' );
+            this->v[1][i]= std::make_unique<Pedone>( BLACK, 'P' );
         }
 
         //initialize white Pieces
@@ -49,23 +46,23 @@ namespace chessgame
         // for loop to inizialize white Paws
         for (int i = 0; i < COLUMNS; i++)
         {
-            this->v[6][i]= make_unique<Pedone>( WHITE, 'p' );
+            this->v[6][i]= std::make_unique<Pedone>( WHITE, 'p' );
         }
         // initialize other white Pieces
-        this->v[7][0]= make_unique<Torre>( WHITE, 't' );
-        this->v[7][1]= make_unique<Cavallo>( WHITE, 'c' );
-        this->v[7][2]= make_unique<Alfiere>( WHITE, 'a' );
-        this->v[7][3]= make_unique<Regina>( WHITE, 'd' );
-        this->v[7][4]= make_unique<Re>( WHITE, 'r' );
-        this->v[7][5]= make_unique<Alfiere>( WHITE, 'a' );
-        this->v[7][6]= make_unique<Cavallo>( WHITE, 'c' );
-        this->v[7][7]= make_unique<Torre>( WHITE, 't' );
+        this->v[7][0]= std::make_unique<Torre>( WHITE, 't' );
+        this->v[7][1]= std::make_unique<Cavallo>( WHITE, 'c' );
+        this->v[7][2]= std::make_unique<Alfiere>( WHITE, 'a' );
+        this->v[7][3]= std::make_unique<Regina>( WHITE, 'd' );
+        this->v[7][4]= std::make_unique<Re>( WHITE, 'r' );
+        this->v[7][5]= std::make_unique<Alfiere>( WHITE, 'a' );
+        this->v[7][6]= std::make_unique<Cavallo>( WHITE, 'c' );
+        this->v[7][7]= std::make_unique<Torre>( WHITE, 't' );
 
     }                               
            
-    std::string& Chessboard::snapshot()
+    std::string Chessboard::snapshot()
     {
-        string s;
+        std::string s;
         // for loop rows
         int num { 8 };
         for ( int i = 0 ; i < ROWS; i++ )
@@ -84,10 +81,10 @@ namespace chessgame
         s += "\nABCDEFGH";
         return s;
     }
-    Coordinates& Chessboard::get_random(const PieceColor pc,const Coordinates& from ,int& count)
+    Coordinates Chessboard::get_random(const PieceColor pc,const Coordinates& from ,int& count)
     {
-        unsigned int row {from.y};
-        unsigned int column {from.x};
+        int row {from.y};
+        int column {from.x};
         // while loop inspects at worst every cell one time and stops if a valid move does not exist
         while (count <= CELLS)
         {
@@ -116,7 +113,8 @@ namespace chessgame
     }
     void Chessboard::set_piece(const Coordinates& c , Piece * p)
         {
-            // saves in limbo last deleted piece 
+            // saves in limbo last deleted piece or nullptr il the cell is empty 
+            // the deallocation of Piece * which was in limbo take place when we use setpiece()
             this->limbo.reset(v[c.y][c.x].release());
 
             // sets respawn_point
