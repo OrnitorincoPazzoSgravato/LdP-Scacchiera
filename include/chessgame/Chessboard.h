@@ -31,9 +31,9 @@ namespace chessgame
     class Piece;
 
     // constants of the chessboard: number of rows,columns and cells
-    constexpr unsigned int ROWS {8};
-    constexpr unsigned int COLUMNS {8};
-    constexpr unsigned int CELLS {64};
+    constexpr int ROWS {8};
+    constexpr int COLUMNS {8};
+    constexpr int CELLS {64};
 
 
     /**
