@@ -4,7 +4,7 @@
     @date: 2021-12-27
 
 */
-
+#include <iostream>
 #include "../../include/chessgame/Pedone.h"
 
 namespace chessgame
@@ -76,6 +76,11 @@ namespace chessgame
                     moves.push_back(Coordinates(x + x_offset, y + y_offset));
                 }
             }
+        }
+
+        for (auto &move : moves)
+        {
+            std::cout << "Pedone Move: " << move.x << " " << move.y << std::endl;
         }
 
         return moves;

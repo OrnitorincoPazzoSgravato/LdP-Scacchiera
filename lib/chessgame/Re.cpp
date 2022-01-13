@@ -4,6 +4,7 @@
     @date: 2021-12-27
 
 */
+#include <iostream>
 #include "../../include/chessgame/Re.h"
 
 namespace chessgame
@@ -48,6 +49,11 @@ namespace chessgame
                     }
                 }
             }
+        }
+
+        for (auto &move : moves)
+        {
+            std::cout << "Re Move: " << move.x << " " << move.y << std::endl;
         }
 
         return moves;

@@ -4,6 +4,7 @@
     @date: 2021-12-27
 
 */
+#include <iostream>
 #include "../../include/chessgame/Regina.h"
 
 namespace chessgame
@@ -52,6 +53,11 @@ namespace chessgame
 
         // Diagonal down left check
         this->diagonalFinder(board, coord, moves, -1, -1);
+
+        for (auto &move : moves)
+        {
+            std::cout << "Regina Move: " << move.x << " " << move.y << std::endl;
+        }
 
         return moves;
     }
