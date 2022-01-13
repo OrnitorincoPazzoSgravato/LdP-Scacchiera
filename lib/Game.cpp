@@ -29,6 +29,14 @@ namespace gameplay
         std::array<chessgame::PieceColor, 2> a_colors = this->getRandColors();
         this->p1 = new chessgame::Human(a_colors[0]);
         this->p2 = new chessgame::Bot(a_colors[1], this->board);
+        if(a_colors[0] == chessgame::WHITE) {
+            this->p1_king_coord = chessgame::Coordinates("E1");
+            this->p2_king_coord = chessgame::Coordinates("E8");
+        }
+        else {
+            this->p1_king_coord = chessgame::Coordinates("E8");
+            this->p2_king_coord = chessgame::Coordinates("E1");
+        }
         std::cout << "Game start!" << std::endl;
     }
 
@@ -432,7 +440,7 @@ namespace gameplay
     // public methods declaration
     void Game::play()
     {
-        this->log_file.open("game_log.txt"); // open the log file
+        this->log_file.open("./game_log.txt"); // open the log file
 
         do
         {   
