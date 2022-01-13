@@ -4,10 +4,19 @@
     // Per altre informazioni, visitare: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
     
         {
             "name": "Debug Scacchiera",
             "program": "C:\\Users\\Zuech\\Documents\\GitHub\\LdP-Scacchiera\\build\\scacchiera.exe",
+            "request": "launch",
+            "cwd": "${fileDirname}",
+            "type": "cppdbg",
+            "args": ["pc"],
+        },
+        {
+            "name": "Debug Scacchiera F",
+            "program": "/home/federico/Documenti/GitHub/LdP-Scacchiera/build/./scacchiera",
             "request": "launch",
             "cwd": "${fileDirname}",
             "type": "cppdbg",

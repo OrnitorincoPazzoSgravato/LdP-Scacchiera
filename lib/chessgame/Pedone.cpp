@@ -44,9 +44,9 @@ namespace chessgame
         if (y + y_offset >= 0 && y + y_offset < ROWS)
         {
             // Control if the end position is empty (only vertical movement)
-            if (board.get_piece(Coordinates(x + x_offset, y + y_offset)) == nullptr)
+            if (x + x_offset >= 0 && x + x_offset < COLUMNS && board.get_piece(Coordinates(x + x_offset, y + y_offset)) == nullptr)
             {
-                moves.push_back(Coordinates(x, y + y_offset));
+                moves.push_back(Coordinates(x + x_offset, y + y_offset));
             }
 
             x_offset = 1;
@@ -57,21 +57,23 @@ namespace chessgame
 
                 // Control if the end position is an enemy (only diagonal movement)
 
-                if (board.get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor() && board.get_piece(Coordinates(x + x_offset, y + y_offset)) != nullptr)
+                if (board.get_piece(Coordinates(x + x_offset, y + y_offset)) != nullptr && board.get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor())
                 {
                     moves.push_back(Coordinates(x + x_offset, y + y_offset));
                 }
             }
 
+            x_offset = -1;
+
             // Control if the x move is inside the board (left diagonal movement)
-            if (x - 1 >= 0 && x - 1 < COLUMNS)
+            if (x + x_offset >= 0 && x + x_offset < COLUMNS)
             {
 
                 // Control if the end position is an enemy (only diagonal movement)
 
-                if (board.get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor() && board.get_piece(Coordinates(x + x_offset, y + y_offset)) != nullptr)
+                if (board.get_piece(Coordinates(x + x_offset, y + y_offset)) != nullptr && board.get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor())
                 {
-                    moves.push_back(Coordinates(x - 1, y + y_offset));
+                    moves.push_back(Coordinates(x + x_offset, y + y_offset));
                 }
             }
         }
