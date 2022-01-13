@@ -13,6 +13,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <array>
+#include <random>
 
 #include "../../include/chessgame/Utilities.h"
 #include "../../include/chessgame/Chessboard.h"
@@ -85,39 +86,48 @@ namespace chessgame
         s += "  ABCDEFGH";
         return s;
     }
-    Coordinates Chessboard::get_random(const PieceColor pc, const Coordinates &from, int &count)
+    std::array<Coordinates,2> Chessboard::get_random(const PieceColor pc)
     {
-        // check input
-        this->check_coordinates(from);
+        // generate the coordinates of a random cell we want to visit
+        int row{std::rand() % ROWS};
+        int column{std::rand() % COLUMNS};
 
+        // count cells
+        int count {0};
 
-        int row{from.y};
-        int column{from.x};
-        // while loop inspects at worst every cell one time and stops if a valid move does not exist
-        while (count <= CELLS)
+        // while loop inspects at worst all cells: a valid move must exist because of checkmate condition
+        while (count < CELLS)
         {
             // increment of the number of pieces we visited
             count++;
+            column++;
+
             // if we finished to visit a row we pass to the next
             if (column == COLUMNS)
             {
                 column = 0;
                 row++;
             }
-            // if we finished to visit the matrix, we start from (0,0)
+            // if we get out of bounds we restart from (0,0)
             if (row == ROWS)
                 row = 0;
             // if the piece in the considered cell contains a piece of given color
-            if (this->v[row][column].get()->getColor() == pc)
+            if (v[row][column].get() && this->v[row][column].get()->getColor() == pc)
             {
-                Coordinates c{column, row};
-                return c;
+                Coordinates from{column, row};
+                // get the possible moves
+                std::vector<Coordinates> possible_moves{this->get_piece(from)->getMoves(*this, from)};
+                
+                // if a valid move does not exist
+                if (possible_moves.size() == 0) continue;
+
+                // if a valid move does exist
+                Coordinates to {possible_moves[0]};
+                return std::array<Coordinates,2> {from,to};
             }
-            column++;
         }
         // if a valid piece does not exist
-        Coordinates c{-1, -1};
-        return c;
+        //return 0 ;
     }
     void Chessboard::set_piece(const Coordinates &c, Piece *p)
     {
@@ -185,7 +195,5 @@ namespace chessgame
         default:
             return;
         }
-
-
     }
 }
