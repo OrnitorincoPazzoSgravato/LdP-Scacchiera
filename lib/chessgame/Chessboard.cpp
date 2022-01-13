@@ -86,12 +86,17 @@ namespace chessgame
         s += "  ABCDEFGH";
         return s;
     }
-    std::array<Coordinates,2> Chessboard::get_random(const PieceColor pc)
+    int get_row(const PieceColor pc)
     {
-        // generate the coordinates of a random cell we want to visit
-        int row{std::rand() % ROWS};
-        int column{std::rand() % COLUMNS};
-
+        if (pc == WHITE)    return 6;
+        return 1;
+    }
+    
+    /* std::array<Coordinates,2> Chessboard::get_random(const PieceColor pc)
+    {
+        // generate the coordinates of a random cell we want to visit, starting with paw line
+        int row {get_row(pc)};
+        int column {std::rand() % COLUMNS};     
         // count cells
         int count {0};
 
@@ -112,26 +117,32 @@ namespace chessgame
             if (row == ROWS)
                 row = 0;
             // if the piece in the considered cell contains a piece of given color
-            if (v[row][column].get() && this->v[row][column].get()->getColor() == pc)
+            Piece * p { this->v[row][column].get() };
+            if ( p && p->getColor() == pc)
             {
                 Coordinates from{column, row};
                 // get the possible moves
-                std::vector<Coordinates> possible_moves{this->get_piece(from)->getMoves(*this, from)};
+                std::vector<Coordinates> possible_moves{p->getMoves(*this, from)};
                 
-                // if a valid move does not exist
-                if (possible_moves.size() == 0) continue;
+                // if a valid move  does exist
+                int moves_number {possible_moves.size()};
+                int i {0};
+                if (moves_number != 0)
+                {
+                    Coordinates to {possible_moves[0]};
+                    return std::array<Coordinates,2> {from,to};
+                }
 
-                // if a valid move does exist
-                Coordinates to {possible_moves[0]};
-                return std::array<Coordinates,2> {from,to};
             }
         }
         // if a valid piece does not exist
         //return 0 ;
-    }
+    }*/ 
+    
     void Chessboard::set_piece(const Coordinates &c, Piece *p)
     {
         this->check_coordinates(c);
+
         // saves in limbo last deleted piece or nullptr il the cell is empty
         // the deallocation of Piece * which was in limbo take place when we use setpiece()
         this->limbo.reset(v[c.y][c.x].release());

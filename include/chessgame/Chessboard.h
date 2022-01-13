@@ -62,7 +62,7 @@ namespace chessgame
         * 
         *@return Coordinates of a piece of given color
         */
-        std::array<Coordinates,2> get_random(const PieceColor pc);
+        // std::array<Coordinates,2> get_random(const PieceColor pc);
         /**
         *@brief This function returns the pointer to the piece in [c.y][c.x]
         *
