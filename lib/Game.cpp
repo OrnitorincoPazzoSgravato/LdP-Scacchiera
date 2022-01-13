@@ -454,8 +454,6 @@ namespace gameplay
 
             } while (invalid_move); // this cycle keeps going until a valid move has been entered
 
-            std::cout << this->board.snapshot() << '\n';
-
             this->n_moves++; // increse number of moves
             this->stall_counter++;
 
