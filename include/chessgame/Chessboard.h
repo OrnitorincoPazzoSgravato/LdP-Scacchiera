@@ -28,6 +28,7 @@
 namespace chessgame
 
 {
+    // forward declaration
     class Piece;
 
     // constants of the chessboard: number of rows,columns and cells
@@ -43,10 +44,11 @@ namespace chessgame
     class Chessboard {
     public:
         /**
-         * @brief Construct a new Chessboard object
+         * @brief Construct a new Chessboard 
          * 
          */
         Chessboard();
+
 
         /**
         *@brief Set the cell [c.y][c.x] with p, reset limbo with p and set respawn_place to c
@@ -55,14 +57,8 @@ namespace chessgame
         *@param p  the pointer to the Piece we want to set
         */                                            
         void set_piece(const Coordinates& c , Piece * p);
-        /**
-        *@brief This function returns a random move of this instance of chessboard
-        *
-        *@param pc the color of the Piece
-        * 
-        *@return Coordinates of a piece of given color
-        */
-        // std::array<Coordinates,2> get_random(const PieceColor pc);
+
+
         /**
         *@brief This function returns the pointer to the piece in [c.y][c.x]
         *
@@ -76,6 +72,8 @@ namespace chessgame
             //  this->check_coordinates(c);
             return v[c.y][c.x].get();
         }
+
+
         /**
         * 
         *@brief This function create a snapshot of the state of the chessboard 
@@ -83,6 +81,8 @@ namespace chessgame
         *@return the string of the state
         */                   
         std::string snapshot();
+
+
         /**
          * @brief Swap the content of a cell at [from.y][from.x] and [to.y][to.x]
          * 
@@ -91,12 +91,16 @@ namespace chessgame
          * @param to  Coordinates of second piece
          */
         void swap_positions(const Coordinates& from,const Coordinates& to);
+
+
         /**
          * @brief Undo the last setPiece(). Be careful when you use it!
          */
         void restore_setPiece(){
             this->v[this->respawn_point.y][this->respawn_point.x].reset(limbo.release());
         }
+
+
         /**
          * @brief Incapsulate the creation of the piece we want to promote
          * 
@@ -104,23 +108,39 @@ namespace chessgame
          * @param coord the coordinates where the paw get promoted
          */
         void promote(char target_index,const Coordinates& coord);
+        
     private: 
 
-        //This variable implements the matrix: chessgame::Chesboard guarantees an incapsulation of this bidimensional array
+        /**
+         * @brief This variable implements the matrix: chessgame::Chesboard guarantees an incapsulation of this bidimensional array
+         * 
+         */
         std::unique_ptr<Piece> v[ROWS][COLUMNS];
 
-        //Limbo is the variable which owns a Piece* when it is removed from the chessboard: we want to implement the posibility of restore the remotion
+        /**
+         * @brief Limbo is the variable which owns a Piece* when it is removed from the chessboard: we want to implement the posibility of restore the remotion
+         * 
+         */
         std::unique_ptr<Piece> limbo;
 
-        //This Coordinates represents the cell where the Piece* owned by limbo was before the remotion
+        /**
+         * @brief This Coordinates represents the cell where the Piece* owned by limbo was before the remotion
+         * 
+         */
         Coordinates respawn_point;
         /**
          * @brief check if coordinates are in chessboard
          * 
          * @param coord
          */
-        void check_coordinates(const Coordinates& coord); 
+        
 };
+    /**
+     * @brief Helper function: checks if coordinates are out of bounds
+     * 
+     * @param coord coordinates we want to check
+     */
+    void check_coordinates(const Coordinates& coord); 
 }
 
 #endif 

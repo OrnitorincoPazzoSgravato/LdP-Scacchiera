@@ -32,6 +32,8 @@ namespace chessgame
         Human(const PieceColor pcolor) 
             : Player {pcolor}
         {}
+
+
         /**
          * @brief This function implement the act of thinking a move by a human player
          * 
@@ -45,6 +47,8 @@ namespace chessgame
             std::cin >> from >> to;
             return std::array<Coordinates, 2>{Coordinates(from), Coordinates(to)};
         }
+
+        
         /**
          * @brief Implement the decision of the piece we want to replace the paw with
          * 
