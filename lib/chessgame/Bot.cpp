@@ -20,12 +20,22 @@
 
 namespace chessgame
 {
+    /**
+     * @brief This helper function generate a row ( it is not random : it starts form the paw line)
+     * 
+     * @param pc the color of paws
+     * @return int the number of a row or column
+     */
     int generate_row(PieceColor pc)
     {
-        if (pc == WHITE)  return 6;
-        return 1;        
+        if (pc == WHITE)  return 1;
+        return 6;        
     }
-
+    /**
+     * @brief iterate a coordinate
+     * 
+     * @param coord the coordinate
+     */
     void next_cell(Coordinates& coord)
     {
         // column ++
@@ -50,11 +60,14 @@ namespace chessgame
     {
         // generate row,column, and count
         int row {generate_row(pieceColor)};
+        std::cout << "Raw generated :  "<< row  << "\n";
         int column {std::rand() % COLUMNS};
+        std::cout << "Column generated :  "<< column  << "\n";
         int count {0};
 
         //generate coordinate
         Coordinates from {column,row};
+        std::cout << "Coordinates :  "<< from.x << " " << from.y << " " << "\n";
 
         //while we ispectionate
         while (count < CELLS)
@@ -70,7 +83,7 @@ namespace chessgame
             if ( p && p->getColor() == this->pieceColor)
             {
                 // get possible moves
-                std::vector<Coordinates> possible_moves{p->getMoves(board,from)};
+                std::vector<Coordinates> possible_moves{p->getMoves(this->board,from)};
 
                 // if a possible move does exist
                 int moves_number {possible_moves.size()};
