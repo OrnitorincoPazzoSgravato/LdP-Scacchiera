@@ -56,15 +56,13 @@ namespace chessgame
         */                                            
         void set_piece(const Coordinates& c , Piece * p);
         /**
-        *@brief This function returns the Coordinates of an almost random piece of the chessboard
+        *@brief This function returns a random move of this instance of chessboard
         *
         *@param pc the color of the Piece
-        *@param from the Coordinates we start the iteration from
-        *@param visited_cells the number of the cells we visited in the previous iterations
         * 
         *@return Coordinates of a piece of given color
         */
-        Coordinates get_random(const PieceColor pc ,const Coordinates& from ,int& visited_cells);
+        std::array<Coordinates,2> get_random(const PieceColor pc);
         /**
         *@brief This function returns the pointer to the piece in [c.y][c.x]
         *
@@ -75,7 +73,7 @@ namespace chessgame
         *
         */               
         Piece * get_piece(const Coordinates& c){
-            this->check_coordinates(c);
+            //  this->check_coordinates(c);
             return v[c.y][c.x].get();
         }
         /**
