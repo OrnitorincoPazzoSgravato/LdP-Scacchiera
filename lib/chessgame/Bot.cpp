@@ -33,7 +33,7 @@ namespace chessgame
         int y = coord.y;
         
         // if end of column, next row
-        if (x == COLUMNS)
+        if (x >= COLUMNS)
         {
             // a caporiga
             x = 0;
@@ -41,7 +41,7 @@ namespace chessgame
             y++;
         }
         // if end of matrix
-        if (y == ROWS)
+        if (y >= ROWS)
         {
             // start from the beginning
             y = 0;
@@ -73,7 +73,7 @@ namespace chessgame
             Piece *p {this->board.get_piece(from)};
 
             // if cell is empty 
-            if (!p) continue;
+            if (p == nullptr) continue;
 
             // if a piece does exist and is controlled by this player
             if (p->getColor() == this->pieceColor)
