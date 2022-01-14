@@ -51,7 +51,7 @@ namespace chessgame
             int y_offset = offset[1];
 
             // Control if the end cell is in the chessboard
-            if (x + x_offset >= 0 && y + y_offset < ROWS && y + y_offset >= 0 && y + y_offset < COLUMNS)
+            if (x + x_offset >= 0 && x + x_offset < ROWS && y + y_offset >= 0 && y + y_offset < COLUMNS)
             {
                 if (board.get_piece(Coordinates(x + x_offset, y + y_offset)) == nullptr)
                 {
