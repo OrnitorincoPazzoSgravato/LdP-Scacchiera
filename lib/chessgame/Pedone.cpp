@@ -78,11 +78,6 @@ namespace chessgame
             }
         }
 
-        for (auto &move : moves)
-        {
-            std::cout << "Pedone Move: " << move.x << " " << move.y << std::endl;
-        }
-
         return moves;
     }
 }

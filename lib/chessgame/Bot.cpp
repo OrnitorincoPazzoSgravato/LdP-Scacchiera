@@ -36,24 +36,27 @@ namespace chessgame
      * 
      * @param coord the coordinate
      */
-    void next_cell(Coordinates& coord)
+    Coordinates Bot::next_cell(const Coordinates& coord)
     {
         // column ++
-        coord.x++;
+        int x = coord.x + 1;
+        int y = coord.y;
         // if end of column, next row
-        if (coord.x == COLUMNS)
+        if (x == COLUMNS)
         {
             // a caporiga
-            coord.x = 0;
+            x = 0;
             // next row
-            coord.y ++;
+            y++;
         }
         // if end of matrix
-        if (coord.y == ROWS)
+        if (y == ROWS && x == COLUMNS)
         {
             // start from the beginning
-            coord.y = 0;
+            y = 0;
+            x = 0;
         }
+        return Coordinates(x, y);
     }
 
     std::array<Coordinates, 2> Bot::think()
@@ -67,14 +70,13 @@ namespace chessgame
 
         //generate coordinate
         Coordinates from {column,row};
-        std::cout << "Coordinates :  "<< from.x << " " << from.y << " " << "\n";
 
         //while we ispectionate
         while (count < CELLS)
         {
             count++;
             // next cell
-            next_cell(from);
+            from = next_cell(from);
 
             // get piece in from
             Piece *p {this->board.get_piece(from)};
@@ -82,6 +84,7 @@ namespace chessgame
             // if a piece does exist and is controlled by this player
             if ( p && p->getColor() == this->pieceColor)
             {
+
                 // get possible moves
                 std::vector<Coordinates> possible_moves{p->getMoves(this->board,from)};
 
@@ -89,9 +92,10 @@ namespace chessgame
                 int moves_number {possible_moves.size()};
                 if (moves_number != 0)
                 {
+                    std::cout << "Moving: "<< from.symbol << '\n';
                     // returns the first move
                     Coordinates to {possible_moves[0]};
-                    return std::array<Coordinates,2> {from,to};
+                    return std::array<Coordinates,2> {from, to};
                 }
             }    
         }

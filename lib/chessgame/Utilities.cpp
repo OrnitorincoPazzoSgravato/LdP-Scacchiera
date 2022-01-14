@@ -2,20 +2,15 @@
 
 namespace chessgame
 {
-    Coordinates::Coordinates(int x, int y)
+    Coordinates::Coordinates(int x_coord, int y_coord) : x{x_coord}, y{y_coord}
     {
         /*if (x < 0 || x > 7 || y < 0 || y > 7)
         {
             throw CoordinateOutOfRangeException("Coordinates Out of Range");
         }*/
-
-        this->x = x;
-        this->y = y;
-
         char col = x + 'A';
         char row = y + '1';
-
-        this->symbol = col + row;
+        this->symbol = std::string() + col + row;
     }
 
     Coordinates::Coordinates(string symbol)

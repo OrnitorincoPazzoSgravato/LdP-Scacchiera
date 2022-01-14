@@ -42,11 +42,6 @@ namespace chessgame
         // Diagonal down left check
         this->diagonalFinder(board, coord, moves, -1, -1);
 
-        for (auto &move : moves)
-        {
-            std::cout << "Afiere Move: " << move.x << " " << move.y << std::endl;
-        }
-
         return moves;
     }
 

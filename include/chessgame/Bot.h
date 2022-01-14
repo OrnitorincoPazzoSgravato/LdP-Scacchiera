@@ -50,6 +50,7 @@ namespace chessgame
 
     private:
         Chessboard &board;
+        Coordinates next_cell(const Coordinates& coord);
     };
 }
 
