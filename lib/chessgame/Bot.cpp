@@ -20,17 +20,7 @@
 
 namespace chessgame
 {
-    /**
-     * @brief This helper function generate a row ( it is not random : it starts form the paw line)
-     * 
-     * @param pc the color of paws
-     * @return int the number of a row or column
-     */
-    int generate_row(PieceColor pc)
-    {
-        if (pc == WHITE)  return 1;
-        return 6;        
-    }
+
     /**
      * @brief iterate a coordinate
      * 
@@ -41,6 +31,7 @@ namespace chessgame
         // column ++
         int x = coord.x + 1;
         int y = coord.y;
+        
         // if end of column, next row
         if (x == COLUMNS)
         {
@@ -62,7 +53,7 @@ namespace chessgame
     std::array<Coordinates, 2> Bot::think()
     {
         // generate row,column, and count
-        int row {generate_row(pieceColor)};
+        int row {std::rand() % ROWS};
         // std::cout << "Raw generated :  "<< row  << "\n";
         int column {std::rand() % COLUMNS};
         // std::cout << "Column generated :  "<< column  << "\n";
