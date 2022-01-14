@@ -189,10 +189,10 @@ namespace gameplay
         return false;
     }
 
-    bool Game::isDefaultMove(chessgame::Piece &p, const chessgame::Coordinates &to)
+    bool Game::isDefaultMove(chessgame::Piece &p, const chessgame::Coordinates &from, const chessgame::Coordinates &to)
     {
         // selected piece's default legal moves
-        std::vector<chessgame::Coordinates> legal_moves_vec = p.getMoves(this->board, to);
+        std::vector<chessgame::Coordinates> legal_moves_vec = p.getMoves(this->board, from);
         for (int i = 0; i < legal_moves_vec.size(); i++)
         {
             if (legal_moves_vec[i] == to)
@@ -269,7 +269,7 @@ namespace gameplay
             // symbol of the piece to move
             char piece_symbol = p->getSymbol();
 
-            bool is_default = this->isDefaultMove(*p, move[1]);
+            bool is_default = this->isDefaultMove(*p, move[0], move[1]);
             bool is_paw_2_tiles_movement = this->isPawTwoTilesMovement(move);
             bool is_arrocco = this->isArrocco(move);
             bool is_en_passant = this->isEnPassant(p->getSymbol(), move[1]);

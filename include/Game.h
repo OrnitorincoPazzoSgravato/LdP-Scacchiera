@@ -120,7 +120,7 @@ namespace gameplay
 		 * @return true 
 		 * @return false 
 		 */
-		bool isDefaultMove(chessgame::Piece &p, const chessgame::Coordinates &to);
+		bool isDefaultMove(chessgame::Piece &p, const chessgame::Coordinates &from, const chessgame::Coordinates &to);
 		/**
 		 * @brief checks the current state of the game to see if the game has ended/should end
 		 * If it's a full bot game, then it always ends in certain amount of moves declared in kBot_moves
