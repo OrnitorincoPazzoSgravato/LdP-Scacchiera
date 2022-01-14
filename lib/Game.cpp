@@ -37,14 +37,18 @@ namespace gameplay
             this->p1_king_coord = chessgame::Coordinates("E8");
             this->p2_king_coord = chessgame::Coordinates("E1");
         }
-        std::cout << "Game start!" << std::endl;
+        this->current_turn = a_colors[0] == chessgame::WHITE;
+        std::cout << "Game created!" << std::endl;
+        std::cout << this->board.snapshot() << std::endl;
     }
 
     Game::Game(bool is_bot_match) : Game()
     {
-        if (is_bot_match)
+        if (is_bot_match) {
+            chessgame::PieceColor p1_color = this->p1->getColor();
             delete this->p1;
-            this->p1 = new chessgame::Bot(this->p1->getColor(), this->board);
+            this->p1 = new chessgame::Bot(p1_color, this->board);
+        }
     }
 
     // destructor declaration
@@ -79,9 +83,8 @@ namespace gameplay
         this->log_file << move << '\n';
     }
 
-    bool Game::isPlayerKingInCheck(bool player_identifier)
+    bool Game::isPlayerKingInCheck(bool player_identifier, const chessgame::Coordinates& king_coord)
     {
-        chessgame::Coordinates king_coord = player_identifier ? this->p1_king_coord : this->p2_king_coord;
         for (int y = 0; y < 8; y++)
         {
             for (int x = 0; x < 8; x++)
@@ -100,6 +103,11 @@ namespace gameplay
             }
         }
         return false;
+    }
+
+    bool Game::isPlayerKingInCheck(bool player_identifier) {
+        chessgame::Coordinates king_coord = player_identifier ? p1_king_coord : p2_king_coord;
+        return this->isPlayerKingInCheck(player_identifier, king_coord);
     }
 
     bool Game::isPawTwoTilesMovement(const std::array<chessgame::Coordinates, 2> &move)
@@ -282,8 +290,8 @@ namespace gameplay
             // here move is executed if valid
             if (is_valid_move)
             {
-                // block used to enforce moves on king check
-                if (isPlayerKingInCheck(player_identifier))
+                // block used to enforce moves in case of king check
+                if (isPlayerKingInCheck(player_identifier) || piece_symbol == 'r' || piece_symbol == 'R' || is_arrocco)
                 {
                     bool is_capture = (is_default && this->board.get_piece(move[1]) != nullptr) || is_en_passant;
 
@@ -291,7 +299,14 @@ namespace gameplay
                     if (is_capture)
                         this->board.set_piece(move[0], nullptr);
 
-                    is_valid_move = !this->isPlayerKingInCheck(player_identifier); // checks if the player is still in check
+                    // i must also prohibit the king from placing himself on check
+                    chessgame::Coordinates king_coord;
+                    if (piece_symbol == 'r' || piece_symbol == 'R')
+                        king_coord = move[1];
+                    else if(is_arrocco)
+                        king_coord = move[0];
+
+                    is_valid_move = !this->isPlayerKingInCheck(player_identifier, king_coord); // checks if the player is in check
 
                     if (is_capture)
                         this->board.restore_setPiece();
@@ -320,7 +335,7 @@ namespace gameplay
                     this->en_passante_coord = new chessgame::Coordinates(move[0]);
                 }
 
-                if (piece_symbol == 'p' || piece_symbol == 'R')
+                if (piece_symbol == 'p' || piece_symbol == 'P')
                 {
                     this->stall_counter = 0;
                 }
@@ -425,8 +440,10 @@ namespace gameplay
 
                     for (auto it = moves_vec.begin(); it != moves_vec.end(); ++it)
                     {
+                        chessgame::Piece* target_p = this->board.get_piece(*it);
+                        if(target_p == nullptr) continue;
 
-                        bool is_capture = this->board.get_piece(*it)->getSymbol() != p->getSymbol(); // surely not nullptr by how the code is structored
+                        bool is_capture = target_p->getSymbol() != p->getSymbol(); // surely not nullptr by how the code is structored
 
                         this->board.swap_positions(piece_coord, *it);
                         if (is_capture)
@@ -452,7 +469,6 @@ namespace gameplay
     void Game::play()
     {
         this->log_file.open("./game_log.txt"); // open the log file
-        std::cout << this->board.snapshot() << std::endl;
 
         do
         {   
@@ -475,7 +491,7 @@ namespace gameplay
             this->n_moves++; // increse number of moves
             this->stall_counter++;
             std::cout << this->board.snapshot() << std::endl;
-            std::cout << "End of turn **********************" << std::endl;
+            std::cout << "********************** End of turn **********************" << std::endl;
             this->current_turn = !this->current_turn; // alternates turns
         } while (!isGameOver());
 

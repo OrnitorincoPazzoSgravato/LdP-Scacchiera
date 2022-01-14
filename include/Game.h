@@ -60,6 +60,15 @@ namespace gameplay
 		 */
 		bool isPlayerKingInCheck(bool player_identifier);
 		/**
+		 * @brief checks if the current player's king is in check
+		 * 
+         * @param player_identifier true if p1, false is p2
+		 * @param the player's king coordinates
+		 * @return true 
+		 * @return false 
+		 */
+		bool isPlayerKingInCheck(bool player_identifier, const chessgame::Coordinates& king_coord);
+		/**
          * @brief check if the provided move is valid, if yes it is executed
          * 
          */
@@ -139,7 +148,7 @@ namespace gameplay
 			 * @brief A full bot game is considered invalid after this number of moves without a winner
 			 * 
 			 */
-		static const int kBot_moves = 100;
+		static const int kBot_moves = 500;
 		/**
 			 * @brief Constructs a new Game object and initialize one human player and one bot player
 			 * 
