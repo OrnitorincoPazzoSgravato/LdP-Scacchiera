@@ -1,12 +1,12 @@
 /**
  * @file Bot.cpp
  * @author Enrico Cavinato
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2022-01-13
- * 
+ *
  * @copyright Copyright (c) 2022
- * 
+ *
  */
 
 #include <array>
@@ -22,40 +22,17 @@ namespace chessgame
 {
 
     /**
-     * @brief iterate a coordinate
-     * 
+     * @brief iterate a coordinate column to column
+     *
      * @param coord the coordinate
      */
-    /* Coordinates Bot::next_cell(const Coordinates& coord)
-    {
-        // column ++
-        int x = coord.x + 1;
-        int y = coord.y;
-        
-        // if end of column, next row
-        if (x >= COLUMNS)
-        {
-            // a caporiga
-            x = 0;
-            // next row
-            y++;
-        }
-        // if end of matrix
-        if (y >= ROWS)
-        {
-            // start from the beginning
-            y = 0;
-            x = 0;
-        }
-        return Coordinates(x, y);
-    }*/
 
-    Coordinates Bot::next_cell(const Coordinates& coord)
+    Coordinates Bot::next_cell(const Coordinates &coord)
     {
         //  row ++
         int x = coord.x;
         int y = coord.y + 1;
-        
+
         // if end of column, next row
 
         if (y == ROWS)
@@ -78,16 +55,16 @@ namespace chessgame
     std::array<Coordinates, 2> Bot::think()
     {
         // generate row,column, and count
-        int row {std::rand() % ROWS};
+        int row{std::rand() % ROWS};
         // std::cout << "Raw generated :  "<< row  << "\n";
-        int column {std::rand() % COLUMNS};
+        int column{std::rand() % COLUMNS};
         // std::cout << "Column generated :  "<< column  << "\n";
-        int count {0};
+        int count{0};
 
-        //generate coordinate
-        Coordinates from {column,row};
+        // generate coordinate
+        Coordinates from{column, row};
 
-        //while we ispectionate
+        // while we ispectionate
         while (count < CELLS)
         {
             count++;
@@ -95,37 +72,42 @@ namespace chessgame
             from = next_cell(from);
 
             // get piece in from
-            Piece *p {this->board.get_piece(from)};
+            Piece *p{this->board.get_piece(from)};
 
-            // if cell is empty 
-            if (p == nullptr) continue;
+            // if cell is empty
+            if (!p)
+                continue;
 
             // if a piece does exist and is controlled by this player
             if (p->getColor() == this->pieceColor)
             {
 
                 // get possible moves
-                std::vector<Coordinates> possible_moves{p->getMoves(this->board,from)};
+                std::vector<Coordinates> possible_moves{p->getMoves(this->board, from)};
 
                 // if a possible move does exist
-                int moves_number {possible_moves.size()};
+                int moves_number{possible_moves.size()};
                 if (moves_number != 0)
                 {
-                    std::cout << "Moving: "<< from.symbol << '\n';
-                    // returns the first move
-                    Coordinates to {possible_moves[0]};
-                    return std::array<Coordinates,2> {from, to};
+                    std::cout << "Moving: " << from.symbol << '\n';
+
+                    int index {std::rand() % moves_number};
+                    
+                    // returns a move
+                    Coordinates to{possible_moves[index]};
+                    return std::array<Coordinates, 2>{from, to};
                 }
-            }    
+            }
         }
     }
-
 
     char Bot::getPromotionTarget()
     {
         char c = '0';
-        if (this->pieceColor == WHITE) c = 'd';
-        else c = 'D';
+        if (this->pieceColor == WHITE)
+            c = 'd';
+        else
+            c = 'D';
         return c;
     }
 }
