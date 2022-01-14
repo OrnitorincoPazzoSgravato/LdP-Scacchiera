@@ -108,9 +108,17 @@ namespace gameplay
         if (p == nullptr)
             return false;
         bool p_is_paw = p->getSymbol() == 'p' || p->getSymbol() == 'P';
-        if (p_is_paw && !(dynamic_cast<chessgame::Pedone *>(p)->has_already_moved) &&
-            move[0].x == move[1].x && std::abs(move[0].y - move[1].y) == 2 &&
-            this->board.get_piece(move[1]) == nullptr)
+
+        // conditions to verify
+        bool has_moved {(dynamic_cast<chessgame::Pedone *>(p)->has_already_moved)};
+        bool same_column {move[0].x == move[1].x};
+        bool y_offset_is_two {std::abs(move[0].y - move[1].y) == 2};
+        bool final_cell_is_empty {this->board.get_piece(move[1]) == nullptr};
+
+        if (p_is_paw && !has_moved && same_column && y_offset_is_two && final_cell_is_empty)
+            //&& !(dynamic_cast<chessgame::Pedone *>(p)->has_already_moved) &&
+            //move[0].x == move[1].x && std::abs(move[0].y - move[1].y) == 2 &&
+            //this->board.get_piece(move[1]) == nullptr)
         {
             p = nullptr;
             return true;
@@ -451,6 +459,7 @@ namespace gameplay
                 // player's move for its turn
                 std::array<chessgame::Coordinates, 2> move = this->current_turn ? this->p1->think() : this->p2->think();
                 invalid_move = this->playerMove(this->current_turn, move);
+                std::cout << "move valid " << invalid_move << " from "<< move[0].x << "," << move[0].y << " to " << move[1].x << "," << move[1].y;
 
             } while (invalid_move); // this cycle keeps going until a valid move has been entered
 
