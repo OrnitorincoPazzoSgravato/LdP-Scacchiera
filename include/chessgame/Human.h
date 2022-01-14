@@ -4,9 +4,9 @@
  * @brief This class implements a human player
  * @version 0.1
  * @date 2022-01-12
- * 
+ *
  * @copyright Copyright (c) 2022
- * 
+ *
  */
 
 #ifndef HUMAN_H
@@ -26,18 +26,18 @@ namespace chessgame
     public:
         /**
          * @brief Construct a new Human object
-         * 
+         *
          * @param pcolor the color of this player
          */
-        Human(const PieceColor pcolor) 
-            : Player {pcolor}
-        {}
-
+        Human(const PieceColor pcolor)
+            : Player{pcolor}
+        {
+        }
 
         /**
          * @brief This function implement the act of thinking a move by a human player
-         * 
-         * @return std::array<Coordinates, 2> an array with the move 
+         *
+         * @return std::array<Coordinates, 2> an array with the move
          */
         std::array<Coordinates, 2> think()
         {
@@ -48,14 +48,12 @@ namespace chessgame
             return std::array<Coordinates, 2>{Coordinates(from), Coordinates(to)};
         }
 
-        
         /**
          * @brief Implement the decision of the piece we want to replace the paw with
-         * 
+         *
          * @return Piece* a pointer to the piece we want to replace the paw with
          */
-        char getPromotionTarget();        
-
-    }; 
+        char getPromotionTarget();
+    };
 }
 #endif

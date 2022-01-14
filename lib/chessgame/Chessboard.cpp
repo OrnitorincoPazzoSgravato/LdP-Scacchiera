@@ -3,9 +3,9 @@
  * @author Enrico Cavinato
  * @version 0.1
  * @date 2022-01-06
- * 
+ *
  * @copyright Copyright (c) 2022
- * 
+ *
  */
 
 #include <memory>
@@ -27,8 +27,8 @@
 namespace chessgame
 
 {
-    Chessboard::Chessboard() 
-        : respawn_point{-1,-1}, limbo{nullptr}
+    Chessboard::Chessboard()
+        : respawn_point{-1, -1}, limbo{nullptr}
     {
         // initialize black Pieces
         this->v[7][0] = std::make_unique<Torre>(BLACK, 'T');
@@ -40,13 +40,13 @@ namespace chessgame
         this->v[7][6] = std::make_unique<Cavallo>(BLACK, 'C');
         this->v[7][7] = std::make_unique<Torre>(BLACK, 'T');
 
-        //for loop to initialize black Paws
+        // for loop to initialize black Paws
         for (int i = 0; i < COLUMNS; i++)
         {
             this->v[6][i] = std::make_unique<Pedone>(BLACK, 'P');
         }
 
-        //initialize white Pieces
+        // initialize white Pieces
 
         // for loop to inizialize white Paws
         for (int i = 0; i < COLUMNS; i++)
@@ -69,10 +69,10 @@ namespace chessgame
         std::string s;
 
         // for loop rows
-        int rows {ROWS};
+        int rows{ROWS};
 
         // print an inverted chessboard
-        for (int i = ROWS -1; i >= 0; i--)
+        for (int i = ROWS - 1; i >= 0; i--)
         {
             // add row number
             s += std::to_string(rows) + " ";
@@ -91,7 +91,7 @@ namespace chessgame
         s += "  ABCDEFGH";
         return s;
     }
-   
+
     void Chessboard::set_piece(const Coordinates &c, Piece *p)
     {
         chessgame::check_coordinates(c);
@@ -112,22 +112,22 @@ namespace chessgame
         chessgame::check_coordinates(from);
         chessgame::check_coordinates(to);
 
-        //Release pointers
+        // Release pointers
         Piece *p1{v[from.y][from.x].release()};
         Piece *p2{v[to.y][to.x].release()};
 
-        //Reset pointers
+        // Reset pointers
         this->v[from.y][from.x].reset(p2);
         this->v[to.y][to.x].reset(p1);
     }
 
-    void check_coordinates(const Coordinates& coord)
+    void check_coordinates(const Coordinates &coord)
     {
-        if (coord.x >= COLUMNS || coord.y >= ROWS || coord.x < 0  || coord.y < 0 )
-            throw std::invalid_argument( "Out of bound Coordinate" );
+        if (coord.x >= COLUMNS || coord.y >= ROWS || coord.x < 0 || coord.y < 0)
+            throw std::invalid_argument("Out of bound Coordinate");
     }
-    
-    void Chessboard::promote(char target_index,const Coordinates& coord)
+
+    void Chessboard::promote(char target_index, const Coordinates &coord)
     {
         // switch statement used to return the choosen derived class of Piece
         switch (target_index)
