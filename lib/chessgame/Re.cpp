@@ -53,12 +53,6 @@ namespace chessgame
                 }
             }
         }
-
-        for (auto &move : moves)
-        {
-            std::cout << "Re Move: " << move.x << " " << move.y << std::endl;
-        }
-
         return moves;
     }
 

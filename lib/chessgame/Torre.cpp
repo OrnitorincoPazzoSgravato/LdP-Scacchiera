@@ -38,11 +38,6 @@ namespace chessgame
         // Horizontal right check
         this->horizontalFinder(board, coord, moves, 1);
 
-        for (auto &move : moves)
-        {
-            std::cout << "Regina Move: " << move.x << " " << move.y << std::endl;
-        }
-
         return moves;
     }
 

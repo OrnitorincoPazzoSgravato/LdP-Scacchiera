@@ -41,6 +41,8 @@ namespace chessgame
         {
             return !(*this == other__coord);
         }
+        Coordinates& operator++() = delete;
+        Coordinates& operator--() = delete;
     };
 }
 

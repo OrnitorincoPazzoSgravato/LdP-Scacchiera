@@ -225,15 +225,15 @@ namespace gameplay
         // piece to check for promotion
         chessgame::Piece *p = this->board.get_piece(coord);
         // a white paw on the top row or a black paw on the bottom row
-        if ((p->getSymbol() == 'p' && coord.x == 7) || (p->getSymbol() == 'P' && coord.x == 0))
+        if ((p->getSymbol() == 'p' && coord.y == 7) || (p->getSymbol() == 'P' && coord.y == 0))
         {
+            p = nullptr;
             // "asks" the player for the promotion target and proceeds to update the board
             char new_symbol = (this->current_turn ? this->p1 : this->p2)->getPromotionTarget();
             this->board.promote(new_symbol, coord);
 
             return new_symbol; // successful promotion
         }
-        p = nullptr;
         return 0; // promotion not required
     }
 
@@ -452,23 +452,30 @@ namespace gameplay
     void Game::play()
     {
         this->log_file.open("./game_log.txt"); // open the log file
+        std::cout << this->board.snapshot() << std::endl;
 
         do
         {   
-            std::cout << this->board.snapshot() << std::endl;
+            std::cout << "Turn n.: " << this->n_moves + 1 << std::endl;
             bool invalid_move = true;
             do
             {
                 // player's move for its turn
                 std::array<chessgame::Coordinates, 2> move = this->current_turn ? this->p1->think() : this->p2->think();
-                invalid_move = this->playerMove(this->current_turn, move);
-                std::cout << "move valid " << invalid_move << " from "<< move[0].x << "," << move[0].y << " to " << move[1].x << "," << move[1].y;
-
+                invalid_move = !this->playerMove(this->current_turn, move);
+                if(!invalid_move) {
+                    chessgame::Piece* p = this->board.get_piece(move[1]);
+                    if(p != nullptr) {
+                        std::cout << "Moved: " << p->getSymbol() << " from " << move[0].symbol << " to " << move[1].symbol << std::endl;
+                    }
+                    else std::cout << "ATTENTION: moved from a void tile!" << std::endl;
+                }
             } while (invalid_move); // this cycle keeps going until a valid move has been entered
 
             this->n_moves++; // increse number of moves
             this->stall_counter++;
-
+            std::cout << this->board.snapshot() << std::endl;
+            std::cout << "End of turn **********************" << std::endl;
             this->current_turn = !this->current_turn; // alternates turns
         } while (!isGameOver());
 
