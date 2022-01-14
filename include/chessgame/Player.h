@@ -34,25 +34,32 @@ namespace chessgame
          */
         Player(const PieceColor p_color)
             : pieceColor(p_color)
-        {
-        }
+        {}
+
+
         /**
          * @brief The act of thinking
          * 
          * @return std::array<Coordinates, 2> an array that cointains the coordinates of the move
          */
         virtual std::array<Coordinates, 2> think() =0;
+
+
         /**
          * @brief Get the Promotion Target object
          * 
          * @return Piece* a pointer to the target
          */
-        virtual char getPromotionTarget() =0;
+
+
+        virtual char getPromotionTarget() = 0;
         /**
          * @brief Get the Color object
          * 
          * @return PieceColor the color of this player
          */
+
+
         PieceColor getColor()
         {
             return this->pieceColor;

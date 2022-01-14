@@ -11,6 +11,8 @@
 #include <string>
 #include <fstream>
 
+#include <stdexcept>
+
 #include "../include/Replay.h"
 
 namespace chessgame
@@ -19,19 +21,45 @@ namespace chessgame
     {
         // opens the input file
         std::ifstream ist { input_file };
-        //if the name is invalid TBD
-        if (!ist) ; 
 
-        // questa cosa inizializza ?
-        Chessboard c;
-        std::cout << c.snapshot();
+        //if the name is invalid
+        if (!ist) throw std::invalid_argument("This file does not exist"); 
+
+        // create a chessboard to recreate the moves
+        Chessboard board;
+
+        // print initial configuration
+        std::cout << board.snapshot();
+
+        //while loop input
         while(!ist.eof())
         {
-            
+            Coordinates from ;
+            Coordinates to ;
+            // get coordinates in from
+            // get Coordinates in to
+
+            // update chessboard
+            Piece* p {board.get_piece(from)};
+            board.set_piece(to,p);
+
+            // print configuration
+            std::cout << board.snapshot();
+
         }
-
-
-
         ist.close();
     }
+     void print_on_file(const std::string &input_file, const std::string &output_file)
+     {
+         // opens the input file
+        std::ifstream ist { input_file };
+
+        //if the name is invalid
+        if (!ist) throw std::invalid_argument("This file does not exist"); 
+
+        // create a chessboard to recreate the moves
+        Chessboard board;
+
+     }
+
 }
