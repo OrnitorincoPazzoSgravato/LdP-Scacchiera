@@ -66,16 +66,16 @@ namespace chessgame
 
     std::string Chessboard::snapshot()
     {
-        std::string s;
+        std::string s = "  ____________\n";
 
         // for loop rows
         int rows {ROWS};
 
         // print an inverted chessboard
         for (int i = ROWS -1; i >= 0; i--)
-        {
+        {   
             // add row number
-            s += std::to_string(rows) + " ";
+            s += std::to_string(rows) + " | ";
             // for loop columns
             for (int j = 0; j < COLUMNS; j++)
             {
@@ -85,10 +85,11 @@ namespace chessgame
                 else
                     s += " ";
             }
-            s += "\n";
+            s += " |\n";
             rows--;
         }
-        s += "  ABCDEFGH";
+        s += "  ************\n";
+        s += "    ABCDEFGH";
         return s;
     }
    

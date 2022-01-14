@@ -491,7 +491,7 @@ namespace gameplay
             this->n_moves++; // increse number of moves
             this->stall_counter++;
             std::cout << this->board.snapshot() << std::endl;
-            std::cout << "End of turn **********************" << std::endl;
+            std::cout << "********************** End of turn **********************" << std::endl;
             this->current_turn = !this->current_turn; // alternates turns
         } while (!isGameOver());
 

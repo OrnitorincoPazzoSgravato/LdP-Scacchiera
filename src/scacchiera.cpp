@@ -1,7 +1,15 @@
+/**
+ * @file scacchiera.cpp
+ * @author Riccardo Zuech
+ * @brief 
+ * @version 0.1
+ * @date 2022-01-14
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 #include <iostream>
 #include "../include/Game.h"
-
-// Riccardo Zuech
 
 int main(int argc, char** argv) {
     if(argc != 2) return 0;
