@@ -41,7 +41,7 @@ namespace chessgame
             y++;
         }
         // if end of matrix
-        if (y == ROWS && x == COLUMNS)
+        if (y == ROWS)
         {
             // start from the beginning
             y = 0;
@@ -72,8 +72,11 @@ namespace chessgame
             // get piece in from
             Piece *p {this->board.get_piece(from)};
 
+            // if cell is empty 
+            if (!p) continue;
+
             // if a piece does exist and is controlled by this player
-            if ( p && p->getColor() == this->pieceColor)
+            if (p->getColor() == this->pieceColor)
             {
 
                 // get possible moves
