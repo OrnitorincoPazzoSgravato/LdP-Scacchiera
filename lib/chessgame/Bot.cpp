@@ -26,7 +26,7 @@ namespace chessgame
      * 
      * @param coord the coordinate
      */
-    Coordinates Bot::next_cell(const Coordinates& coord)
+    /* Coordinates Bot::next_cell(const Coordinates& coord)
     {
         // column ++
         int x = coord.x + 1;
@@ -42,6 +42,31 @@ namespace chessgame
         }
         // if end of matrix
         if (y == ROWS)
+        {
+            // start from the beginning
+            y = 0;
+            x = 0;
+        }
+        return Coordinates(x, y);
+    }*/
+
+    Coordinates Bot::next_cell(const Coordinates& coord)
+    {
+        //  row ++
+        int x = coord.x;
+        int y = coord.y + 1;
+        
+        // if end of column, next row
+
+        if (y == ROWS)
+        {
+            // a caporiga
+            y = 0;
+            // next column
+            x++;
+        }
+        // if end of matrix
+        if (x == COLUMNS)
         {
             // start from the beginning
             y = 0;
