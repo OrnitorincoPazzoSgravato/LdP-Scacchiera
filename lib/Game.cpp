@@ -109,6 +109,9 @@ namespace gameplay
             return false;
         bool p_is_paw = p->getSymbol() == 'p' || p->getSymbol() == 'P';
 
+        // se non è un pedone
+        if (!p_is_paw) return false;
+
         // conditions to verify
         bool has_moved {(dynamic_cast<chessgame::Pedone *>(p)->has_already_moved)};
         bool same_column {move[0].x == move[1].x};
@@ -222,7 +225,7 @@ namespace gameplay
         // piece to check for promotion
         chessgame::Piece *p = this->board.get_piece(coord);
         // a white paw on the top row or a black paw on the bottom row
-        if ((p->getSymbol() == 'p' && coord.x == 0) || (p->getSymbol() == 'P' && coord.x == 7))
+        if ((p->getSymbol() == 'p' && coord.x == 7) || (p->getSymbol() == 'P' && coord.x == 0))
         {
             // "asks" the player for the promotion target and proceeds to update the board
             char new_symbol = (this->current_turn ? this->p1 : this->p2)->getPromotionTarget();
