@@ -67,11 +67,15 @@ namespace chessgame
     std::string Chessboard::snapshot()
     {
         std::string s;
+
         // for loop rows
-        int num{8};
+        int rows {ROWS};
+
+        // print an inverted chessboard
         for (int i = ROWS -1; i >= 0; i--)
         {
-            s += std::to_string(num) + " ";
+            // add row number
+            s += std::to_string(rows) + " ";
             // for loop columns
             for (int j = 0; j < COLUMNS; j++)
             {
@@ -82,7 +86,7 @@ namespace chessgame
                     s += " ";
             }
             s += "\n";
-            num--;
+            rows--;
         }
         s += "  ABCDEFGH";
         return s;
@@ -113,8 +117,8 @@ namespace chessgame
         Piece *p2{v[to.y][to.x].release()};
 
         //Reset pointers
-        this->v[from.y][from.x].reset(p1);
-        this->v[to.y][to.x].reset(p2);
+        this->v[from.y][from.x].reset(p2);
+        this->v[to.y][to.x].reset(p1);
     }
 
     void check_coordinates(const Coordinates& coord)
