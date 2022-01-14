@@ -72,13 +72,8 @@ namespace chessgame
         int rows{ROWS};
 
         // print an inverted chessboard
-<<<<<<< HEAD
-        for (int i = ROWS - 1; i >= 0; i--)
-        {
-=======
         for (int i = ROWS -1; i >= 0; i--)
         {   
->>>>>>> 5809bd09aec803adc08300bedc2042897212b12d
             // add row number
             s += std::to_string(rows) + " | ";
             // for loop columns

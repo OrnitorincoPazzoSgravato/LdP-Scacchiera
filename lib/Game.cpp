@@ -239,7 +239,7 @@ namespace gameplay
             // "asks" the player for the promotion target and proceeds to update the board
             char new_symbol = (this->current_turn ? this->p1 : this->p2)->getPromotionTarget();
             this->board.promote(new_symbol, coord);
-
+            std::cout << "Paw has been promoted to " << new_symbol << std::endl;
             return new_symbol; // successful promotion
         }
         return 0; // promotion not required
@@ -461,14 +461,15 @@ namespace gameplay
                 }
             }
         }
-
+        chessgame::PieceColor color = this->current_turn ? this->p1->getColor() : this->p2->getColor();
+        std::cout << "The game has ended. " << (color == chessgame::WHITE ? "WHITE" : "BLACK") << " wins." << std::endl;
         return true;
     }
 
     // public methods declaration
     void Game::play()
     {
-        this->log_file.open("./game_log.txt"); // open the log file
+        this->log_file.open("../game_log.txt"); // open the log file
 
         do
         {   

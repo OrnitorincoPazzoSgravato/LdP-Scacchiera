@@ -12,7 +12,7 @@
             "request": "launch",
             "cwd": "${fileDirname}",
             "type": "cppdbg",
-            "args": ["pc"],
+            "args": ["cc"],
         },
         {
             "name": "Debug Scacchiera F",
