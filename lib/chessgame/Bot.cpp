@@ -60,9 +60,9 @@ namespace chessgame
     {
         // generate row,column, and count
         int row {generate_row(pieceColor)};
-        std::cout << "Raw generated :  "<< row  << "\n";
+        // std::cout << "Raw generated :  "<< row  << "\n";
         int column {std::rand() % COLUMNS};
-        std::cout << "Column generated :  "<< column  << "\n";
+        // std::cout << "Column generated :  "<< column  << "\n";
         int count {0};
 
         //generate coordinate
