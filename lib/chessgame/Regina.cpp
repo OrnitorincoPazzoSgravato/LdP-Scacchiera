@@ -31,90 +31,38 @@ namespace chessgame
         vector<Coordinates> moves;
 
         // Vertical up check
-        this->verticalFinder(board, coord, moves, 1);
+        this->finder(board, coord, moves, 0, 1);
 
         // Vertical down check
-        this->verticalFinder(board, coord, moves, -1);
+        this->finder(board, coord, moves, 0, -1);
 
         // Horizontal left check
-        this->horizontalFinder(board, coord, moves, -1);
+        this->finder(board, coord, moves, -1, 0);
 
         // Horizontal right check
-        this->horizontalFinder(board, coord, moves, 1);
+        this->finder(board, coord, moves, 1, 0);
 
         // Diagonal up right check
-        this->diagonalFinder(board, coord, moves, 1, 1);
+        this->finder(board, coord, moves, 1, 1);
 
         // Diagonal down right check
-        this->diagonalFinder(board, coord, moves, 1, -1);
+        this->finder(board, coord, moves, 1, -1);
 
         // Diagonal up left check
-        this->diagonalFinder(board, coord, moves, -1, 1);
+        this->finder(board, coord, moves, -1, 1);
 
         // Diagonal down left check
-        this->diagonalFinder(board, coord, moves, -1, -1);
+        this->finder(board, coord, moves, -1, -1);
 
         return moves;
     }
 
-    void Regina::horizontalFinder(Chessboard &board, const Coordinates &coord, vector<Coordinates> &moves, int versor)
+    void Regina::finder(Chessboard &board, const Coordinates &coord, vector<Coordinates> &moves, int h_versor, int v_versor)
     {
         int x = coord.x;
         int y = coord.y;
-        int x_offset = 0;
-        int y_offset = 0;
-        while (x + x_offset >= 0 && x + x_offset < COLUMNS)
-        {
-            if (board.get_piece(Coordinates(x + x_offset, y + y_offset)) == nullptr)
-            {
-                moves.push_back(Coordinates(x + x_offset, y + y_offset));
-            }
-            else if (board.get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor())
-            {
-                moves.push_back(Coordinates(x + x_offset, y + y_offset));
-                break;
-            }
-            else
-            {
-                break;
-            }
-
-            x_offset += versor;
-        }
-    }
-
-    void Regina::verticalFinder(Chessboard &board, const Coordinates &coord, vector<Coordinates> &moves, int versor)
-    {
-        int x = coord.x;
-        int y = coord.y;
-        int x_offset = 0;
-        int y_offset = 0;
-        while (y + y_offset >= 0 && y + y_offset < ROWS)
-        {
-            if (board.get_piece(Coordinates(x + x_offset, y + y_offset)) == nullptr)
-            {
-                moves.push_back(Coordinates(x + x_offset, y + y_offset));
-            }
-            else if (board.get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor())
-            {
-                moves.push_back(Coordinates(x + x_offset, y + y_offset));
-                break;
-            }
-            else
-            {
-                break;
-            }
-
-            y_offset += versor;
-        }
-    }
-
-    void Regina::diagonalFinder(Chessboard &board, const Coordinates &coord, vector<Coordinates> &moves, int h_versor, int v_versor)
-    {
-        int x = coord.x;
-        int y = coord.y;
-        int x_offset = 0;
-        int y_offset = 0;
+        int x_offset = h_versor;
+        int y_offset = v_versor;
         while (x + x_offset >= 0 && x + x_offset < COLUMNS && y + y_offset >= 0 && y + y_offset < ROWS)
         {
             if (board.get_piece(Coordinates(x + x_offset, y + y_offset)) == nullptr)

@@ -49,8 +49,9 @@ namespace chessgame
     {
         int x = coord.x;
         int y = coord.y;
-        int x_offset = 0;
-        int y_offset = 0;
+        int x_offset = h_versor;
+        int y_offset = v_versor;
+
         while (x + x_offset >= 0 && x + x_offset < COLUMNS && y + y_offset >= 0 && y + y_offset < ROWS)
         {
             if (board.get_piece(Coordinates(x + x_offset, y + y_offset)) == nullptr)

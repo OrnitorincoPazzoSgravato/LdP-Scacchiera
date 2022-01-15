@@ -31,8 +31,7 @@ namespace chessgame
         vector<Coordinates> getMoves(Chessboard &board, const Coordinates &coord) override;
 
     private:
-        void horizontalFinder(Chessboard &board, const Coordinates &coord, vector<Coordinates> &moves, int versor);
-        void verticalFinder(Chessboard &board, const Coordinates &coord, vector<Coordinates> &moves, int versor);
+        void finder(Chessboard &board, const Coordinates &coord, vector<Coordinates> &moves, int h_versor, int v_versor);
     };
 
 }

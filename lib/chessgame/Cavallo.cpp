@@ -44,7 +44,7 @@ namespace chessgame
             {-2, 1},
             {-1, 2}};
 
-        //Foreach couple of offsets
+        // Foreach couple of offsets
         for (auto &offset : offsets)
         {
             int x_offset = offset[0];

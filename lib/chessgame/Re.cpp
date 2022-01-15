@@ -28,18 +28,22 @@ namespace chessgame
         int x = coord.x;
         int y = coord.y;
 
-        for (int i = -1; i < 2; i++)
+        for (int i = -1; i <= 1; i++)
         {
-            for (int j = -1; j < 2; j++)
+            for (int j = -1; j <= 1; j++)
             {
                 // Control if the end cell is not the piece's cell
-                if (i != 0 && j != 0)
-                {
-                    int x_offset = i;
-                    int y_offset = j;
 
-                    // Control if the end cell is in the chessboard
-                    if (x + x_offset >= 0 && x + x_offset < COLUMNS && y + y_offset >= 0 && y + y_offset < ROWS)
+                int x_offset = j;
+                int y_offset = i;
+                // Control if the end cell is in the chessboard
+                if (x + x_offset >= 0 && x + x_offset < COLUMNS && y + y_offset >= 0 && y + y_offset < ROWS)
+                {
+                    if (x_offset == 0 && y_offset == 0)
+                    {
+                        continue;
+                    }
+                    else
                     {
                         if (board.get_piece(Coordinates(x + x_offset, y + y_offset)) == nullptr)
                         {
