@@ -33,6 +33,16 @@ namespace chessgame
         Coordinates(){};
         Coordinates(int x, int y);
         Coordinates(string symbol);
+        Coordinates(const Coordinates& coord) {
+            this->x = coord.x;
+            this->y = coord.y;
+            this->symbol = coord.symbol;
+        }
+        Coordinates& operator=(const Coordinates& coord) {
+            this->x = coord.x;
+            this->y = coord.y;
+            this->symbol = coord.symbol;
+        }
         bool operator==(const Coordinates &other_coord) const
         {
             return this->x == other_coord.x && this->y == other_coord.y;

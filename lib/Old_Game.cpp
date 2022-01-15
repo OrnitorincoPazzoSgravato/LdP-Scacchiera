@@ -195,6 +195,8 @@ namespace gameplay
                 }
             }
         }
+        p = nullptr;
+        dest_p = nullptr; // clears dest_p pointer after use
 
         return false;
     }
@@ -252,6 +254,7 @@ namespace gameplay
         if (!is_swap && this->board.get_piece(move[1]) != nullptr)
         { // this is a capture movement
             this->board.set_piece(move[1], nullptr);
+            this->stall_counter = 0;
         }
         // here the piece is finally moved
         this->board.swap_positions(move[0], move[1]);
@@ -266,85 +269,6 @@ namespace gameplay
             log_move += ("\n" + promotion_output);
 
         return log_move;
-    }
-
-    std::vector<chessgame::Coordinates> Game::getPieceMovesAll(const chessgame::Coordinates &piece_coord)
-    {
-        chessgame::Piece *p = this->board.get_piece(piece_coord);
-        if (p == nullptr)
-            return std::vector<chessgame::Coordinates>{};
-
-        // vector containing all possible moves this piece can do
-        std::vector<chessgame::Coordinates> moves_vec = p->getMoves(this->board, piece_coord);
-
-        char p_symbol = p->getSymbol();
-        chessgame::PieceColor p_color = p->getColor();
-
-        bool p_is_paw = p_symbol == 'p' || p_symbol == 'P';
-        bool p_is_tower = p_symbol == 't' || p_symbol == 'T';
-        bool p_is_king = p_symbol == 'r' || p_symbol == 'R';
-        // two tiles movement of a first time moving paw
-        if (p_is_paw && !dynamic_cast<chessgame::Pedone *>(p)->has_already_moved)
-        {
-            int offset = p_color == chessgame::WHITE ? 2 : -2;
-            moves_vec.push_back(chessgame::Coordinates(piece_coord.x, piece_coord.y + offset));
-        }
-        // en passant capture
-        else if (p_is_paw && this->en_passante_coord != nullptr && this->board.get_piece(*(this->en_passante_coord))->getColor() != p_color)
-        {
-            int offset = p_color == chessgame::WHITE ? 1 : -1;
-            bool left_capturable = *(this->en_passante_coord) == chessgame::Coordinates(piece_coord.x - 1, piece_coord.y + offset);
-            bool right_capturable = *(this->en_passante_coord) == chessgame::Coordinates(piece_coord.x + 1, piece_coord.y + offset);
-            if (left_capturable)
-                moves_vec.push_back(chessgame::Coordinates(piece_coord.x - 1, piece_coord.y + offset));
-            else if (right_capturable)
-                moves_vec.push_back(chessgame::Coordinates(piece_coord.x + 1, piece_coord.y + offset));
-        }
-        // tower in king arrocco
-        else if (p_is_tower && !dynamic_cast<chessgame::Torre *>(p)->has_already_moved)
-        {
-            chessgame::Coordinates king_coord = p_color == this->p1->getColor() ? p1_king_coord : p2_king_coord;
-            if (!dynamic_cast<chessgame::Re *>(this->board.get_piece(king_coord))->has_already_moved)
-            {
-                moves_vec.push_back(king_coord);
-            }
-        }
-        // king in tower arrocco
-        else if(p_is_king && !dynamic_cast<chessgame::Re *>(p)->has_already_moved) {
-            int t_y = piece_coord.y;
-            std::array<chessgame::Coordinates, 2> a {chessgame::Coordinates{7, t_y}, chessgame::Coordinates{0, t_y}};
-            for(int i = 0; i < 2; i++) {
-                chessgame::Piece* tower = this->board.get_piece(a[i]);
-                bool is_same_color = tower != nullptr && tower->getColor() == p_color;
-                bool is_valid_tower = is_same_color && (tower->getSymbol() == 't' || tower->getSymbol() == 'T') &&
-                !dynamic_cast<chessgame::Torre *>(tower)->has_already_moved;
-                if(is_valid_tower) moves_vec.push_back(a[i]);
-            }
-        }
-        return moves_vec;
-    }
-
-    bool Game::isMoveSelfCheck(bool player_identifier, const chessgame::Coordinates& from, const chessgame::Coordinates& to, char piece_symbol, bool is_capture, bool is_arrocco) {
-        bool is_valid_move = false;
-
-        this->board.swap_positions(from, to);
-        if (is_capture)
-            this->board.set_piece(from, nullptr);
-
-        // i must also prohibit the king from placing himself on check
-        chessgame::Coordinates king_coord;
-        if (piece_symbol == 'r' || piece_symbol == 'R')
-            king_coord = to;
-        else if(is_arrocco)
-            king_coord = from;
-
-        is_valid_move = !this->isPlayerKingInCheck(player_identifier, king_coord); // checks if the player is in check
-
-        if (is_capture)
-            this->board.restore_setPiece();
-        this->board.swap_positions(to, from);
-
-        return  !is_valid_move;
     }
 
     bool Game::playerMove(bool player_identifier, std::array<chessgame::Coordinates, 2> &move)
@@ -367,52 +291,125 @@ namespace gameplay
             // here move is executed if valid
             if (is_valid_move)
             {
-                bool is_capture = (is_default && this->board.get_piece(move[1]) != nullptr) || is_en_passant;
-                // self check case, obviously illegal
-                if(this->isMoveSelfCheck(player_identifier, move[0], move[1], piece_symbol, is_capture, is_arrocco))
-                    return false;
-                
+                // block used to enforce moves in case of king check
+                if (isPlayerKingInCheck(player_identifier) || piece_symbol == 'r' || piece_symbol == 'R' || is_arrocco)
+                {
+                    bool is_capture = (is_default && this->board.get_piece(move[1]) != nullptr) || is_en_passant;
+
+                    this->board.swap_positions(move[0], move[1]);
+                    if (is_capture)
+                        this->board.set_piece(move[0], nullptr);
+
+                    // i must also prohibit the king from placing himself on check
+                    chessgame::Coordinates king_coord;
+                    if (piece_symbol == 'r' || piece_symbol == 'R')
+                        king_coord = move[1];
+                    else if(is_arrocco)
+                        king_coord = move[0];
+
+                    is_valid_move = !this->isPlayerKingInCheck(player_identifier, king_coord); // checks if the player is in check
+
+                    if (is_capture)
+                        this->board.restore_setPiece();
+                    this->board.swap_positions(move[1], move[0]);
+
+                    if (!is_valid_move)
+                        return false; // move doesn't resolve the check state, so it's illegal
+                }
+
                 // move is executed and written on the log file
                 this->writeLog(this->legalTurnCleanUp(move, is_arrocco));
 
-                // the block below is used for aftereffects and special rules
+                // the block below is used for clean-up and special rules
                 // special rule arrocco: tower in king position case
                 if (is_arrocco && (piece_symbol == 't' || piece_symbol == 'T'))
+                {
                     player_identifier ? this->p1_king_coord = move[0] : this->p2_king_coord = move[0];
+                }
                 else if (is_en_passant)
                 {
                     delete this->en_passante_coord;
                     this->en_passante_coord = nullptr;
                 }
                 else if (is_paw_2_tiles_movement)
+                {
                     this->en_passante_coord = new chessgame::Coordinates(move[0]);
+                }
 
-                // we're moving a paw or capturing a piece, so we must reset the stall counter
-                if (piece_symbol == 'p' || piece_symbol == 'P' || is_capture)
+                if (piece_symbol == 'p' || piece_symbol == 'P')
+                {
                     this->stall_counter = 0;
+                }
 
-                // updates the player's king position if it has been moved (except for tower in king arrocco)
+                // updates the player's king position if it has been moved (applied also to special rule: arrocco)
                 if (piece_symbol == 'r' || piece_symbol == 'R')
+                {
                     player_identifier ? this->p1_king_coord = move[1] : this->p2_king_coord = move[1];
+                }
             }
+            p = nullptr; // clears p pointer after use
             return is_valid_move;
         }
         return false;
     }
 
+    std::vector<chessgame::Coordinates> Game::getPieceMovesAll(const chessgame::Coordinates &piece_coord)
+    {
+        chessgame::Piece *p = this->board.get_piece(piece_coord);
+        if (p == nullptr)
+            return std::vector<chessgame::Coordinates>{};
+
+        // vector containing all possible moves this piece can do (for the king the special move arrocco has been removed, as it has already been considered for an appliable tower)
+        std::vector<chessgame::Coordinates> moves_vec = p->getMoves(this->board, piece_coord);
+
+        char p_symbol = p->getSymbol();
+
+        bool p_is_paw = p_symbol == 'p' || p_symbol == 'P';
+        bool p_is_tower = p_symbol == 't' || p_symbol == 'T';
+        // two tiles movement of a first time moving paw
+        if (p_is_paw && !dynamic_cast<chessgame::Pedone *>(p)->has_already_moved)
+        {
+            int offset = p->getColor() == chessgame::WHITE ? 2 : -2;
+            moves_vec.push_back(chessgame::Coordinates(piece_coord.x, piece_coord.y + offset));
+        }
+        // en passant capture
+        else if (p_is_paw && this->en_passante_coord != nullptr)
+        {
+            int offset = p->getColor() == chessgame::WHITE ? 1 : -1;
+            bool left_capturable = *(this->en_passante_coord) == chessgame::Coordinates(piece_coord.x - 1, piece_coord.y + offset);
+            bool right_capturable = *(this->en_passante_coord) == chessgame::Coordinates(piece_coord.x + 1, piece_coord.y + offset);
+            if (left_capturable)
+                moves_vec.push_back(chessgame::Coordinates(piece_coord.x - 1, piece_coord.y + offset));
+            else if (right_capturable)
+                moves_vec.push_back(chessgame::Coordinates(piece_coord.x + 1, piece_coord.y + offset));
+        }
+        // tower in king arrocco
+        else if (p_is_tower && !dynamic_cast<chessgame::Torre *>(p)->has_already_moved)
+        {
+            chessgame::Coordinates king_coord = p->getColor() == this->p1->getColor() ? p1_king_coord : p2_king_coord;
+            if (!dynamic_cast<chessgame::Re *>(this->board.get_piece(king_coord))->has_already_moved)
+            {
+                moves_vec.push_back(king_coord);
+            }
+        }
+        // king in tower arrocco has been skipped as it's the same as a tower in king arrocco
+        return moves_vec;
+    }
+
     bool Game::isGameOver()
     {
-        if (this->is_bot_game && this->n_moves >= Game::kBot_moves) // a bot game has reached its maximum amount of moves
+        // block used to check if a bot game has reached its max amount of moves (game ending condition)
+        if (this->is_bot_game && this->n_moves >= Game::kBot_moves)
         {
             std::cout << "The full-bot game has reached its maximum amount of moves without ending {" << Game::kBot_moves << "}. Please try again." << std::endl;
             return true;
         }
-        else if (this->stall_counter >= 50) // the game is stalled
+        else if (this->stall_counter >= 50)
         {
             std::cout << "The game ended as 50 consecutive moves has been made without moving a paw or capturing a piece." << std::endl;
             return true;
         }
-        else if(!isPlayerKingInCheck(this->current_turn)) // player hasn't checked its opponent, but it still might be stalemate
+        else if(!isPlayerKingInCheck(!this->current_turn))
         {
             // block used to check for stalemate
             for (int y = 0; y < 8; y++)
@@ -421,18 +418,16 @@ namespace gameplay
                 {
                     chessgame::Coordinates piece_coord = chessgame::Coordinates(x, y);
                     chessgame::Piece *p = this->board.get_piece(piece_coord);
-                    if (p != nullptr && p->getColor() == (this->current_turn ? this->p1->getColor() : this->p2->getColor()))
+                    if (p != nullptr && p->getColor() == (this->current_turn ? this->p2->getColor() : this->p1->getColor()))
                     {
                         if (this->getPieceMovesAll(piece_coord).size() != 0)
                             return false;
                     }
                 }
             }
-            return true;
         }
 
-        // player has checked its opponent, now we check for a checkmate
-
+        // check is it's checkmate
         for (int y = 0; y < 8; y++)
         {
             for (int x = 0; x < 8; x++)
@@ -440,7 +435,7 @@ namespace gameplay
                 chessgame::Coordinates piece_coord = chessgame::Coordinates(x, y);
                 chessgame::Piece *p = this->board.get_piece(piece_coord);
 
-                if (p != nullptr && p->getColor() == (this->current_turn ? this->p1->getColor() : this->p2->getColor()))
+                if (p != nullptr && p->getColor() == (this->current_turn ? this->p2->getColor() : this->p1->getColor()))
                 {
                     std::vector<chessgame::Coordinates> moves_vec = this->getPieceMovesAll(piece_coord);
 
@@ -450,17 +445,25 @@ namespace gameplay
                         if(target_p == nullptr) continue;
 
                         bool is_capture = target_p->getSymbol() != p->getSymbol();
-                        bool is_arrocco = this->isArrocco(std::array<chessgame::Coordinates, 2> {piece_coord, *it});
 
-                        if(!this->isMoveSelfCheck(this->current_turn, piece_coord, *it, p->getSymbol(), is_capture, is_arrocco)) {
-                            return false;
-                        }
+                        this->board.swap_positions(piece_coord, *it);
+                        if (is_capture)
+                            this->board.set_piece(piece_coord, nullptr);
+
+                        bool check_resolved = !this->isPlayerKingInCheck(!this->current_turn); // checks if the player is still in check
+
+                        if (is_capture)
+                            this->board.restore_setPiece();
+                        this->board.swap_positions(*it, piece_coord);
+
+                        if (check_resolved)
+                            return false; // move doesn't resolve the check state, so it's illegal
                     }
                 }
             }
         }
         
-        chessgame::PieceColor color = !this->current_turn ? this->p1->getColor() : this->p2->getColor();
+        chessgame::PieceColor color = this->current_turn ? this->p1->getColor() : this->p2->getColor();
         std::cout << "The game has ended. " << (color == chessgame::WHITE ? "WHITE" : "BLACK") << " wins." << std::endl;
         return true;
     }
@@ -472,8 +475,7 @@ namespace gameplay
 
         do
         {   
-            chessgame::PieceColor color = this->current_turn ? this->p1->getColor() : this->p2->getColor();
-            std::cout << "Turn n.: " << this->n_moves + 1 << (color == chessgame::WHITE ? " - WHITE" : " - BLACK") << " moves." << std::endl;
+            std::cout << "Turn n.: " << this->n_moves + 1 << std::endl;
             bool invalid_move = true;
             do
             {

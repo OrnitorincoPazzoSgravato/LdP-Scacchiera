@@ -31,6 +31,7 @@ namespace gameplay
 		chessgame::Chessboard board;
 		int n_moves;
 		bool current_turn; // true if p1's turn, false if p2's turn
+		bool is_bot_game;
 		chessgame::Player *p1, *p2;
 		chessgame::Coordinates p1_king_coord, p2_king_coord;
 		std::ofstream log_file;
@@ -139,7 +140,7 @@ namespace gameplay
 		 */
 		bool isGameOver();
 
-		bool isStalemate();
+		bool isMoveSelfCheck(bool player_identifier, const chessgame::Coordinates& from, const chessgame::Coordinates& to, char piece_symbol, bool is_capture, bool is_arrocco);
 
 		std::vector<chessgame::Coordinates> getPieceMovesAll(const chessgame::Coordinates &piece_coord);
 
