@@ -384,8 +384,10 @@ namespace gameplay
                     delete this->en_passante_coord;
                     this->en_passante_coord = nullptr;
                 }
-                else if (is_paw_2_tiles_movement)
+                else if (is_paw_2_tiles_movement) {
+                    delete this->en_passante_coord;
                     this->en_passante_coord = new chessgame::Coordinates(move[1]);
+                }
 
                 // we're moving a paw or capturing a piece, so we must reset the stall counter
                 if (piece_symbol == 'p' || piece_symbol == 'P' || is_capture)
