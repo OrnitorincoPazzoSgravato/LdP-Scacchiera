@@ -60,9 +60,6 @@ namespace gameplay
         delete this->en_passante_coord;
         delete this->p1;
         delete this->p2;
-        this->p1 = nullptr;
-        this->p2 = nullptr;
-        this->en_passante_coord = nullptr;
     }
 
     // private methods declaration
@@ -81,7 +78,7 @@ namespace gameplay
 
     void Game::writeLog(const std::string &move)
     {
-        this->log_file << move << '\n';
+        this->log_file << move << std::endl;
     }
 
     bool Game::isPlayerKingInCheck(const chessgame::Coordinates king_coord)
@@ -249,7 +246,7 @@ namespace gameplay
     std::string Game::legalTurnCleanUp(const std::array<chessgame::Coordinates, 2> &move, bool is_swap)
     {
         // the log move for the current move
-        std::string log_move = move[0].symbol + ' ' + move[1].symbol;
+        std::string log_move = move[0].symbol + " " + move[1].symbol;
 
         if (!is_swap && this->board.get_piece(move[1]) != nullptr)
         { // this is a capture movement
@@ -264,8 +261,10 @@ namespace gameplay
             this->updateFirstMove(move[0]);
 
         char promotion_output = this->promotion(move[1]); // calls the function that manage the special rule "promotion"
-        if (promotion_output != 0)                        // successful promotion, as per documentation
-            log_move += ("\n" + promotion_output);
+        
+        if (promotion_output != 0) { // successful promotion, as per documentation
+            return (log_move + '\n' + promotion_output); 
+        }
 
         return log_move;
     }
@@ -406,7 +405,6 @@ namespace gameplay
 
     bool Game::isGameOver()
     {
-        
         chessgame::PieceColor color = this->getCurrentPlayer()->getColor();
         if (this->is_bot_game && this->n_moves >= Game::kBot_moves) // a bot game has reached its maximum amount of moves
         {
@@ -473,7 +471,7 @@ namespace gameplay
     // public methods declaration
     void Game::play()
     {
-        this->log_file.open("../game_log.txt"); // opens the log file
+        this->log_file.open("./game_log.txt"); // opens the log file
 
         do
         {   
