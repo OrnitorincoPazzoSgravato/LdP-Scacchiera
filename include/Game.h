@@ -59,7 +59,7 @@ namespace gameplay
 		 * @return true 
 		 * @return false 
 		 */
-		bool isPlayerKingInCheck(bool player_identifier);
+		bool isPlayerKingInCheck();
 		/**
 		 * @brief checks if the current player's king is in check
 		 * 
@@ -68,12 +68,12 @@ namespace gameplay
 		 * @return true 
 		 * @return false 
 		 */
-		bool isPlayerKingInCheck(bool player_identifier, const chessgame::Coordinates& king_coord);
+		bool isPlayerKingInCheck(const chessgame::Coordinates king_coord);
 		/**
          * @brief check if the provided move is valid, if yes it is executed
          * 
          */
-		bool playerMove(bool player_identifier, std::array<chessgame::Coordinates, 2> &move);
+		bool playerMove(std::array<chessgame::Coordinates, 2> &move);
 		/**
 		 * @brief checks if the piece at the provided coordinates is promotable. If it is proceeds to it.
 		 * 
@@ -140,7 +140,19 @@ namespace gameplay
 		 */
 		bool isGameOver();
 
-		bool isMoveSelfCheck(bool player_identifier, const chessgame::Coordinates& from, const chessgame::Coordinates& to, char piece_symbol, bool is_capture, bool is_arrocco);
+		bool isMoveSelfCheck(const chessgame::Coordinates& from, const chessgame::Coordinates& to, char piece_symbol, bool is_capture, bool is_arrocco);
+
+		chessgame::Player* getCurrentPlayer() {
+			return this->current_turn ? this->p1 : this->p2;
+		}
+
+		chessgame::Coordinates getCurrentPlayerKing() {
+			return this->current_turn ? this->p1_king_coord : this->p2_king_coord; 
+		}
+
+		void setCurrentPlayerKing(const chessgame::Coordinates& coord) {
+			this->current_turn ? this->p1_king_coord = coord : this->p2_king_coord = coord;
+		}
 
 		std::vector<chessgame::Coordinates> getPieceMovesAll(const chessgame::Coordinates &piece_coord);
 
