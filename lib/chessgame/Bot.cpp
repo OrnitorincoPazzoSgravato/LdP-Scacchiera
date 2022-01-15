@@ -89,7 +89,7 @@ namespace chessgame
                 int moves_number{possible_moves.size()};
                 if (moves_number != 0)
                 {
-                    std::cout << "Moving: " << from.symbol << '\n';
+                    std::cout << "Bot is trying to move: " << p->getSymbol() << '\n';
 
                     int index {std::rand() % moves_number};
                     

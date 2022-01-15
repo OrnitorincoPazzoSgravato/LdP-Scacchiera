@@ -99,7 +99,7 @@ namespace gameplay
                     for (auto it = moves_vec.begin(); it != moves_vec.end(); ++it)
                     {
                         if ((*it).x == king_coord.x && (*it).y == king_coord.y) {
-                            std::cout << (p_color == chessgame::WHITE ? "WHITE" : "BLACK") << " is in check." << std::endl;
+                            
                             return true;
                         }
                     }
@@ -438,7 +438,7 @@ namespace gameplay
         }
 
         // player has checked its opponent, now we check for a checkmate
-
+        std::cout << (color == chessgame::WHITE ? "WHITE" : "BLACK") << " is in check." << std::endl;
         for (int y = 0; y < 8; y++)
         {
             for (int x = 0; x < 8; x++)
@@ -466,7 +466,7 @@ namespace gameplay
             }
         }
         
-        std::cout << "The game has ended. " << (color == chessgame::WHITE ? "WHITE" : "BLACK") << " lost." << std::endl;
+        std::cout << "It's a checkmate! " << (color == chessgame::WHITE ? "WHITE" : "BLACK") << " lost." << std::endl;
         return true;
     }
 
