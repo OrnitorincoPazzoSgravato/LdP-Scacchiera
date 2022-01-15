@@ -32,31 +32,38 @@ namespace chessgame
         {
             for (int j = -1; j <= 1; j++)
             {
-                // Control if the end cell is not the piece's cell
 
                 int x_offset = j;
                 int y_offset = i;
                 // Control if the end cell is in the chessboard
                 if (x + x_offset >= 0 && x + x_offset < COLUMNS && y + y_offset >= 0 && y + y_offset < ROWS)
                 {
-                    if (x_offset == 0 && y_offset == 0)
+                    // Control if the end cell is not the piece's cell
+                    if (!(x_offset == 0 && y_offset == 0)) // The cell is not the piece's cell
                     {
-                        continue;
-                    }
-                    else
-                    {
+                        // So i check if the end cell is empty
                         if (board.get_piece(Coordinates(x + x_offset, y + y_offset)) == nullptr)
                         {
                             moves.push_back(Coordinates(x + x_offset, y + y_offset));
                         }
-                        else if (board.get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor())
+                        else // The cell is not empty
                         {
-                            moves.push_back(Coordinates(x + x_offset, y + y_offset));
+                            // So i check if the end cell is the same color of the piece
+                            if (board.get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor())
+                            {
+                                moves.push_back(Coordinates(x + x_offset, y + y_offset));
+                            }
                         }
                     }
                 }
             }
         }
+
+        /*for (auto &move : moves)
+        {
+            std::cout << "Re move: " << move.symbol << std::endl;
+        }*/
+
         return moves;
     }
 

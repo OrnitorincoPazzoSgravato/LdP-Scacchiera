@@ -52,19 +52,24 @@ namespace chessgame
         int x_offset = h_versor;
         int y_offset = v_versor;
 
+        // While the end cell is in the chessboard
         while (x + x_offset >= 0 && x + x_offset < COLUMNS && y + y_offset >= 0 && y + y_offset < ROWS)
         {
+            // Check if the end cell is empty
             if (board.get_piece(Coordinates(x + x_offset, y + y_offset)) == nullptr)
             {
                 moves.push_back(Coordinates(x + x_offset, y + y_offset));
             }
-            else if (board.get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor())
-            {
-                moves.push_back(Coordinates(x + x_offset, y + y_offset));
-                break;
-            }
             else
-            {
+            { // Else the cell is not empty
+
+                // Check the piece color
+                if (board.get_piece(Coordinates(x + x_offset, y + y_offset))->getColor() != this->getColor())
+                {
+                    // If the color is different, the cell is a possible move
+                    moves.push_back(Coordinates(x + x_offset, y + y_offset));
+                }
+                // The cell is not empty so the piece can't move in the current direction
                 break;
             }
 

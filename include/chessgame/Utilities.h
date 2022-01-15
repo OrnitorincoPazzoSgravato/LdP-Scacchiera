@@ -19,9 +19,9 @@ namespace chessgame
     };
     /**
      * @brief This class represent a pair of coordinates
-     * 
+     *
      * @param x the column
-     * @param y the row 
+     * @param y the row
      */
     class Coordinates
     {
@@ -33,15 +33,18 @@ namespace chessgame
         Coordinates(){};
         Coordinates(int x, int y);
         Coordinates(string symbol);
-        Coordinates(const Coordinates& coord) {
+        Coordinates(const Coordinates &coord)
+        {
             this->x = coord.x;
             this->y = coord.y;
             this->symbol = coord.symbol;
         }
-        Coordinates& operator=(const Coordinates& coord) {
+        Coordinates &operator=(const Coordinates &coord)
+        {
             this->x = coord.x;
             this->y = coord.y;
             this->symbol = coord.symbol;
+            return *this;
         }
         bool operator==(const Coordinates &other_coord) const
         {
@@ -51,8 +54,8 @@ namespace chessgame
         {
             return !(*this == other__coord);
         }
-        Coordinates& operator++() = delete;
-        Coordinates& operator--() = delete;
+        Coordinates &operator++() = delete;
+        Coordinates &operator--() = delete;
     };
 }
 
