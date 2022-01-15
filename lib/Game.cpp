@@ -12,6 +12,7 @@
 #include "../include/Game.h"
 
 #include <random>
+#include <time.h>
 
 #include "../include/chessgame/Player.h"
 #include "../include/chessgame/Human.h"
@@ -26,6 +27,7 @@ namespace gameplay
     // constructors declaration
     Game::Game() : n_moves{0}, en_passante_coord{nullptr}, board{chessgame::Chessboard()}, stall_counter{0}, is_bot_game{false}
     {
+        srand(time(NULL));
         std::array<chessgame::PieceColor, 2> a_colors = this->getRandColors();
         this->p1 = new chessgame::Human(a_colors[0]);
         this->p2 = new chessgame::Bot(a_colors[1], this->board);
