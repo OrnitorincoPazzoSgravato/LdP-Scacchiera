@@ -12,6 +12,7 @@
 #include <array>
 #include <vector>
 #include <stdexcept>
+#include <ctime>
 
 #include "../../include/chessgame/Bot.h"
 #include "../../include/chessgame/Chessboard.h"
@@ -45,7 +46,7 @@ namespace chessgame
         // if end of matrix
         if (x == COLUMNS)
         {
-            // start from the beginning
+            // start from the beginning of the matrix
             y = 0;
             x = 0;
         }
@@ -54,11 +55,12 @@ namespace chessgame
 
     std::array<Coordinates, 2> Bot::think()
     {
+        //use current time as seed for random generator
+        std::srand(std::time(0));
+
         // generate row,column, and count
         int row{std::rand() % ROWS};
-        // std::cout << "Raw generated :  "<< row  << "\n";
         int column{std::rand() % COLUMNS};
-        // std::cout << "Column generated :  "<< column  << "\n";
         int count{0};
 
         // generate coordinate
@@ -89,8 +91,8 @@ namespace chessgame
                 int moves_number{possible_moves.size()};
                 if (moves_number != 0)
                 {
-                    std::cout << "Bot is trying to move: " << p->getSymbol() << '\n';
-
+                    //use current time as seed for random generator
+                    std::srand(std::time(0));
                     int index {std::rand() % moves_number};
                     
                     // returns a move
@@ -99,6 +101,9 @@ namespace chessgame
                 }
             }
         }
+        // good practice : this function has a defualt move to return: it never occurs because 
+        // gameplay::Game controls checkmate
+        return std::array<Coordinates,2> {Coordinates {-1,-1},Coordinates {-1,-1}};
     }
 
     char Bot::getPromotionTarget()
