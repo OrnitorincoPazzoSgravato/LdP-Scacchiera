@@ -76,7 +76,7 @@ namespace chessgame
 
             // if cell is empty
             if (!p)
-                continue;
+                continue; 
 
             // if a piece does exist and is controlled by this player
             if (p->getColor() == this->pieceColor)

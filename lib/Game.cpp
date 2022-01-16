@@ -27,7 +27,7 @@ namespace gameplay
     // constructors declaration
     Game::Game() : n_moves{0}, en_passante_coord{nullptr}, board{chessgame::Chessboard()}, stall_counter{0}, is_bot_game{false}
     {
-        srand(time(NULL));
+        srand(time(NULL)); // used to randomize each game
         std::array<chessgame::PieceColor, 2> a_colors = this->getRandColors();
         this->p1 = new chessgame::Human(a_colors[0]);
         this->p2 = new chessgame::Bot(a_colors[1], this->board);
@@ -98,7 +98,6 @@ namespace gameplay
                     for (auto it = moves_vec.begin(); it != moves_vec.end(); ++it)
                     {
                         if ((*it).x == king_coord.x && (*it).y == king_coord.y) {
-                            
                             return true;
                         }
                     }
@@ -439,6 +438,7 @@ namespace gameplay
 
         // player has checked its opponent, now we check for a checkmate
         std::cout << (color == chessgame::WHITE ? "WHITE" : "BLACK") << " is in check." << std::endl;
+        // if WHITE is in check, we should look if they have moves that uncheck them
         for (int y = 0; y < 8; y++)
         {
             for (int x = 0; x < 8; x++)
@@ -446,16 +446,15 @@ namespace gameplay
                 chessgame::Coordinates piece_coord = chessgame::Coordinates(x, y);
                 chessgame::Piece *p = this->board.get_piece(piece_coord);
 
-                if (p != nullptr && p->getColor() != color)
+                if (p != nullptr && p->getColor() == color)
                 {
                     std::vector<chessgame::Coordinates> moves_vec = this->getPieceMovesAll(piece_coord);
 
                     for (auto it = moves_vec.begin(); it != moves_vec.end(); ++it)
                     {
                         chessgame::Piece* target_p = this->board.get_piece(*it);
-                        if(target_p == nullptr) continue;
 
-                        bool is_capture = target_p->getSymbol() != p->getSymbol();
+                        bool is_capture = target_p != nullptr && target_p->getSymbol() != p->getSymbol();
                         bool is_arrocco = this->isArrocco(std::array<chessgame::Coordinates, 2> {piece_coord, *it});
 
                         if(!this->isMoveSelfCheck(piece_coord, (*it), p->getSymbol(), is_capture, is_arrocco)) {
