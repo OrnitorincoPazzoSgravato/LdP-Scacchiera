@@ -151,13 +151,13 @@ namespace gameplay
         return false;
     }
 
-    bool Game::isArrocco(const std::array<chessgame::Coordinates, 2> &move)
+    bool isArrocco(const std::array<chessgame::Coordinates, 2> &move, const chessgame::Chessboard &board)
     {
-        chessgame::Piece *p = this->board.get_piece(move[0]);
+        chessgame::Piece *p = board.get_piece(move[0]);
         if (p == nullptr)
             return false;
 
-        chessgame::Piece *dest_p = this->board.get_piece(move[1]);
+        chessgame::Piece *dest_p = board.get_piece(move[1]);
 
         char piece_symbol = p->getSymbol();
 
@@ -186,7 +186,7 @@ namespace gameplay
                     int end_index = move[0].x < move[1].x ? move[1].x : move[0].x;
                     for (; index <= end_index && !obstacles; index++)
                     {
-                        if (this->board.get_piece(chessgame::Coordinates(kY, index)) != nullptr)
+                        if (board.get_piece(chessgame::Coordinates(kY, index)) != nullptr)
                             obstacles == true;
                     }
 
@@ -361,7 +361,7 @@ namespace gameplay
 
             bool is_default = this->isDefaultMove(*p, move[0], move[1]);
             bool is_paw_2_tiles_movement = this->isPawTwoTilesMovement(move);
-            bool is_arrocco = this->isArrocco(move);
+            bool is_arrocco = isArrocco(move, this->board);
             bool is_en_passant = this->isEnPassant(p->getSymbol(), move[1]);
 
             bool is_valid_move = is_default || is_paw_2_tiles_movement || is_arrocco || is_en_passant;
@@ -455,7 +455,7 @@ namespace gameplay
                         chessgame::Piece* target_p = this->board.get_piece(*it);
 
                         bool is_capture = target_p != nullptr && target_p->getSymbol() != p->getSymbol();
-                        bool is_arrocco = this->isArrocco(std::array<chessgame::Coordinates, 2> {piece_coord, *it});
+                        bool is_arrocco = isArrocco(std::array<chessgame::Coordinates, 2> {piece_coord, *it}, this->board);
 
                         if(!this->isMoveSelfCheck(piece_coord, (*it), p->getSymbol(), is_capture, is_arrocco)) {
                             return false;

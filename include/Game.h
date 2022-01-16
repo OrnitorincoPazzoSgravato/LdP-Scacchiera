@@ -21,6 +21,15 @@
 namespace gameplay
 {
 	/**
+	 * @brief manages the special rule "arrocco", returns if the provided move is a case of "arrocco"
+	 * 
+	 * @param p 
+	 * @param dest_p 
+	 * @return true 
+	 * @return false 
+	 */
+	bool isArrocco(const std::array<chessgame::Coordinates, 2> &move, const chessgame::Chessboard& board);
+	/**
 	 * @brief classe che rappresenta lo svolgimento di una partita a scacchi.
 	 * Deve occuparsi dell'inizializzazione della partita, dello svolgimento dei turni,
 	 * del controllo della validità delle mosse e dell'applicazione delle regole speciali.
@@ -113,15 +122,6 @@ namespace gameplay
 		 * @return false 
 		 */
 		bool isEnPassant(char piece_symbol, const chessgame::Coordinates &to);
-		/**
-		 * @brief manages the special rule "arrocco", returns if the provided move is a case of "arrocco"
-		 * 
-		 * @param p 
-		 * @param dest_p 
-		 * @return true 
-		 * @return false 
-		 */
-		bool isArrocco(const std::array<chessgame::Coordinates, 2> &move);
 		/**
 		 * @brief manages base movement rules, returns if the provided piece can defaultly move to the specified tile
 		 * 

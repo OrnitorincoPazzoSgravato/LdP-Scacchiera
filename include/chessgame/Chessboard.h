@@ -66,7 +66,7 @@ namespace chessgame
          *@return  nullptr if there's no Piece* in that cell
          *
          */
-        Piece *get_piece(const Coordinates &c)
+        Piece *get_piece(const Coordinates &c) const
         {
             //  this->check_coordinates(c);
             return v[c.y][c.x].get();
@@ -78,7 +78,7 @@ namespace chessgame
          *
          *@return string of the state
          */
-        std::string snapshot();
+        std::string snapshot() const;
 
         /**
          * @brief Swap the content of a cell at [from.y][from.x] and [to.y][to.x]

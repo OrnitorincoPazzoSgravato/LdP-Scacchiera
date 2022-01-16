@@ -64,7 +64,7 @@ namespace chessgame
         this->v[0][7] = std::make_unique<Torre>(WHITE, 't');
     }
 
-    std::string Chessboard::snapshot()
+    std::string Chessboard::snapshot() const
     {
         std::string s = "  __________________________\n";
 
