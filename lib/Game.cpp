@@ -264,8 +264,9 @@ namespace gameplay
         char promotion_output = this->promotion(move[1]); // calls the function that manage the special rule "promotion"
         
         if (promotion_output != 0) { // successful promotion, as per documentation
-            return (log_move + '\n' + promotion_output); 
+            return (log_move + ' ' + promotion_output); 
         }
+        else return (log_move + " *");
 
         return log_move;
     }
