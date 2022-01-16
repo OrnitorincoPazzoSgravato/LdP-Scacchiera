@@ -66,7 +66,7 @@ namespace chessgame
 
     std::string Chessboard::snapshot()
     {
-        std::string s = "  ____________\n";
+        std::string s = "  __________________________\n";
 
         // for loop rows
         int rows{ROWS};
@@ -75,21 +75,24 @@ namespace chessgame
         for (int i = ROWS -1; i >= 0; i--)
         {   
             // add row number
-            s += std::to_string(rows) + " | ";
+            s += std::to_string(rows) + " |";
             // for loop columns
             for (int j = 0; j < COLUMNS; j++)
             {
                 Piece *p{this->v[i][j].get()};
-                if (p)
+                if (p) {
+                    s += ' ';
                     s += p->getSymbol();
+                    s += ' ';
+                }
                 else
-                    s += " ";
+                    s += "   ";
             }
-            s += " |\n";
+            s += "|\n";
             rows--;
         }
-        s += "  ************\n";
-        s += "    ABCDEFGH";
+        s += "  **************************\n";
+        s += "    A  B  C  D  E  F  G  H";
         return s;
     }
 
