@@ -128,9 +128,7 @@ namespace gameplay
         bool final_cell_is_empty {this->board.get_piece(move[1]) == nullptr};
 
         if (p_is_paw && !has_moved && same_column && y_offset_is_two && final_cell_is_empty)
-            //&& !(dynamic_cast<chessgame::Pedone *>(p)->has_already_moved) &&
-            //move[0].x == move[1].x && std::abs(move[0].y - move[1].y) == 2 &&
-            //this->board.get_piece(move[1]) == nullptr)
+
         {
             p = nullptr;
             return true;
