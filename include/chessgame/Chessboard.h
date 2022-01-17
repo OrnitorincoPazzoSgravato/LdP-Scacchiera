@@ -68,7 +68,7 @@ namespace chessgame
          */
         Piece *get_piece(const Coordinates &c) const
         {
-            //  this->check_coordinates(c);
+            check_coordinates(c);
             return v[c.y][c.x].get();
         }
 
