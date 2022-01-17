@@ -19,10 +19,42 @@
 
 namespace chessgame
 {
+
     class Human : public Player
     {
     private:
-        /* data */
+        /**
+         * @brief check if the move is valid
+         *
+         * @param move a move from the human player
+         * @return true if valid
+         * @return false if invalid
+         */
+        bool check_move(const std::array<std::string, 2> &move)
+        {
+            if (move[0].length() != 2 || move[0].length() != 2)
+                return false;
+            else if (move[0] == "XX" && move[1] == "XX")
+                return true;
+            else if (move[0][0] < 'A' || move[0][0] > 'H' || move[0][1] < 1 || move[0][1] > 8 || move[1][0] < 'A' || move[1][0] > 'H' || move[1][1] < 1 || move[1][1] > 8)
+                return false;
+            return true;
+        }
+        /**
+         * @brief Get a move from the human player
+         *
+         * @param pc color of human player
+         * @return std::array<std::string, 2> array with the move
+         */
+        std::array<std::string, 2> human_thinking()
+        {
+            std::string from, to;
+            std::string color = this->pieceColor == chessgame::WHITE ? "white" : "black";
+            std::cout << "Please state your move (" << color << "): ";
+            std::cin >> from >> to;
+            return std::array<std::string, 2>{from, to};
+        }
+
     public:
         /**
          * @brief Construct a new Human object
@@ -37,15 +69,21 @@ namespace chessgame
         /**
          * @brief This function implement the act of thinking a move by a human player
          *
-         * @return std::array<Coordinates, 2> an array with the move
+         * @return std::array<Coordinates, 2> an array with a move inside the chessboard
+         * @return std::array<Coordinates, 2> "XX" "XX" to print chessboard
          */
         std::array<Coordinates, 2> think()
         {
-            std::string from, to;
-            std::string color = this->pieceColor == chessgame::WHITE ? "white" : "black";
-            std::cout << "Please state your move (" << color << "): ";
-            std::cin >> from >> to;
-            return std::array<Coordinates, 2>{Coordinates(from), Coordinates(to)};
+            bool valid_move{false};
+            std::array<std::string, 2> move{"XX", "XX"};
+            while (!valid_move)
+            {
+                move = human_thinking();
+                valid_move = check_move(move);
+                if (move[0] == "XX" && move[1] == "XX")
+                    return std::array<Coordinates, 2>{Coordinates{-1, -1}, Coordinates{-1, -1}};
+            }
+            return std::array<Coordinates, 2>{Coordinates{move[0]}, Coordinates{move[1]}};
         }
 
         /**
