@@ -51,14 +51,14 @@ namespace chessgame
     private:
         // a reference to a chessboard in this game
         Chessboard &board;
-        /**
-         * @brief this private function returns the coordinates of the cell after coord in an iteration column by column
-         * 
-         * @param coord the previous coordinates
-         * @return Coordinates after coord 
-         */
-        Coordinates next_cell(const Coordinates &coord);
     };
+    /**
+     * @brief this helper function returns the coordinates of the cell after coord in an iteration column by column
+     *
+     * @param coord the previous coordinates
+     * @return Coordinates after coord
+     */
+    Coordinates next_cell(const Coordinates &coord);
 }
 
 #endif
