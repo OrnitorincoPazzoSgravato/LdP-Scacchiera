@@ -1,7 +1,7 @@
 /**
  * @file Chessboard.h
  * @author Enrico Cavinato
- * @brief
+ * @brief Class that implement the concept of a real life Chessboard
  * @version 0.1
  * @date 2022-01-12
  *
@@ -68,7 +68,6 @@ namespace chessgame
          */
         Piece *get_piece(const Coordinates &c) const
         {
-            check_coordinates(c);
             return v[c.y][c.x].get();
         }
 
