@@ -50,7 +50,7 @@ namespace chessgame
     std::array<Coordinates, 2> Bot::think()
     {
         //use current time as seed for random generator
-        std::srand(std::time(0));
+        std::srand(std::time(NULL));
 
         // generate row,column, and count
         int row{std::rand() % ROWS};
@@ -86,7 +86,7 @@ namespace chessgame
                 if (moves_number != 0)
                 {
                     //use current time as seed for random generator
-                    std::srand(std::time(0));
+                    std::srand(std::time(NULL));
                     int index {std::rand() % moves_number};
                     
                     // returns a move

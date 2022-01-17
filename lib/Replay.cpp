@@ -86,14 +86,14 @@ namespace replay_game
 
     void Replay::print_on_screen()
     {
-        std::cout << "-----------REPLAY OF THE GAME-----------" << std::endl;
-        
+        std::cout << "-----------REPLAY OF THE GAME-----------" ;
+        std::cout << this->board.snapshot() + "\n";
+        int turn {0};
+
         // while loop input
         while (!input_file.eof())
         {
-            // print the state of chessboard
-            std::cout << this->board.snapshot() + "\n";
-
+            turn++;
             // wait 1 second before the move
             std::this_thread::sleep_for(std::chrono::seconds(1));
 
@@ -102,10 +102,12 @@ namespace replay_game
             chessgame::Coordinates from{this_move[0]};
             chessgame::Coordinates to{this_move[1]};
 
+            // print the state of chessboard
+            std::cout << this->board.snapshot() + "\n";
             std::cout << "Moved: " << this->board.get_piece(to)->getSymbol() << " from " << from.symbol << " to " << to.symbol << std::endl;
-            std::cout << "********************** End of turn **********************" << std::endl;
+            std::cout << "********************** End of turn " << turn <<  " **********************";
         }
-        std::cout << "********************** GAME OVER **********************" << std::endl;
+        std::cout << "********************** GAME OVER **********************";
     }
 
     std::array<chessgame::Coordinates, 2> Replay::move()
@@ -126,7 +128,8 @@ namespace replay_game
         if (!this->board.get_piece(to))
         {
             // if this is an enpassant or arrocco move
-            en_passant_capture(from, to);
+            if (this->board.get_piece(from)->getSymbol() == 'p' || this->board.get_piece(from)->getSymbol() == 'P')
+                en_passant_capture(from, to);
             arrocco_move(from, to);
 
             // move

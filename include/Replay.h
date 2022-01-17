@@ -16,6 +16,7 @@
 #include <istream>
 #include <string>
 #include <ostream>
+#include <fstream>
 
 #include "./chessgame/Chessboard.h"
 #include "./chessgame/Utilities.h"
