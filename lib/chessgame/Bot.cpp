@@ -21,14 +21,7 @@
 
 namespace chessgame
 {
-
-    /**
-     * @brief iterate a coordinate column to column
-     *
-     * @param coord the coordinate
-     */
-
-    Coordinates Bot::next_cell(const Coordinates &coord)
+    Coordinates next_cell(const Coordinates &coord)
     {
         //  row ++
         int x = coord.x;
@@ -52,6 +45,7 @@ namespace chessgame
         }
         return Coordinates(x, y);
     }
+
 
     std::array<Coordinates, 2> Bot::think()
     {
