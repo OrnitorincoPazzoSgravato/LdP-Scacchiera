@@ -23,43 +23,23 @@
 namespace replay_game
 {
     Replay::Replay(const std::string &input, const std::string &output)
+        : is_onscreen_replay{output == "string"}
     {
         // open input file
         input_file.open(input, std::fstream::in);
 
         // if input file does not exist
-        if (!input_file)
-            throw std::invalid_argument("This file does not exist");
-
-        // if file not open
-        if (!input_file.is_open())
-            throw std::invalid_argument("File not open");
-
-        // it this is a screen replay
-        if (output == "screen")
-            is_onscreen_replay = true;
+        if (!input_file || !input_file.is_open())
+            throw std::invalid_argument("This file does not exist or not open properly");
         // it this is a log file replay
-        else
+
+        if (!is_onscreen_replay)
         {
             output_file.open(output, std::fstream::out);
             // check if output file is open
             if (!output_file.is_open())
                 throw std::invalid_argument("File not open");
         }
-    }
-
-    void Replay::print()
-    {
-        // if replay on screen
-        if (is_onscreen_replay)
-            print_on_screen();
-
-        // else replay on file
-        else
-            print_on_file();
-
-        // close input file
-        input_file.close();
     }
 
     void Replay::print_on_file()
@@ -74,10 +54,10 @@ namespace replay_game
 
             // make the move
             std::array<chessgame::Coordinates, 2> this_move = move();
-            chessgame::Coordinates from{this_move[0]};
-            chessgame::Coordinates to{this_move[1]};
+            std::string from{this_move[0].symbol};
+            std::string to{this_move[1].symbol};
 
-            output_file << "Moved: " << this->board.get_piece(to)->getSymbol() << " from " << from.symbol << " to " << to.symbol << std::endl;
+            output_file << "Moved: " << this->board.get_piece(to)->getSymbol() << " from " << from << " to " << to << std::endl;
             output_file << "********************** End of turn **********************" << std::endl;
         }
         output_file << "********************** GAME OVER **********************" << std::endl;
@@ -86,9 +66,9 @@ namespace replay_game
 
     void Replay::print_on_screen()
     {
-        std::cout << "-----------REPLAY OF THE GAME-----------" ;
+        std::cout << "-----------REPLAY OF THE GAME-----------";
         std::cout << this->board.snapshot() + "\n";
-        int turn {0};
+        int turn{0};
 
         // while loop input
         while (!input_file.eof())
@@ -99,13 +79,13 @@ namespace replay_game
 
             // make the move
             std::array<chessgame::Coordinates, 2> this_move = move();
-            chessgame::Coordinates from{this_move[0]};
-            chessgame::Coordinates to{this_move[1]};
+            std::string from{this_move[0].symbol};
+            std::string to{this_move[1].symbol};
 
             // print the state of chessboard
             std::cout << this->board.snapshot() + "\n";
-            std::cout << "Moved: " << this->board.get_piece(to)->getSymbol() << " from " << from.symbol << " to " << to.symbol << std::endl;
-            std::cout << "********************** End of turn " << turn <<  " **********************";
+            std::cout << "Moved: " << this->board.get_piece(to)->getSymbol() << " from " << from << " to " << to << std::endl;
+            std::cout << "********************** End of turn " << turn << " **********************";
         }
         std::cout << "********************** GAME OVER **********************";
     }
@@ -198,13 +178,11 @@ namespace replay_game
             chessgame::Coordinates enpassant_coord{to.x, from.y};
             this->board.set_piece(enpassant_coord, nullptr);
         }
-        // if not enpassant, this function does nothing
-        return;
     }
 
     Replay::~Replay()
     {
-        // close io streams
+        // close fstreams
         if (this->input_file.is_open())
             this->input_file.close();
         if (this->output_file.is_open())

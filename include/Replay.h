@@ -46,7 +46,14 @@ namespace replay_game
                  * @brief print content of input file
                  *
                  */
-                void print();
+                void print()
+                { 
+                        if (is_onscreen_replay)
+                                print_on_screen();
+                        else
+                                print_on_file();
+                        input_file.close();
+                }
                 /**
                  * @brief Copy constructor disabled
                  *
