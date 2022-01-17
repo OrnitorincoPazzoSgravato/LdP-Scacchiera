@@ -482,6 +482,10 @@ namespace gameplay
             {
                 // player's move for its turn
                 std::array<chessgame::Coordinates, 2> move = this->getCurrentPlayer()->think();
+                if(move[0].symbol == "XX" && move[1].symbol == "XX") {
+                    std::cout << this->board.snapshot() << std::endl;
+                    continue;
+                }
                 invalid_move = !this->playerMove(move);
                 if(!invalid_move) {
                     chessgame::Piece* p = this->board.get_piece(move[1]);
