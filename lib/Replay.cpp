@@ -19,45 +19,75 @@
 
 #include "../include/Replay.h"
 #include "../include/Game.h"
+#include "../include/chessgame/Utilities.h"
+#include "../include/chessgame/Chessboard.h"
+#include "../include/chessgame/Human.h"
 
 namespace replay_game
 {
     Replay::Replay(const std::string &input, const std::string &output)
-        : is_onscreen_replay{output == "screen"}
+        : is_onscreen_replay{false}
     {
         // open input file
         input_file.open(input, std::fstream::in);
 
         // if input file does not exist
-        if (!input_file || !input_file.is_open())
+        if (!input_file)
             throw std::invalid_argument("This file does not exist or not open properly");
         // it this is a log file replay
 
-        if (!is_onscreen_replay)
-        {
-            output_file.open(output, std::fstream::out);
-            // check if output file is open
-            if (!output_file.is_open())
-                throw std::invalid_argument("File not open");
-        }
+        output_file.open(output, std::fstream::out);
+        // check if output file is open
+        if (!output_file.is_open())
+            throw std::invalid_argument("File not open");
+    }
+
+    Replay::Replay(const std::string &input)
+        : is_onscreen_replay{true}
+    {
+        // open input file
+        input_file.open(input, std::fstream::in);
+
+        // if input file does not exist
+        if (!input_file)
+            throw std::invalid_argument("This file does not exist or not open properly");
     }
 
     void Replay::print_on_file()
     {
         int turn{0};
-        output_file << "-----------REPLAY OF THE GAME-----------" << std::endl;
-        output_file << this->board.snapshot()  << std::endl;
+        output_file << "-----------REPLAY OF THE GAME-----------\n"
+                    << std::endl;
+        output_file << this->board.snapshot() << std::endl;
 
         // while loop
         while (!input_file.eof())
         {
+            // next turn
             turn++;
+
             // make the move
             std::array<chessgame::Coordinates, 2> this_move = move();
             std::string from{this_move[0].symbol};
             std::string to{this_move[1].symbol};
 
-            //print state of chessboard
+            // print checkmate contition
+            char checkmate_char;
+            this->input_file >> checkmate_char;
+            switch (checkmate_char)
+            {
+            case chessgame::WHITE:
+                /* code */
+                output_file << "White player is in check\n" << std::endl;
+                break;
+            case chessgame::BLACK:
+                output_file << "Black player is in check\n" << std::endl;
+                break;
+            default:
+                break;
+            }
+
+            // print state of chessboard
             output_file << this->board.snapshot() << std::endl;
 
             output_file << "Moved: " << this->board.get_piece(to)->getSymbol() << " from " << from << " to " << to << std::endl;
@@ -69,8 +99,8 @@ namespace replay_game
 
     void Replay::print_on_screen()
     {
-        std::cout << "-----------REPLAY OF THE GAME-----------";
-        std::cout << this->board.snapshot() + "\n";
+        std::cout << "-----------REPLAY OF THE GAME-----------\n";
+        std::cout << this->board.snapshot() << "\n";
         int turn{0};
 
         // while loop input
@@ -87,8 +117,25 @@ namespace replay_game
 
             // print the state of chessboard
             std::cout << this->board.snapshot() + "\n";
+
+            // print checkmate contition
+            int checkmate_flag;
+            this->input_file >> checkmate_flag;
+            switch (checkmate_flag)
+            {
+            case chessgame::WHITE:
+                /* code */
+                std::cout << "White player is in check\n";
+                break;
+            case chessgame::BLACK:
+                std::cout << "Black player is in check\n";
+                break;
+            default:
+                break;
+            }
+
             std::cout << "Moved: " << this->board.get_piece(to)->getSymbol() << " from " << from << " to " << to << std::endl;
-            std::cout << "********************** End of turn " << turn << " **********************";
+            std::cout << "********************** End of turn " << turn << " **********************\n";
         }
         std::cout << "********************** GAME OVER **********************";
     }
@@ -102,11 +149,15 @@ namespace replay_game
 
         // get input
         this->input_file >> initial >> final >> promotion_char;
+
+        //chacks if input is valid
+        bool valid_formula {chessgame::check_move(std::array<std::string,2>{initial,final})}; 
+        if (!valid_formula)
+            throw std::invalid_argument("Invalid string in log file");
+        
         chessgame::Coordinates from{initial};
         chessgame::Coordinates to{final};
 
-        chessgame::check_coordinates(from);
-        chessgame::check_coordinates(to);
         // if to is an empty cell
         if (!this->board.get_piece(to))
         {
@@ -176,7 +227,9 @@ namespace replay_game
     void Replay::en_passant_capture(const chessgame::Coordinates &from, const chessgame::Coordinates &to)
     {
         // if column is different but cell is empty
-        if (from.x != to.x && !this->board.get_piece(to))
+        bool different_column{from.x != to.x};
+        bool destination_empty{!(from.x != to.x)};
+        if (different_column && destination_empty)
         {
             chessgame::Coordinates enpassant_coord{to.x, from.y};
             this->board.set_piece(enpassant_coord, nullptr);
