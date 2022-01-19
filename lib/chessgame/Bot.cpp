@@ -24,8 +24,8 @@ namespace chessgame
     Coordinates next_cell(const Coordinates &coord)
     {
         //  row ++
-        int x = coord.x;
-        int y = coord.y + 1;
+        int x {coord.x};
+        int y {coord.y + 1} ;
 
         // if end of column, next row
 
@@ -87,10 +87,9 @@ namespace chessgame
                 {
                     //use current time as seed for random generator
                     std::srand(std::time(NULL));
-                    int index {std::rand() % moves_number};
-                    
+                
                     // returns a move
-                    Coordinates to{possible_moves[index]};
+                    Coordinates to{possible_moves[std::rand() % moves_number]};
                     return std::array<Coordinates, 2>{from, to};
                 }
             }

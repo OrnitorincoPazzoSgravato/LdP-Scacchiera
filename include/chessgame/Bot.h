@@ -54,6 +54,8 @@ namespace chessgame
     };
     /**
      * @brief this helper function returns the coordinates of the cell after coord in an iteration column by column
+     * WE DID NOT implemented this as a Coordinates operator++ because the iteration is
+     * not a standard row by row 
      *
      * @param coord the previous coordinates
      * @return Coordinates after coord

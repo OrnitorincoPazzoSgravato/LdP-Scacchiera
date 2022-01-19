@@ -18,12 +18,12 @@
 #include <istream>
 
 #include "../include/Replay.h"
-#include "Game.h"
+#include "../include/Game.h"
 
 namespace replay_game
 {
     Replay::Replay(const std::string &input, const std::string &output)
-        : is_onscreen_replay{output == "string"}
+        : is_onscreen_replay{output == "screen"}
     {
         // open input file
         input_file.open(input, std::fstream::in);
@@ -44,21 +44,24 @@ namespace replay_game
 
     void Replay::print_on_file()
     {
+        int turn{0};
         output_file << "-----------REPLAY OF THE GAME-----------" << std::endl;
+        output_file << this->board.snapshot()  << std::endl;
 
         // while loop
         while (!input_file.eof())
         {
-            // print the state of chessboard
-            output_file << this->board.snapshot() << std::endl;
-
+            turn++;
             // make the move
             std::array<chessgame::Coordinates, 2> this_move = move();
             std::string from{this_move[0].symbol};
             std::string to{this_move[1].symbol};
 
+            //print state of chessboard
+            output_file << this->board.snapshot() << std::endl;
+
             output_file << "Moved: " << this->board.get_piece(to)->getSymbol() << " from " << from << " to " << to << std::endl;
-            output_file << "********************** End of turn **********************" << std::endl;
+            output_file << "********************** End of turn " << turn << " **********************" << std::endl;
         }
         output_file << "********************** GAME OVER **********************" << std::endl;
         output_file.close();
