@@ -423,7 +423,7 @@ namespace gameplay
                     chessgame::Coordinates piece_coord = chessgame::Coordinates(x, y);
                     chessgame::Piece *p = this->board.get_piece(piece_coord);
                     if (p != nullptr && p->getColor() == color && this->getPieceMovesAll(piece_coord).size() != 0) {
-                        this->writeLog("\n");
+                        this->writeLog(" *\n");
                         return false;
                     }
                 }
