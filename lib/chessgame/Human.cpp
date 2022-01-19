@@ -54,4 +54,26 @@ namespace chessgame
         } while (!correct_symbol_entered);
         return allowed_symbols[target_index];
     }
+
+    /**
+     * @brief check if the move is valid
+     *
+     * @param move a move from the human player
+     * @return true if valid
+     * @return false if invalid
+     */
+    bool check_move(const std::array<std::string, 2> &move)
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            bool uppercase{move[i][0] >= 'A' && move[i][0] <= 'H'};
+            bool lowercase{move[i][0] >= 'a' && move[i][0] <= 'h'};
+            bool low_or_up{uppercase || lowercase};
+            bool right_length{move[i].length() == 2};
+            bool right_int{move[i][1] >= 1 && move[i][1] <= 8};
+            if (!low_or_up || !right_length || !right_int)
+                return false;
+        }
+        return true;
+    }
 }
