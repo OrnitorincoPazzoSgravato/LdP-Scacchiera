@@ -80,7 +80,7 @@ namespace gameplay
 
     void Game::writeLog(const std::string &move)
     {
-        this->log_file << move << std::endl;
+        this->log_file << move;
     }
 
     bool Game::isPlayerKingInCheck(const chessgame::Coordinates king_coord)
@@ -425,10 +425,9 @@ namespace gameplay
                 {
                     chessgame::Coordinates piece_coord = chessgame::Coordinates(x, y);
                     chessgame::Piece *p = this->board.get_piece(piece_coord);
-                    if (p != nullptr && p->getColor() == color)
-                    {
-                        if (this->getPieceMovesAll(piece_coord).size() != 0)
-                            return false;
+                    if (p != nullptr && p->getColor() == color && this->getPieceMovesAll(piece_coord).size() != 0) {
+                        this->writeLog("\n");
+                        return false;
                     }
                 }
             }
@@ -437,6 +436,7 @@ namespace gameplay
 
         // player has checked its opponent, now we check for a checkmate
         std::cout << (color == chessgame::WHITE ? "WHITE" : "BLACK") << " is in check." << std::endl;
+        this->writeLog((color == chessgame::WHITE ? " 0\n" : " 1\n"));
         // if WHITE is in check, we should look if they have moves that uncheck them
         for (int y = 0; y < 8; y++)
         {
@@ -472,7 +472,7 @@ namespace gameplay
     void Game::play()
     {
         this->log_file.open("./game_log.txt"); // opens the log file
-
+        // if(n_moves != 0) this->writeLog("\n");
         do
         {   
             chessgame::PieceColor color = this->getCurrentPlayer()->getColor();

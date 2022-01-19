@@ -1,4 +1,13 @@
-// ho aggiunto gli operatori di confronto (RIccardo)
+/**
+ * @file Utilities.h
+ * @author Riccardo Zuech
+ * @brief 
+ * @version 0.1
+ * @date 2022-01-19
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 
 #ifndef UTILITIES_H
 #define UTILITIES_H
