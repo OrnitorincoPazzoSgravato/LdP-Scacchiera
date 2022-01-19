@@ -19,27 +19,11 @@
 
 namespace chessgame
 {
+    bool check_move(const std::array<std::string, 2> &move);
 
     class Human : public Player
     {
     private:
-        /**
-         * @brief check if the move is valid
-         *
-         * @param move a move from the human player
-         * @return true if valid
-         * @return false if invalid
-         */
-        bool check_move(const std::array<std::string, 2> &move)
-        {
-            if (move[0].length() != 2 || move[0].length() != 2)
-                return false;
-            else if (move[0] == "XX" && move[1] == "XX")
-                return true;
-            else if (move[0][0] < 'A' || move[0][0] > 'H' || move[0][1] < 1 || move[0][1] > 8 || move[1][0] < 'A' || move[1][0] > 'H' || move[1][1] < 1 || move[1][1] > 8)
-                return false;
-            return true;
-        }
         /**
          * @brief Get a move from the human player
          *
@@ -75,13 +59,13 @@ namespace chessgame
         std::array<Coordinates, 2> think()
         {
             bool valid_move{false};
-            std::array<std::string, 2> move{"XX", "XX"};
+            std::array<std::string, 2> move{"XX","XX"};
             while (!valid_move)
             {
                 move = human_thinking();
-                valid_move = check_move(move);
                 if (move[0] == "XX" && move[1] == "XX")
-                    return std::array<Coordinates, 2>{Coordinates{-1, -1}, Coordinates{-1, -1}};
+                    return std::array<Coordinates, 2>{Coordinates{"XX"}, Coordinates{"XX"}};
+                valid_move = chessgame::check_move(move);
             }
             return std::array<Coordinates, 2>{Coordinates{move[0]}, Coordinates{move[1]}};
         }
