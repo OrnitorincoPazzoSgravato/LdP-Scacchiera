@@ -24,11 +24,9 @@ namespace chessgame
     Coordinates next_cell(const Coordinates &coord)
     {
         //  row ++
-        int x {coord.x};
-        int y {coord.y + 1} ;
+        int x {coord.x}, y {coord.y + 1};
 
         // if end of column, next row
-
         if (y == ROWS)
         {
             // a caporiga
@@ -51,14 +49,10 @@ namespace chessgame
     {
         //use current time as seed for random generator
         std::srand(std::time(NULL));
-
-        // generate row,column, and count
-        int row{std::rand() % ROWS};
-        int column{std::rand() % COLUMNS};
         int count{0};
 
-        // generate coordinate
-        Coordinates from{column, row};
+        // generate coordinates
+        Coordinates from{std::rand() % ROWS, std::rand() % COLUMNS};
 
         // while we ispectionate
         while (count < CELLS)
@@ -67,10 +61,8 @@ namespace chessgame
             // next cell
             from = next_cell(from);
 
-            // get piece in from
+            // get piece in from, if empty cell continue
             Piece *p{this->board.get_piece(from)};
-
-            // if cell is empty
             if (!p)
                 continue; 
 
@@ -101,11 +93,9 @@ namespace chessgame
 
     char Bot::getPromotionTarget()
     {
-        char c = '0';
         if (this->pieceColor == WHITE)
-            c = 'd';
+            return WHITE_QUEEN;
         else
-            c = 'D';
-        return c;
+            return BLACK_QUEEN;
     }
 }
