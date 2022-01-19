@@ -43,6 +43,12 @@ namespace replay_game
                  */
                 Replay(const std::string &input, const std::string &output);
                 /**
+                 * @brief Construct a new Replay object
+                 * 
+                 * @param input a string with the input file
+                 */
+                Replay(const std::string &input);
+                /**
                  * @brief print content of input file
                  *
                  */
