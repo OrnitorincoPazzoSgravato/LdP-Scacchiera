@@ -36,6 +36,25 @@ namespace chessgame
     constexpr int COLUMNS{8};
     constexpr int CELLS{64};
 
+    constexpr char BLACK_BISHOP {'A'};
+    constexpr char WHITE_BISHOP {'a'};
+
+    constexpr char BLACK_HORSE {'C'};
+    constexpr char WHITE_HORSE {'c'};
+
+    constexpr char WHITE_QUEEN {'d'};
+    constexpr char BLACK_QUEEN {'D'};
+
+    constexpr char WHITE_TOWER {'t'};
+    constexpr char BLACK_TOWER {'T'};
+
+    constexpr char WHITE_KING {'r'};
+    constexpr char BLACK_KING {'R'};
+
+    constexpr char WHITE_PAW {'p'};
+    constexpr char BLACK_PAW {'P'};
+
+
     /**
      * @brief This class implements a chessboard
      *
