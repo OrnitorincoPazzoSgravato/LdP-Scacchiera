@@ -27,7 +27,6 @@ namespace gameplay
     // constructors declaration
     Game::Game() : n_moves{0}, en_passante_coord{nullptr}, board{chessgame::Chessboard()}, stall_counter{0}, is_bot_game{false}
     {
-        srand(time(NULL)); // used to randomize each game
         std::array<chessgame::PieceColor, 2> a_colors = this->getRandColors();
         this->p1 = new chessgame::Human(a_colors[0]);
         this->p2 = new chessgame::Bot(a_colors[1], this->board);
@@ -67,15 +66,13 @@ namespace gameplay
     // private methods declaration
     std::array<chessgame::PieceColor, 2> Game::getRandColors()
     {
-        std::array<chessgame::PieceColor, 2> c_array; // declaration of the returned array
-
+        std::srand(time(NULL)); // used to randomize each game
         double rand_num = std::rand(); // std library rand function to get a random number between 0 and 1
         // based on rand_num c_array is initialized with different values (just two possible outcomes, so an if-else is enough to cover them)
         if (rand_num < 0.5)
-            c_array = {chessgame::PieceColor::BLACK, chessgame::PieceColor::WHITE};
+            return {chessgame::PieceColor::BLACK, chessgame::PieceColor::WHITE};
         else
-            c_array = {chessgame::PieceColor::WHITE, chessgame::PieceColor::BLACK};
-        return c_array;
+            return {chessgame::PieceColor::WHITE, chessgame::PieceColor::BLACK};
     }
 
     void Game::writeLog(const std::string &move)
