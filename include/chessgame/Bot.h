@@ -28,7 +28,7 @@ namespace chessgame
          *
          */
         Bot(const PieceColor &p_color, Chessboard &cboard)
-            : Player{p_color}, board{cboard}
+            : Player{p_color}, board{cboard}, last_move_index{0}
         {
         }
 
@@ -51,6 +51,7 @@ namespace chessgame
     private:
         // a reference to a chessboard in this game
         Chessboard &board;
+        int last_move_index;
     };
     /**
      * @brief this helper function returns the coordinates of the cell after coord in an iteration column by column
