@@ -25,14 +25,12 @@
 
 namespace replay_game
 {
-    const std::string gameover_string {"********************** GAME OVER **********************"};
+    const std::string gameover_string{"********************** GAME OVER **********************"};
 
     void Replay::print()
     {
-        // open input file
+        // open input file and checks if open
         input_file.open(inputstring, std::fstream::in);
-
-        // checks if open
         if (!input_file)
             throw std::invalid_argument("This file does not exist or not open properly");
 
@@ -41,39 +39,38 @@ namespace replay_game
             print_on_screen();
         else
         {
-            //open output file
+            // open output file and check if output file is open
             output_file.open(outputstring, std::fstream::out);
-
-            // check if output file is open
             if (!output_file.is_open())
                 throw std::invalid_argument("File not open");
+            //print and close output
             print_on_file();
             output_file.close();
         }
+        //close input
         input_file.close();
     }
 
     void Replay::print_on_file()
     {
         int turn{0};
-        output_file << "-----------REPLAY OF THE GAME-----------\n" << std::endl;
-        output_file << this->board.snapshot() << std::endl;
+        output_file << "-----------REPLAY OF THE GAME-----------"<< std::endl << this->board.snapshot() << std::endl;
 
         // while loop
         while (!input_file.eof())
         {
             // next turn
             turn++;
+            output_file << "********************** Turn " << turn << " **********************" << std::endl;
 
             // make the move
             std::array<chessgame::Coordinates, 2> this_move = move();
-            std::string from{this_move[0].symbol};
-            std::string to{this_move[1].symbol};
+            std::string from{this_move[0].symbol}, to{this_move[1].symbol};
 
             // print checkmate contition
             char checkmate_char;
             this->input_file >> checkmate_char;
-            output_file << kingcheck_string(checkmate_char) <<std::endl;
+            output_file << kingcheck_string(checkmate_char) << std::endl;
 
             // print state of chessboard
             output_file << this->board.snapshot() << std::endl;
@@ -86,8 +83,7 @@ namespace replay_game
 
     void Replay::print_on_screen()
     {
-        std::cout << "-----------REPLAY OF THE GAME-----------\n";
-        std::cout << this->board.snapshot() << "\n";
+        std::cout << "-----------REPLAY OF THE GAME-----------\n" << this->board.snapshot() << "\n";
         int turn{0};
 
         // while loop input
@@ -96,11 +92,11 @@ namespace replay_game
             turn++;
             // wait 1 second before the move
             std::this_thread::sleep_for(std::chrono::seconds(1));
+            std::cout << "********************** Turn " << turn << " **********************\n" ;
 
             // make the move
             std::array<chessgame::Coordinates, 2> this_move = move();
-            std::string from{this_move[0].symbol};
-            std::string to{this_move[1].symbol};
+            std::string from{this_move[0].symbol}, to{this_move[1].symbol};
 
             // print the state of chessboard
             std::cout << this->board.snapshot() + "\n";
@@ -125,11 +121,7 @@ namespace replay_game
 
         // get input
         this->input_file >> initial >> final >> promotion_char;
-
-        //chacks if input is valid
-        // bool valid_formula{chessgame::check_move(std::array<std::string, 2>{initial, final})};
-        //if (!valid_formula)
-        //    throw std::invalid_argument("Invalid string in log file");
+        check_input_from_file(initial, final);
 
         chessgame::Coordinates from{initial};
         chessgame::Coordinates to{final};
@@ -224,15 +216,24 @@ namespace replay_game
     std::string kingcheck_string(char checkmate_flag)
     {
         switch (checkmate_flag)
-            {
-            case '0':
-                return "White player is in check";
-                break;
-            case '1':
-                return "Black player is in check";
-                break;
-            default:
-                return "";
-            }
+        {
+        case '0':
+            return "White player is in check";
+            break;
+        case '1':
+            return "Black player is in check";
+            break;
+        default:
+            return "";
+        }
+    }
+
+    void check_input_from_file(const std::string &initial, const std::string &final)
+    {
+        bool valid_formula{chessgame::check_move(std::array<std::string, 2>{initial, final})};
+        bool initial_lowercase{initial[0] >= 'a' && initial[0] <= 'h'};
+        bool final_lowercase{final[0] >= 'a' && final[0] <= 'h'};
+        if (!valid_formula || initial_lowercase || final_lowercase)
+            throw std::invalid_argument("Invalid string in log file");
     }
 }
