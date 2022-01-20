@@ -23,8 +23,8 @@ namespace gameplay
 	/**
 	 * @brief manages the special rule "arrocco", returns if the provided move is a case of "arrocco"
 	 * 
-	 * @param p 
-	 * @param dest_p 
+	 * @param move array of two coordinates representing move
+	 * @param board const reference to the currently used board
 	 * @return true 
 	 * @return false 
 	 */
@@ -38,152 +38,199 @@ namespace gameplay
 	class Game
 	{
 		chessgame::Chessboard board;
+		/**
+		 * @brief Number of moves executed in the current istance of Game.
+		 */
 		int n_moves;
-		bool current_turn; // true if p1's turn, false if p2's turn
+		/**
+		 * @brief True if p1's turn, false if p2's turn.
+		 */
+		bool current_turn;
 		bool is_bot_game;
+		/**
+		 * @brief Pointers to the two players.
+		 */
 		chessgame::Player *p1, *p2;
-		chessgame::Coordinates p1_king_coord, p2_king_coord;
-		std::ofstream log_file;
+		/**
+		 * @brief coordinates to the two player's kings. Used to speed up methods based on a king's check status.
+		 */
+		chessgame::Coordinates p1_king_coord, p2_king_coord; 
+		std::ofstream log_file; // ofstream representing the log file of the game
+		/**
+		 * @brief Number of turns of stalling. Used for implementing "patta".
+		 */
 		int stall_counter;
-
+		/**
+		 * @brief Pointer to an istance of Coordinates representing the position of the last en_passant - elegible paw. Used a pointer as nullptr is a valid
+		 * value for the rule implementation (no paw moved by two tiles on the previous turn).
+		 */
 		chessgame::Coordinates *en_passante_coord;
 
 		/**
-		 * @brief Returns an array of both PieceColor's values in a randomic order
+		 * @brief Returns an array of both possible PieceColor's values in a randomic order.
 		 * 
 		 * @return std::array<chessgame::PieceColor&, 2> 
 		 */
 		std::array<chessgame::PieceColor, 2> getRandColors();
 		/**
-		 * @brief Writes a move to the game's log file
+		 * @brief Writes a move to the game's log file.
 		 * 
 		 * @param move move to be recorded in the log
-		 * @return bool true if the write op succedeed, fale if it failed
 		 */
 		void writeLog(const std::string &move);
 		/**
-		 * @brief checks if the current player's king is in check
+		 * @brief Checks if the current player's king is checked.
 		 * 
-         * @param player_identifier true if p1, false is p2
 		 * @return true 
 		 * @return false 
 		 */
 		bool isPlayerKingInCheck();
 		/**
-		 * @brief checks if the current player's king is in check
+		 * @brief Checks if the current player's king is checked.
+		 * @note Used to check if a move is an istance of self-checking-
 		 * 
-         * @param player_identifier true if p1, false is p2
-		 * @param the player's king coordinates
+         * @param king_coord coordinates of the current player's king.
 		 * @return true 
 		 * @return false 
 		 */
 		bool isPlayerKingInCheck(const chessgame::Coordinates king_coord);
 		/**
-         * @brief check if the provided move is valid, if yes it is executed
-         * 
+         * @brief Checks if the provided move is valid and executes it.
+		 * 
+		 * @return true 
+		 * @return false 
          */
 		bool playerMove(std::array<chessgame::Coordinates, 2> &move);
 		/**
-		 * @brief checks if the piece at the provided coordinates is promotable. If it is proceeds to it.
+		 * @brief Checks if the piece at the provided coordinates is promotable and proceeds to promote it.
 		 * 
 		 * @param coord coordinate of the piece to check
 		 * @return char representing the promoted piece, null character if the promotion didn't happen
 		 */
 		char promotion(const chessgame::Coordinates &coord);
 		/**
-		 * @brief updates the has_already_moved attribute of a paw, king or tower
+		 * @brief Updates the has_already_moved attribute of paws, king and towers
 		 * 
 		 * @param coord the coordinate of the piece that's about to move
 		 */
 		void updateFirstMove(const chessgame::Coordinates &coord);
 		/**
-		 * @brief Function to be called when a successful move has been recognized. It's role is to do everything that needs to be done
-		 * at the end of a turn
+		 * @brief Function to be called when a successful move has been recognized. Used to call and apply methods and algorithms for correctly ending a turn.
 		 * 
 		 * @param move the array representation of the move
-		 * @param is_swap disables the capture function if true
-		 * @return std::string string representation of the move to be logged
+		 * @param is_swap disables the capture flag if true
+		 * @return std::string representation of the legal move (to be logged in the log file)
 		 */
 		std::string legalTurnCleanUp(const std::array<chessgame::Coordinates, 2> &move, bool is_swap);
 		/**
-		 * @brief manages the two-tiles movement of a first time moving paw, return if the provided move is a case of it.
+		 * @brief Checks if the provided move is a case of a paw's two-tiles movement.
 		 * 
-		 * @param move 
+		 * @param move the array representation of the move
 		 * @return true 
 		 * @return false 
 		 */
 		bool isPawTwoTilesMovement(const std::array<chessgame::Coordinates, 2> &move);
 		/**
-		 * @brief manages the special rule "en passant", returns if it is a case of "en passant"
+		 * @brief Checks if the provided move is a case of special rule "en passant".
 		 * 
-		 * @param piece_symbol 
-		 * @param to 
+		 * @param piece_symbol symbol of the moving piece
+		 * @param to target coordinate of the provided piexe
 		 * @return true 
 		 * @return false 
 		 */
 		bool isEnPassant(char piece_symbol, const chessgame::Coordinates &to);
 		/**
-		 * @brief manages base movement rules, returns if the provided piece can defaultly move to the specified tile
+		 * @brief Checks if the provided piece can move from and to the provided coordinates.
 		 * 
-		 * @param p 
-		 * @param to 
+		 * @param p piece about to move
+		 * @param from starting coordinate
+		 * @param to ending coordinate
 		 * @return true 
 		 * @return false 
 		 */
 		bool isDefaultMove(chessgame::Piece &p, const chessgame::Coordinates &from, const chessgame::Coordinates &to);
 		/**
-		 * @brief checks the current state of the game to see if the game has ended/should end
-		 * If it's a full bot game, then it always ends in certain amount of moves declared in kBot_moves
+		 * @brief Checks the current state of the game to see if the game has ended/should end.
+		 * If it's a full bot game, then it always ends in certain amount of moves declared in kBot_moves.
 		 * 
 		 * @return true if game over
 		 * @return false if game can continue
 		 */
 		bool isGameOver();
-
+		/**
+		 * @brief Checks if the provided move (from - to), for the specified piece, ends up in a case of self-checking.
+		 * 
+		 * @param from coordinate to move from
+		 * @param to coordinate to move to
+		 * @param piece_symbol symbol representing the peice to move
+		 * @param is_capture self-explanatory flag
+		 * @param is_arrocco self-explanatory flag
+		 * @return true 
+		 * @return false 
+		 */
 		bool isMoveSelfCheck(const chessgame::Coordinates& from, const chessgame::Coordinates& to, char piece_symbol, bool is_capture, bool is_arrocco);
 
+		/**
+		 * @brief Get the Current Player object
+		 * 
+		 * @return chessgame::Player*
+		 */
 		chessgame::Player* getCurrentPlayer() {
 			return this->current_turn ? this->p1 : this->p2;
 		}
-
+		/**
+		 * @brief Get the Current Player King coordinates
+		 * 
+		 * @return chessgame::Coordinates 
+		 */
 		chessgame::Coordinates getCurrentPlayerKing() {
 			return this->current_turn ? this->p1_king_coord : this->p2_king_coord; 
 		}
-
+		/**
+		 * @brief Set the Current Player King coordinates
+		 * 
+		 * @param coord 
+		 */
 		void setCurrentPlayerKing(const chessgame::Coordinates& coord) {
 			this->current_turn ? this->p1_king_coord = coord : this->p2_king_coord = coord;
 		}
 
+		/**
+		 * @brief Get all possible moves for a specifies piece based on the board's current state.
+		 * 
+		 * @param piece_coord
+		 * @return std::vector<chessgame::Coordinates> vector containing all the coordinates the piece can move to
+		 */
 		std::vector<chessgame::Coordinates> getPieceMovesAll(const chessgame::Coordinates &piece_coord);
 
 	public:
 		/**
-			 * @brief A full bot game is considered invalid after this number of moves without a winner
-			 * 
-			 */
+		 * @brief A full bot game is considered invalid after this number of moves without a winner
+		 * 
+		 */
 		static const int kBot_moves = 500;
 		/**
-			 * @brief Constructs a new Game object and initialize one human player and one bot player
-			 * 
-			 */
+		 * @brief Constructs a new Game object and initialize one human player and one bot player
+		 * 
+		 */
 		Game();
 		/**
-			 * @brief Constructs a new Game object, and initialize its players based on the argument's value
-			 * 
-			 * @param is_bot_game false: 1 bot and 1 human; true: 2 bots
-			 */
+		 * @brief Constructs a new Game object, and initialize its players based on the argument's value
+		 * 
+		 * @param is_bot_game false: 1 bot and 1 human; true: 2 bots
+		 */
 		Game(bool is_bot_game);
 
 		/**
-			 * @brief starts a game of chess, logging valid moves in "game_log.txt"
-			 * 
-			 */
+		 * @brief starts a game of chess, logging valid moves in "game_log.txt"
+		 * 
+		 */
 		void play();
 
 		/**
-			 * @brief Destroy the Game object and closes the log_file if not already closed
-			 * 
-			 */
+		 * @brief Destroy the Game object and closes the log_file if not already closed
+		 * 
+		 */
 		~Game();
 	};
 };

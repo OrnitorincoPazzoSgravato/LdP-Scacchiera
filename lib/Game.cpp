@@ -27,7 +27,7 @@ namespace gameplay
     // constructors declaration
     Game::Game() : n_moves{0}, en_passante_coord{nullptr}, board{chessgame::Chessboard()}, stall_counter{0}, is_bot_game{false}
     {
-        std::array<chessgame::PieceColor, 2> a_colors = this->getRandColors();
+        std::array<chessgame::PieceColor, 2> a_colors = this->getRandColors(); // retrieves random colors
         this->p1 = new chessgame::Human(a_colors[0]);
         this->p2 = new chessgame::Bot(a_colors[1], this->board);
         if(a_colors[0] == chessgame::WHITE) {
@@ -38,17 +38,18 @@ namespace gameplay
             this->p1_king_coord = chessgame::Coordinates("E8");
             this->p2_king_coord = chessgame::Coordinates("E1");
         }
-        this->current_turn = a_colors[0] == chessgame::WHITE;
+        this->current_turn = a_colors[0] == chessgame::WHITE; // checking which player is WHITE
+        // GUI initialization
         std::cout << "Game created!" << std::endl;
         std::cout << this->board.snapshot() << std::endl;
     }
 
-    Game::Game(bool is_bot_match) : Game()
+    Game::Game(bool is_bot_match) : Game() 
     {
         if (is_bot_match) {
-            this->is_bot_game = true;
+            this->is_bot_game = true; // updates flag
             chessgame::PieceColor p1_color = this->p1->getColor();
-            delete this->p1;
+            delete this->p1; // deletes the old player
             this->p1 = new chessgame::Bot(p1_color, this->board);
         }
     }
@@ -56,8 +57,9 @@ namespace gameplay
     // destructor declaration
     Game::~Game()
     {
-        if (this->log_file.is_open())
+        if (this->log_file.is_open()) // case: the file should have been closed in play() but it hasn't, so we close it here
             this->log_file.close();
+        // delete of raw memory
         delete this->en_passante_coord;
         delete this->p1;
         delete this->p2;
