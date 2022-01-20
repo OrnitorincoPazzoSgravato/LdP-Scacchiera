@@ -162,7 +162,7 @@ namespace replay_game
         if (!this->board.get_piece(to))
         {
             // if this is an enpassant or arrocco move
-            if (this->board.get_piece(from)->getSymbol() == 'p' || this->board.get_piece(from)->getSymbol() == 'P')
+            if (this->board.get_piece(from)->getSymbol() == chessgame::WHITE_PAW || this->board.get_piece(from)->getSymbol() == chessgame::BLACK_PAW)
                 en_passant_capture(from, to);
             arrocco_move(from, to);
 

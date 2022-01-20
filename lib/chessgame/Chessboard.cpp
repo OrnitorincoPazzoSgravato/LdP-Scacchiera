@@ -31,19 +31,19 @@ namespace chessgame
         : respawn_point{-1, -1}, limbo{nullptr}
     {
         // initialize black Pieces
-        this->v[7][0] = std::make_unique<Torre>(BLACK, 'T');
-        this->v[7][1] = std::make_unique<Cavallo>(BLACK, 'C');
-        this->v[7][2] = std::make_unique<Alfiere>(BLACK, 'A');
-        this->v[7][3] = std::make_unique<Regina>(BLACK, 'D');
-        this->v[7][4] = std::make_unique<Re>(BLACK, 'R');
-        this->v[7][5] = std::make_unique<Alfiere>(BLACK, 'A');
-        this->v[7][6] = std::make_unique<Cavallo>(BLACK, 'C');
-        this->v[7][7] = std::make_unique<Torre>(BLACK, 'T');
+        this->v[7][0] = std::make_unique<Torre>(BLACK, BLACK_TOWER);
+        this->v[7][1] = std::make_unique<Cavallo>(BLACK, BLACK_HORSE);
+        this->v[7][2] = std::make_unique<Alfiere>(BLACK, BLACK_BISHOP);
+        this->v[7][3] = std::make_unique<Regina>(BLACK, BLACK_QUEEN);
+        this->v[7][4] = std::make_unique<Re>(BLACK, BLACK_KING);
+        this->v[7][5] = std::make_unique<Alfiere>(BLACK, BLACK_BISHOP);
+        this->v[7][6] = std::make_unique<Cavallo>(BLACK, BLACK_HORSE);
+        this->v[7][7] = std::make_unique<Torre>(BLACK, BLACK_TOWER);
 
         // for loop to initialize black Paws
         for (int i = 0; i < COLUMNS; i++)
         {
-            this->v[6][i] = std::make_unique<Pedone>(BLACK, 'P');
+            this->v[6][i] = std::make_unique<Pedone>(BLACK, BLACK_PAW);
         }
 
         // initialize white Pieces
@@ -51,17 +51,17 @@ namespace chessgame
         // for loop to inizialize white Paws
         for (int i = 0; i < COLUMNS; i++)
         {
-            this->v[1][i] = std::make_unique<Pedone>(WHITE, 'p');
+            this->v[1][i] = std::make_unique<Pedone>(WHITE, WHITE_PAW);
         }
         // initialize other white Pieces
-        this->v[0][0] = std::make_unique<Torre>(WHITE, 't');
-        this->v[0][1] = std::make_unique<Cavallo>(WHITE, 'c');
-        this->v[0][2] = std::make_unique<Alfiere>(WHITE, 'a');
-        this->v[0][3] = std::make_unique<Regina>(WHITE, 'd');
-        this->v[0][4] = std::make_unique<Re>(WHITE, 'r');
-        this->v[0][5] = std::make_unique<Alfiere>(WHITE, 'a');
-        this->v[0][6] = std::make_unique<Cavallo>(WHITE, 'c');
-        this->v[0][7] = std::make_unique<Torre>(WHITE, 't');
+        this->v[0][0] = std::make_unique<Torre>(WHITE, WHITE_TOWER);
+        this->v[0][1] = std::make_unique<Cavallo>(WHITE, WHITE_HORSE);
+        this->v[0][2] = std::make_unique<Alfiere>(WHITE, WHITE_BISHOP);
+        this->v[0][3] = std::make_unique<Regina>(WHITE, WHITE_QUEEN);
+        this->v[0][4] = std::make_unique<Re>(WHITE, WHITE_KING);
+        this->v[0][5] = std::make_unique<Alfiere>(WHITE, WHITE_BISHOP);
+        this->v[0][6] = std::make_unique<Cavallo>(WHITE, WHITE_HORSE);
+        this->v[0][7] = std::make_unique<Torre>(WHITE, WHITE_TOWER);
     }
 
     std::string Chessboard::snapshot() const
@@ -136,29 +136,29 @@ namespace chessgame
         // switch statement used to return the choosen derived class of Piece
         switch (target_index)
         {
-        case 'C':
-            v[coord.y][coord.x] = std::make_unique<Cavallo>(BLACK, 'C');
+        case BLACK_HORSE:
+            v[coord.y][coord.x] = std::make_unique<Cavallo>(BLACK, BLACK_HORSE);
             break;
-        case 'A':
-            v[coord.y][coord.x] = std::make_unique<Alfiere>(BLACK, 'A');
+        case BLACK_BISHOP:
+            v[coord.y][coord.x] = std::make_unique<Alfiere>(BLACK, BLACK_BISHOP);
             break;
-        case 'D':
-            v[coord.y][coord.x] = std::make_unique<Regina>(BLACK, 'D');
+        case BLACK_QUEEN:
+            v[coord.y][coord.x] = std::make_unique<Regina>(BLACK, BLACK_QUEEN);
             break;
-        case 'T':
-            v[coord.y][coord.x] = std::make_unique<Torre>(BLACK, 'T');
+        case BLACK_TOWER:
+            v[coord.y][coord.x] = std::make_unique<Torre>(BLACK, BLACK_TOWER);
             break;
-        case 'a':
-            v[coord.y][coord.x] = std::make_unique<Alfiere>(WHITE, 'a');
+        case WHITE_BISHOP:
+            v[coord.y][coord.x] = std::make_unique<Alfiere>(WHITE, WHITE_BISHOP);
             break;
-        case 'c':
-            v[coord.y][coord.x] = std::make_unique<Cavallo>(WHITE, 'c');
+        case WHITE_HORSE:
+            v[coord.y][coord.x] = std::make_unique<Cavallo>(WHITE, WHITE_HORSE);
             break;
-        case 'd':
-            v[coord.y][coord.x] = std::make_unique<Regina>(WHITE, 'd');
+        case WHITE_QUEEN:
+            v[coord.y][coord.x] = std::make_unique<Regina>(WHITE, WHITE_QUEEN);
             break;
-        case 't':
-            v[coord.y][coord.x] = std::make_unique<Torre>(WHITE, 't');
+        case WHITE_TOWER:
+            v[coord.y][coord.x] = std::make_unique<Torre>(WHITE, WHITE_TOWER);
             break;
         default:
             return;
