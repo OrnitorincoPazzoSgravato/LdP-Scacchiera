@@ -41,25 +41,24 @@ namespace replay_game
                  * @param input a string with the input file
                  * @param output file where we print output,if it is "screen" print on screen
                  */
-                Replay(const std::string &input, const std::string &output);
+                Replay(const std::string &input, const std::string &output)
+                    : is_onscreen_replay{false}, inputstring{input}, outputstring{output}
+                {
+                }
                 /**
                  * @brief Construct a new Replay object
                  * 
                  * @param input a string with the input file
                  */
-                Replay(const std::string &input);
+                Replay(const std::string &input)
+                    : is_onscreen_replay{true}
+                {
+                }
                 /**
                  * @brief print content of input file
                  *
                  */
-                void print()
-                { 
-                        if (is_onscreen_replay)
-                                print_on_screen();
-                        else
-                                print_on_file();
-                        input_file.close();
-                }
+                void print();
                 /**
                  * @brief Copy constructor disabled
                  *
@@ -81,6 +80,16 @@ namespace replay_game
                  *
                  */
                 std::fstream input_file;
+                /**
+                 * @brief string with input file
+                 * 
+                 */
+                std::string inputstring;
+                /**
+                 * @brief string with output file, empty if output is on screen
+                 * 
+                 */
+                std::string outputstring;
                 /**
                  * @brief the output file
                  *
@@ -145,6 +154,14 @@ namespace replay_game
          * @brief Coordinate iniziali RE BIANCO E1
          */
         const chessgame::Coordinates re_bianco_init{"E1"};
+        /**
+         * @brief helper function to check if int input is WHITE,BLACK or invalid, to implement
+         * the replay of check
+         * 
+         * @param checkmate_flag 
+         * @return std::string to war if check
+         */
+        std::string kingcheck_string(int checkmate_flag);
 }
 
 #endif

@@ -25,39 +25,38 @@
 
 namespace replay_game
 {
-    Replay::Replay(const std::string &input, const std::string &output)
-        : is_onscreen_replay{false}
+    const std::string gameover_string {"********************** GAME OVER **********************"};
+
+    void Replay::print()
     {
         // open input file
-        input_file.open(input, std::fstream::in);
+        input_file.open(inputstring, std::fstream::in);
 
-        // if input file does not exist
+        // checks if open
         if (!input_file)
             throw std::invalid_argument("This file does not exist or not open properly");
-        // it this is a log file replay
 
-        output_file.open(output, std::fstream::out);
-        // check if output file is open
-        if (!output_file.is_open())
-            throw std::invalid_argument("File not open");
-    }
+        // if this is a onscreen replay
+        if (is_onscreen_replay)
+            print_on_screen();
+        else
+        {
+            //open output file
+            output_file.open(outputstring, std::fstream::out);
 
-    Replay::Replay(const std::string &input)
-        : is_onscreen_replay{true}
-    {
-        // open input file
-        input_file.open(input, std::fstream::in);
-
-        // if input file does not exist
-        if (!input_file)
-            throw std::invalid_argument("This file does not exist or not open properly");
+            // check if output file is open
+            if (!output_file.is_open())
+                throw std::invalid_argument("File not open");
+            print_on_file();
+            output_file.close();
+        }
+        input_file.close();
     }
 
     void Replay::print_on_file()
     {
         int turn{0};
-        output_file << "-----------REPLAY OF THE GAME-----------\n"
-                    << std::endl;
+        output_file << "-----------REPLAY OF THE GAME-----------\n" << std::endl;
         output_file << this->board.snapshot() << std::endl;
 
         // while loop
@@ -74,18 +73,7 @@ namespace replay_game
             // print checkmate contition
             char checkmate_char;
             this->input_file >> checkmate_char;
-            switch (checkmate_char)
-            {
-            case chessgame::WHITE:
-                /* code */
-                output_file << "White player is in check\n" << std::endl;
-                break;
-            case chessgame::BLACK:
-                output_file << "Black player is in check\n" << std::endl;
-                break;
-            default:
-                break;
-            }
+            output_file << kingcheck_string(checkmate_char) <<std::endl;
 
             // print state of chessboard
             output_file << this->board.snapshot() << std::endl;
@@ -93,8 +81,7 @@ namespace replay_game
             output_file << "Moved: " << this->board.get_piece(to)->getSymbol() << " from " << from << " to " << to << std::endl;
             output_file << "********************** End of turn " << turn << " **********************" << std::endl;
         }
-        output_file << "********************** GAME OVER **********************" << std::endl;
-        output_file.close();
+        output_file << gameover_string << std::endl;
     }
 
     void Replay::print_on_screen()
@@ -119,25 +106,14 @@ namespace replay_game
             std::cout << this->board.snapshot() + "\n";
 
             // print checkmate contition
-            int checkmate_flag;
+            char checkmate_flag;
             this->input_file >> checkmate_flag;
-            switch (checkmate_flag)
-            {
-            case chessgame::WHITE:
-                /* code */
-                std::cout << "White player is in check\n";
-                break;
-            case chessgame::BLACK:
-                std::cout << "Black player is in check\n";
-                break;
-            default:
-                break;
-            }
+            std::cout << kingcheck_string(checkmate_flag) << "\n";
 
             std::cout << "Moved: " << this->board.get_piece(to)->getSymbol() << " from " << from << " to " << to << std::endl;
             std::cout << "********************** End of turn " << turn << " **********************\n";
         }
-        std::cout << "********************** GAME OVER **********************";
+        std::cout << gameover_string;
     }
 
     std::array<chessgame::Coordinates, 2> Replay::move()
@@ -151,10 +127,10 @@ namespace replay_game
         this->input_file >> initial >> final >> promotion_char;
 
         //chacks if input is valid
-        bool valid_formula {chessgame::check_move(std::array<std::string,2>{initial,final})}; 
+        bool valid_formula{chessgame::check_move(std::array<std::string, 2>{initial, final})};
         if (!valid_formula)
             throw std::invalid_argument("Invalid string in log file");
-        
+
         chessgame::Coordinates from{initial};
         chessgame::Coordinates to{final};
 
@@ -243,5 +219,20 @@ namespace replay_game
             this->input_file.close();
         if (this->output_file.is_open())
             this->output_file.close();
+    }
+
+    std::string kingcheck_string(int checkmate_flag)
+    {
+        switch (checkmate_flag)
+            {
+            case chessgame::WHITE:
+                return "White player is in check";
+                break;
+            case chessgame::BLACK:
+                return "Black player is in check";
+                break;
+            default:
+                return "";
+            }
     }
 }
