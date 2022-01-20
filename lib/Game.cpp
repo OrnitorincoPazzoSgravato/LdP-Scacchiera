@@ -493,6 +493,10 @@ namespace gameplay
                 }
             } while (invalid_move); // this cycle keeps going until a valid move has been entered
 
+            
+            //use current time as seed for random generator
+            std::srand(time(NULL));
+
             this->n_moves++; // increse number of moves
             this->stall_counter++;
             std::cout << this->board.snapshot() << std::endl;

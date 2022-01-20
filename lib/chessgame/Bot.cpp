@@ -47,8 +47,6 @@ namespace chessgame
 
     std::array<Coordinates, 2> Bot::think()
     {
-        //use current time as seed for random generator
-        std::srand(std::time(NULL));
         int count{0};
 
         // generate coordinates
@@ -74,14 +72,13 @@ namespace chessgame
                 std::vector<Coordinates> possible_moves{p->getMoves(this->board, from)};
 
                 // if a possible move does exist
-                int moves_number{possible_moves.size()};
+                size_t moves_number{possible_moves.size()};
                 if (moves_number != 0)
                 {
-                    //use current time as seed for random generator
-                    std::srand(std::time(NULL));
-                
+                    int index = this->last_move_index >= moves_number ? std::rand() % moves_number : this->last_move_index;
+                    this->last_move_index = index + 1;
                     // returns a move
-                    Coordinates to{possible_moves[std::rand() % moves_number]};
+                    Coordinates to{possible_moves[index]};
                     return std::array<Coordinates, 2>{from, to};
                 }
             }
