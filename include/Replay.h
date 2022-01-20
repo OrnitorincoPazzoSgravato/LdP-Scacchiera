@@ -51,7 +51,7 @@ namespace replay_game
                  * @param input a string with the input file
                  */
                 Replay(const std::string &input)
-                    : is_onscreen_replay{true}
+                    : is_onscreen_replay{true},inputstring{input}
                 {
                 }
                 /**
@@ -161,7 +161,7 @@ namespace replay_game
          * @param checkmate_flag 
          * @return std::string to war if check
          */
-        std::string kingcheck_string(int checkmate_flag);
+        std::string kingcheck_string(char checkmate_flag);
 }
 
 #endif

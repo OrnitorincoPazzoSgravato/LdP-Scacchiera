@@ -127,9 +127,9 @@ namespace replay_game
         this->input_file >> initial >> final >> promotion_char;
 
         //chacks if input is valid
-        bool valid_formula{chessgame::check_move(std::array<std::string, 2>{initial, final})};
-        if (!valid_formula)
-            throw std::invalid_argument("Invalid string in log file");
+        // bool valid_formula{chessgame::check_move(std::array<std::string, 2>{initial, final})};
+        //if (!valid_formula)
+        //    throw std::invalid_argument("Invalid string in log file");
 
         chessgame::Coordinates from{initial};
         chessgame::Coordinates to{final};
@@ -221,14 +221,14 @@ namespace replay_game
             this->output_file.close();
     }
 
-    std::string kingcheck_string(int checkmate_flag)
+    std::string kingcheck_string(char checkmate_flag)
     {
         switch (checkmate_flag)
             {
-            case chessgame::WHITE:
+            case '0':
                 return "White player is in check";
                 break;
-            case chessgame::BLACK:
+            case '1':
                 return "Black player is in check";
                 break;
             default:
