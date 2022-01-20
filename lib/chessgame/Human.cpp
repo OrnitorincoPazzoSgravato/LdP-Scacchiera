@@ -27,11 +27,11 @@ namespace chessgame
         std::array<char, 4> allowed_symbols;
         if (this->pieceColor == PieceColor::BLACK)
         {
-            allowed_symbols = {'T', 'C', 'A', 'D'};
+            allowed_symbols = {BLACK_TOWER, BLACK_HORSE, BLACK_BISHOP, BLACK_QUEEN};
         }
         else
         {
-            allowed_symbols = {'t', 'c', 'a', 'd'};
+            allowed_symbols = {WHITE_TOWER, WHITE_HORSE, WHITE_BISHOP, WHITE_QUEEN};
         }
         // used later to promote to the correct derived class of Piece
         int target_index;
