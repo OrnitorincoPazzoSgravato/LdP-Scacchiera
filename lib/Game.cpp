@@ -407,11 +407,13 @@ namespace gameplay
         chessgame::PieceColor color = this->getCurrentPlayer()->getColor();
         if (this->is_bot_game && this->n_moves >= Game::kBot_moves) // a bot game has reached its maximum amount of moves
         {
+            this->writeLog(" 3\n");
             std::cout << "The full-bot game has reached its maximum amount of moves without ending {" << Game::kBot_moves << "}. Please try again." << std::endl;
             return true;
         }
         else if (this->stall_counter >= 50) // the game is stalled
         {
+            this->writeLog(" 2\n");
             std::cout << "The game ended as 50 consecutive moves has been made without moving a paw or capturing a piece." << std::endl;
             return true;
         }
@@ -431,6 +433,7 @@ namespace gameplay
                     }
                 }
             }
+            this->writeLog(" 2\n");
             std::cout << "The game ended as " << (color == chessgame::WHITE ? "WHITE" : "BLACK") << " has been stalemated." << std::endl;
             return true;
         }
