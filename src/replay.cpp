@@ -14,14 +14,18 @@
 #include "../include/Replay.h"
 
 int main(int argc,char** argv) {
-    if(argc == 2)
+    // if screen print
+    if (argc < 3 || argc >4)
+        throw std::invalid_argument("Invalid number of argumensts");
+    if(argv[1] == "v")
     {
-        replay_game::Replay replay {argv[1]};
+        replay_game::Replay replay {argv[2]};
         replay.print();
     }
-    else if(argc == 3)
+    // else file print
+    else if(argv[1] == "f")
     {
-        replay_game::Replay replay {argv[1],argv[2]};
+        replay_game::Replay replay {argv[2],argv[3]};
         replay.print();
     }
     return 0;
