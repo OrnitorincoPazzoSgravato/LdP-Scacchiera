@@ -162,6 +162,13 @@ namespace replay_game
          * @return std::string to war if check
          */
         std::string kingcheck_string(char checkmate_flag);
+        /**
+         * @brief checks if coordinates are in right layout
+         * 
+         * @param initial coordinate from symbol
+         * @param fianl coordinate to symbol
+         */
+        void check_input_from_file(const std::string &initial, const std::string &final);
 }
 
 #endif

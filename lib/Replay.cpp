@@ -115,16 +115,14 @@ namespace replay_game
     std::array<chessgame::Coordinates, 2> Replay::move()
     {
         // elements of the move:
-        std::string initial;
-        std::string final;
+        std::string initial,final;
         char promotion_char;
 
         // get input
         this->input_file >> initial >> final >> promotion_char;
         check_input_from_file(initial, final);
 
-        chessgame::Coordinates from{initial};
-        chessgame::Coordinates to{final};
+        chessgame::Coordinates from{initial},to{final} ;
 
         // if to is an empty cell
         if (!this->board.get_piece(to))
