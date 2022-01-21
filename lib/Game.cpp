@@ -157,8 +157,8 @@ namespace gameplay
             // series of conditions
             bool p_Is_King = piece_symbol == chessgame::BLACK_KING || piece_symbol == chessgame::WHITE_KING;
             bool p_Is_Tower = piece_symbol == chessgame::BLACK_TOWER || piece_symbol == chessgame::WHITE_TOWER;
-            bool dest_Is_King = dest_p_symbol == chessgame::BLACK_KING || piece_symbol == chessgame::WHITE_KING;
-            bool dest_Is_Tower = dest_p_symbol == chessgame::BLACK_TOWER || piece_symbol == chessgame::WHITE_TOWER;
+            bool dest_Is_King = dest_p_symbol == chessgame::BLACK_KING || dest_p_symbol == chessgame::WHITE_KING;
+            bool dest_Is_Tower = dest_p_symbol == chessgame::BLACK_TOWER || dest_p_symbol == chessgame::WHITE_TOWER;
 
             bool king_in_tower = p_Is_King && dest_Is_Tower;
             bool tower_in_king = p_Is_Tower && dest_Is_King;
@@ -375,19 +375,19 @@ namespace gameplay
                 this->writeLog(this->legalTurnCleanUp(move, is_arrocco));
 
                 // the block below is used for aftereffects and special rules
-                // special rule arrocco: tower in king position case
-                if (is_arrocco && (piece_symbol == chessgame::WHITE_TOWER || piece_symbol == chessgame::BLACK_TOWER))
-                    this->setCurrentPlayerKing(move[0]);
-                else if (is_en_passant) // after effect of en passant
-                {
+                // used to reset the EN_PASSANT coordiante setted for a first time moving paw on the next turn
+                if(this->en_passante_coord != nullptr) {
                     delete this->en_passante_coord;
                     this->en_passante_coord = nullptr;
                 }
+                // special rule arrocco: tower in king position case
+                if (is_arrocco && (piece_symbol == chessgame::WHITE_TOWER || piece_symbol == chessgame::BLACK_TOWER))
+                    this->setCurrentPlayerKing(move[0]);
                 else if (is_paw_2_tiles_movement) { // after effect of paw moving by two tiles
                     delete this->en_passante_coord;
                     this->en_passante_coord = new chessgame::Coordinates(move[1]);
                 }
-
+                
                 // we're moving a paw or capturing a piece, so we must reset the stall counter
                 if (piece_symbol == chessgame::WHITE_PAW || piece_symbol == chessgame::BLACK_PAW || is_capture)
                     this->stall_counter = 0;
