@@ -407,13 +407,13 @@ namespace gameplay
         chessgame::PieceColor color = this->getCurrentPlayer()->getColor();
         if (this->is_bot_game && this->n_moves >= Game::kBot_moves) // a bot game has reached its maximum amount of moves
         {
-            this->writeLog(" 3\n");
+            this->writeLog(" * 1\n");
             std::cout << "The full-bot game has reached its maximum amount of moves without ending {" << Game::kBot_moves << "}. Please try again." << std::endl;
             return true;
         }
         else if (this->stall_counter >= 50) // the game is stalled
         {
-            this->writeLog(" 2\n");
+            this->writeLog(" * 1\n");
             std::cout << "The game ended as 50 consecutive moves has been made without moving a paw or capturing a piece." << std::endl;
             return true;
         }
@@ -428,19 +428,19 @@ namespace gameplay
                     chessgame::Piece *p = this->board.get_piece(piece_coord);
                     // a piece of the opponent (now current player) which has moves available
                     if (p != nullptr && p->getColor() == color && this->getPieceMovesAll(piece_coord).size() != 0) {
-                        this->writeLog(" *\n");
+                        this->writeLog(" * 0\n");
                         return false;
                     }
                 }
             }
-            this->writeLog(" 2\n");
+            this->writeLog(" * 1\n");
             std::cout << "The game ended as " << (color == chessgame::WHITE ? "WHITE" : "BLACK") << " has been stalemated." << std::endl;
             return true;
         }
 
         // player has checked its opponent, now we check for a checkmate
         std::cout << (color == chessgame::WHITE ? "WHITE" : "BLACK") << " is in check." << std::endl;
-        this->writeLog((color == chessgame::WHITE ? " 0\n" : " 1\n"));
+        this->writeLog((color == chessgame::WHITE ? " 0" : " 1"));
         // if current player (the one about to move) is in check: we look if they have moves that uncheck them
         for (int y = 0; y < chessgame::ROWS; y++)
         {
@@ -461,14 +461,15 @@ namespace gameplay
                         bool is_arrocco = isArrocco(std::array<chessgame::Coordinates, 2> {piece_coord, *it}, this->board);
 
                         if(!this->isMoveSelfCheck(piece_coord, (*it), p->getSymbol(), is_capture, is_arrocco)) {
+                            this->writeLog(" 0\n");
                             return false;
                         }
                     }
                 }
             }
         }
-        
         std::cout << "It's a checkmate! " << (color == chessgame::WHITE ? "WHITE" : "BLACK") << " lost." << std::endl;
+        this->writeLog((color == chessgame::WHITE ? " 3\n" : " 2\n"));
         return true; // game now ends
     }
 
