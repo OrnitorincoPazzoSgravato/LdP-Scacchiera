@@ -41,6 +41,7 @@ namespace replay_game
             output_file.open(outputstring, std::fstream::out);
             if (!output_file.is_open())
                 throw std::invalid_argument("File not open");
+
             // print and close output
             print_on_file();
             output_file.close();
@@ -71,13 +72,17 @@ namespace replay_game
             int end_of_game{-1};
             this->input_file >> checkmate_char >> end_of_game;
             output_file << kingcheck_string(checkmate_char) << std::endl;
-            output_file << end_of_game_check(end_of_game) << std::endl;
 
             // print state of chessboard
             output_file << this->board.snapshot() << std::endl;
 
             output_file << "Moved: " << this->board.get_piece(to)->getSymbol() << " from " << from << " to " << to << std::endl;
             output_file << "********************** End of turn " << turn << " **********************" << std::endl;
+            output_file << end_of_game_check(end_of_game) << std::endl;
+
+            // if game ended
+            if (end_of_game != 0)
+                break;
         }
         output_file << gameover_string << std::endl;
     }
@@ -108,10 +113,14 @@ namespace replay_game
             int end_of_game{-1};
             this->input_file >> checkmate_flag >> end_of_game;
             std::cout << kingcheck_string(checkmate_flag) << "\n";
-            std::cout << end_of_game_check(end_of_game) << "\n";
 
             std::cout << "Moved: " << this->board.get_piece(to)->getSymbol() << " from " << from << " to " << to << std::endl;
             std::cout << "********************** End of turn " << turn << " **********************\n";
+            std::cout << end_of_game_check(end_of_game) << "\n";
+
+            // if game ended
+            if (end_of_game != 0)
+                break;
         }
         std::cout << gameover_string;
     }
@@ -152,9 +161,8 @@ namespace replay_game
         return std::array<chessgame::Coordinates, 2>{from, to};
     }
 
-    void Replay::arrocco_move(const chessgame::Coordinates from, const chessgame::Coordinates to)
+    void Replay::arrocco_move(const chessgame::Coordinates &from, const chessgame::Coordinates &to)
     {
-
         // se non è arrocco termina
         if (!gameplay::isArrocco(std::array<chessgame::Coordinates, 2>{from, to}, board))
             return;

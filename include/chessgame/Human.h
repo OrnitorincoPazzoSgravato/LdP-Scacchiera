@@ -20,19 +20,11 @@
 namespace chessgame
 {
     /**
-<<<<<<< HEAD
-     * @brief Helper function to check if move is valid
-     * 
-     * @param move array of symbols of initial and final cell of the move
-     * @return true if move is valid
-     * @return false if move is not valid
-=======
      * @brief check if the move is valid
      *
      * @param move a move from the human player
      * @return true if valid
      * @return false if invalid
->>>>>>> c82d5c2bec114571f62d325b95cb01bfa706a73f
      */
     bool check_move(const std::array<std::string, 2> &move);
 

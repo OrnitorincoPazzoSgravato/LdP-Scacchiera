@@ -13,9 +13,7 @@
 #define REPLAY_H
 
 #include <iostream>
-#include <istream>
 #include <string>
-#include <ostream>
 #include <fstream>
 #include <exception>
 
@@ -112,7 +110,7 @@ namespace replay_game
                  * @param from initial cell of the move
                  * @param to final cell of the move
                  */
-                void arrocco_move(const chessgame::Coordinates from, const chessgame::Coordinates to);
+                void arrocco_move(const chessgame::Coordinates &from, const chessgame::Coordinates &to);
                 /**
                  * @brief check if the move is an enpassant capture and capture the opponent's paw
                  *
