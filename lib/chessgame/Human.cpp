@@ -52,15 +52,12 @@ namespace chessgame
     {
         for (int i = 0; i < 2; i++) // checking if the move's coordinates are out of the chessboard coordinates' bounds
         {
-            bool uppercase{move[i][0] >= 'A' && move[i][0] <= 'H'};
-            bool lowercase{move[i][0] >= 'a' && move[i][0] <= 'h'};
-            bool low_or_up{uppercase || lowercase};
-
-            bool right_length{move[i].length() == 2};
-            bool right_int{move[i][1] >= '1' && move[i][1] <= '8'};
-
-            if (!low_or_up || !right_length || !right_int)
+            try {
+                chessgame::Coordinates {move[i]};
+            }
+            catch(std::invalid_argument) {
                 return false;
+            }
         }
         return true;
     }
