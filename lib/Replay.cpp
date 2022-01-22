@@ -10,12 +10,10 @@
  */
 #include <string>
 #include <fstream>
-#include <ostream>
 #include <chrono>
 #include <thread>
 #include <stdexcept>
 #include <iostream>
-#include <istream>
 
 #include "../include/Replay.h"
 #include "../include/Game.h"
@@ -43,18 +41,19 @@ namespace replay_game
             output_file.open(outputstring, std::fstream::out);
             if (!output_file.is_open())
                 throw std::invalid_argument("File not open");
-            //print and close output
+            // print and close output
             print_on_file();
             output_file.close();
         }
-        //close input
+        // close input
         input_file.close();
     }
 
     void Replay::print_on_file()
     {
         int turn{0};
-        output_file << "-----------REPLAY OF THE GAME-----------"<< std::endl << this->board.snapshot() << std::endl;
+        output_file << "-----------REPLAY OF THE GAME-----------" << std::endl
+                    << this->board.snapshot() << std::endl;
 
         // while loop
         while (!input_file.eof())
@@ -68,9 +67,11 @@ namespace replay_game
             std::string from{this_move[0].symbol}, to{this_move[1].symbol};
 
             // print checkmate contition
-            char checkmate_char;
-            this->input_file >> checkmate_char;
+            char checkmate_char{'x'};
+            int end_of_game{-1};
+            this->input_file >> checkmate_char >> end_of_game;
             output_file << kingcheck_string(checkmate_char) << std::endl;
+            output_file << end_of_game_check(end_of_game) << std::endl;
 
             // print state of chessboard
             output_file << this->board.snapshot() << std::endl;
@@ -83,7 +84,8 @@ namespace replay_game
 
     void Replay::print_on_screen()
     {
-        std::cout << "-----------REPLAY OF THE GAME-----------\n" << this->board.snapshot() << "\n";
+        std::cout << "-----------REPLAY OF THE GAME-----------\n"
+                  << this->board.snapshot() << "\n";
         int turn{0};
 
         // while loop input
@@ -92,7 +94,7 @@ namespace replay_game
             turn++;
             // wait 1 second before the move
             std::this_thread::sleep_for(std::chrono::seconds(1));
-            std::cout << "********************** Turn " << turn << " **********************\n" ;
+            std::cout << "********************** Turn " << turn << " **********************\n";
 
             // make the move
             std::array<chessgame::Coordinates, 2> this_move = move();
@@ -101,10 +103,12 @@ namespace replay_game
             // print the state of chessboard
             std::cout << this->board.snapshot() + "\n";
 
-            // print checkmate contition
-            char checkmate_flag;
-            this->input_file >> checkmate_flag;
+            // print check contition and game over condition
+            char checkmate_flag{'x'};
+            int end_of_game{-1};
+            this->input_file >> checkmate_flag >> end_of_game;
             std::cout << kingcheck_string(checkmate_flag) << "\n";
+            std::cout << end_of_game_check(end_of_game) << "\n";
 
             std::cout << "Moved: " << this->board.get_piece(to)->getSymbol() << " from " << from << " to " << to << std::endl;
             std::cout << "********************** End of turn " << turn << " **********************\n";
@@ -115,14 +119,14 @@ namespace replay_game
     std::array<chessgame::Coordinates, 2> Replay::move()
     {
         // elements of the move:
-        std::string initial,final;
+        std::string initial, final;
         char promotion_char;
 
         // get input
         this->input_file >> initial >> final >> promotion_char;
         check_input_from_file(initial, final);
 
-        chessgame::Coordinates from{initial},to{final} ;
+        chessgame::Coordinates from{initial}, to{final};
 
         // if to is an empty cell
         if (!this->board.get_piece(to))
@@ -211,18 +215,36 @@ namespace replay_game
             this->output_file.close();
     }
 
-    std::string kingcheck_string(char checkmate_flag)
+    std::string kingcheck_string(char check_flag)
     {
-        switch (checkmate_flag)
+        switch (check_flag)
         {
         case '0':
             return "White player is in check";
-            break;
         case '1':
             return "Black player is in check";
-            break;
-        default:
+        case '*':
             return "";
+        default:
+            throw std::invalid_argument("Invalid input for check in log file");
+        }
+    }
+
+    std::string end_of_game_check(int i)
+    {
+        switch (i)
+        {
+        case 0:
+            return "";
+        case 1:
+            return "Game Over: the game is a draw.";
+        case 2:
+            return "It's a checkmate, white player won!";
+        case 3:
+            return "It's a checkmate, black player won!";
+
+        default:
+            throw std::invalid_argument("Invalid input in log file");
         }
     }
 
