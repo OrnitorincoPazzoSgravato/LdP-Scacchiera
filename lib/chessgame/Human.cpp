@@ -18,12 +18,9 @@ namespace chessgame
 {
     char Human::getPromotionTarget()
     {
-        // array that stores the allowed target promotion symbols
-        std::array<char, 4> allowed_symbols;
-        if (this->pieceColor == chessgame::BLACK)
-            allowed_symbols = {chessgame::BLACK_TOWER, chessgame::BLACK_HORSE, chessgame::BLACK_BISHOP, chessgame::BLACK_QUEEN};
-        else
-            allowed_symbols = {chessgame::WHITE_TOWER, chessgame::WHITE_HORSE, chessgame::WHITE_BISHOP, chessgame::WHITE_QUEEN};
+        // arrays that stores the allowed target promotion symbols
+        std::array<char, 4> allowed_up_symbols {chessgame::BLACK_TOWER, chessgame::BLACK_HORSE, chessgame::BLACK_BISHOP, chessgame::BLACK_QUEEN};
+        std::array<char, 4> allowed_low_symbols {chessgame::WHITE_TOWER, chessgame::WHITE_HORSE, chessgame::WHITE_BISHOP, chessgame::WHITE_QUEEN};
 
         // used later to promote to the correct derived class of Piece
         int target_index;
@@ -31,20 +28,20 @@ namespace chessgame
         do
         {
             char target_symbol;
-            std::cout << "Please, insert your desired promotion target's symbol (CASE SENSITIVE): ";
+            std::cout << "Please, insert your desired promotion target's symbol: ";
             std::cin >> target_symbol;
 
             // checks if allowed target of promotion
             for (int i = 0; i < 4 && !correct_symbol_entered; i++)
             {
-                if (allowed_symbols[i] == target_symbol)
+                if (allowed_low_symbols[i] == target_symbol || allowed_up_symbols[i] == target_symbol)
                 {
                     target_index = i;
                     correct_symbol_entered = true;
                 }
             }
         } while (!correct_symbol_entered);
-        return allowed_symbols[target_index];
+        return (this->pieceColor == chessgame::WHITE ? allowed_low_symbols : allowed_up_symbols)[target_index];
     }
 
     
