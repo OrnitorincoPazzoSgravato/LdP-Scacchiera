@@ -41,6 +41,7 @@ namespace replay_game
             output_file.open(outputstring, std::fstream::out);
             if (!output_file.is_open())
                 throw std::invalid_argument("File not open");
+
             // print and close output
             print_on_file();
             output_file.close();
@@ -160,9 +161,8 @@ namespace replay_game
         return std::array<chessgame::Coordinates, 2>{from, to};
     }
 
-    void Replay::arrocco_move(const chessgame::Coordinates from, const chessgame::Coordinates to)
+    void Replay::arrocco_move(const chessgame::Coordinates &from, const chessgame::Coordinates &to)
     {
-
         // se non è arrocco termina
         if (!gameplay::isArrocco(std::array<chessgame::Coordinates, 2>{from, to}, board))
             return;
