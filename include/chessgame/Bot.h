@@ -10,7 +10,11 @@
 #ifndef BOT_H
 #define BOT_H
 
+#include <array>
+
 #include "Player.h"
+#include "Utilities.h"
+#include "Chessboard.h"
 
 namespace chessgame
 {
@@ -41,16 +45,22 @@ namespace chessgame
         std::array<Coordinates, 2> think();
         /**
          *
-         * @brief: This method implements promotion in bot class
+         * @brief: This function implements promotion in bot class
          *
-         * @return a charachter, d or D
+         * @return char of a Queen 
          *
          */
         char getPromotionTarget();
 
     private:
-        // a reference to a chessboard in this game
+        /**
+         * @brief reference to the chessboard of this game 
+         */
         Chessboard &board;
+        /**
+         * @brief int of the index of last move
+         * 
+         */
         int last_move_index;
     };
     /**

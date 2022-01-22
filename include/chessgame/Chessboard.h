@@ -151,6 +151,8 @@ namespace chessgame
      * @brief Helper function: checks if coordinates are out of bounds
      *
      * @param coord coordinates we want to check
+     * 
+     * @throw std::invalid_argument if coordinates are out of range
      */
     void check_coordinates(const Coordinates &coord);
 }
