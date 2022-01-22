@@ -1,7 +1,7 @@
 /**
  * @file Human.cpp
  * @author Riccardo Zuech
- * @brief This class represents a human player
+ * @brief Definition of methods of Human
  * @version 0.1
  * @date 2022-01-12
  *
@@ -9,15 +9,10 @@
  *
  */
 
-#include "../../include/chessgame/Player.h"
 
-#include "../../include/chessgame/Piece.h"
-#include "../../include/chessgame/Utilities.h"
-#include "../../include/chessgame/Torre.h"
-#include "../../include/chessgame/Regina.h"
-#include "../../include/chessgame/Cavallo.h"
-#include "../../include/chessgame/Alfiere.h"
 #include "../../include/chessgame/Human.h"
+
+#include "../../include/chessgame/Chessboard.h"
 
 namespace chessgame
 {
@@ -25,14 +20,11 @@ namespace chessgame
     {
         // array that stores the allowed target promotion symbols
         std::array<char, 4> allowed_symbols;
-        if (this->pieceColor == PieceColor::BLACK)
-        {
-            allowed_symbols = {BLACK_TOWER, BLACK_HORSE, BLACK_BISHOP, BLACK_QUEEN};
-        }
+        if (this->pieceColor == chessgame::BLACK)
+            allowed_symbols = {chessgame::BLACK_TOWER, chessgame::BLACK_HORSE, chessgame::BLACK_BISHOP, chessgame::BLACK_QUEEN};
         else
-        {
-            allowed_symbols = {WHITE_TOWER, WHITE_HORSE, WHITE_BISHOP, WHITE_QUEEN};
-        }
+            allowed_symbols = {chessgame::WHITE_TOWER, chessgame::WHITE_HORSE, chessgame::WHITE_BISHOP, chessgame::WHITE_QUEEN};
+
         // used later to promote to the correct derived class of Piece
         int target_index;
         bool correct_symbol_entered = false;
@@ -55,22 +47,18 @@ namespace chessgame
         return allowed_symbols[target_index];
     }
 
-    /**
-     * @brief check if the move is valid
-     *
-     * @param move a move from the human player
-     * @return true if valid
-     * @return false if invalid
-     */
+    
     bool check_move(const std::array<std::string, 2> &move)
     {
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 2; i++) // checking if the move's coordinates are out of the chessboard coordinates' bounds
         {
             bool uppercase{move[i][0] >= 'A' && move[i][0] <= 'H'};
             bool lowercase{move[i][0] >= 'a' && move[i][0] <= 'h'};
             bool low_or_up{uppercase || lowercase};
+
             bool right_length{move[i].length() == 2};
             bool right_int{move[i][1] >= '1' && move[i][1] <= '8'};
+
             if (!low_or_up || !right_length || !right_int)
                 return false;
         }

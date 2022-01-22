@@ -1,7 +1,8 @@
 /**
  * @file Game.h
  * @author Riccardo Zuech
- * @brief 
+ * @brief This class represents a game of chess. It only has one public method, play(), used to start the game. An istance of Game can be used to play one and only one game,
+ * to play more other istances of Game must be created. 
  * @version 0.1
  * @date 2022-01-06
  * 
@@ -30,10 +31,10 @@ namespace gameplay
 	 */
 	bool isArrocco(const std::array<chessgame::Coordinates, 2> &move, const chessgame::Chessboard& board);
 	/**
-	 * @brief classe che rappresenta lo svolgimento di una partita a scacchi.
+	 * @brief classe che rappresenta una partita a scacchi.
 	 * Deve occuparsi dell'inizializzazione della partita, dello svolgimento dei turni,
 	 * del controllo della validità delle mosse e dell'applicazione delle regole speciali.
-	 * Inoltre deve produrre un file di log di riepilogo delle mosse
+	 * Inoltre deve produrre un file di log di riepilogo delle mosse.
 	 */
 	class Game
 	{
