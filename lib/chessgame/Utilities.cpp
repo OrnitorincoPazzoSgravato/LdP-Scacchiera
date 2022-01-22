@@ -31,20 +31,12 @@ namespace chessgame
         char row = symbol[1];
 
         // Check if the received symbol is a column value
-        if (col <= '9' && col >= '0')
+        if ((col <= '9' && col >= '0') && ((row <= 'Z' && row >= 'A') || (row <= 'z' && row >= 'a')))
         {
             char temp{col};
             col = row;
             row = temp;
         }
-
-        if ((row <= 'Z' && row >= 'A') || (row <= 'z' && row >= 'a'))
-        {
-            char temp{row};
-            col = row;
-            row = temp;
-        }
-
         if (col >= 'a' || col <= 'z')
         {
             col -= 'a';
