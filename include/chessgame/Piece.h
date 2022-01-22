@@ -32,7 +32,7 @@ namespace chessgame
     public:
         char getSymbol();
         PieceColor getColor();
-        virtual vector<Coordinates> getMoves(Chessboard &board, const Coordinates &coord) = 0;
+        virtual vector<Coordinates> getMoves(const Chessboard &board, const Coordinates &coord) = 0;
     };
 }
 

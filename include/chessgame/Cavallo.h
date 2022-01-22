@@ -27,7 +27,7 @@ namespace chessgame
     public:
         Cavallo() = delete;
         Cavallo(PieceColor color, const char symbol);
-        vector<Coordinates> getMoves(Chessboard &board, const Coordinates &coord) override;
+        vector<Coordinates> getMoves(const Chessboard &board, const Coordinates &coord) override;
     };
 
 }

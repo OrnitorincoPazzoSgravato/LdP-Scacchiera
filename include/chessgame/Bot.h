@@ -56,7 +56,7 @@ namespace chessgame
         /**
          * @brief reference to the chessboard of this game 
          */
-        Chessboard &board;
+        const Chessboard &board;
         /**
          * @brief int of the index of last move
          * 

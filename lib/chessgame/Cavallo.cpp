@@ -26,7 +26,7 @@ namespace chessgame
         @return: vector<Coordinates> of the possible moves of the current piece
 
     */
-    vector<Coordinates> Cavallo::getMoves(Chessboard &board, const Coordinates &coord)
+    vector<Coordinates> Cavallo::getMoves(const Chessboard &board, const Coordinates &coord)
     {
         vector<Coordinates> moves;
 
