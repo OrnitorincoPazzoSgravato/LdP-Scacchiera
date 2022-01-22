@@ -50,7 +50,7 @@ namespace chessgame
     
     bool check_move(const std::array<std::string, 2> &move)
     {
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 2; i++) // checking if the move's coordinates are out of the chessboard coordinates' bounds
         {
             bool uppercase{move[i][0] >= 'A' && move[i][0] <= 'H'};
             bool lowercase{move[i][0] >= 'a' && move[i][0] <= 'h'};

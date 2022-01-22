@@ -10,6 +10,8 @@
  */
 #include "../../include/chessgame/Utilities.h"
 
+#include <string>
+
 namespace chessgame
 {   
 
