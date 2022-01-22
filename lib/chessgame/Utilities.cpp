@@ -13,14 +13,11 @@
 #include <string>
 
 namespace chessgame
-{   
+{
 
     Coordinates::Coordinates(int x_coord, int y_coord) : x{x_coord}, y{y_coord}
     {
-        /*if (x < 0 || x > 7 || y < 0 || y > 7)
-        {
-            throw CoordinateOutOfRangeException("Coordinates Out of Range");
-        }*/
+
         char col = x + 'A';
         char row = y + '1';
         this->symbol = std::string() + col + row;
@@ -33,10 +30,25 @@ namespace chessgame
         char col = symbol[0];
         char row = symbol[1];
 
-        /*if (col - 'A' < 0 || col - 'A' > 7 || row - '1' < 0 || y > row - '1')
+        // Check if the received symbol is a column value
+        if (col <= '9' && col >= '0')
         {
-            throw CoordinateOutOfRangeException("Coordinates Out of Range");
-        }*/
+            char temp{col};
+            col = row;
+            row = temp;
+        }
+
+        if ((row <= 'Z' && row >= 'A') || (row <= 'z' && row >= 'a'))
+        {
+            char temp{row};
+            col = row;
+            row = temp;
+        }
+
+        if (col >= 'a' || col <= 'z')
+        {
+            col -= 'a';
+        }
 
         this->x = col - 'A';
         this->y = row - '1';
