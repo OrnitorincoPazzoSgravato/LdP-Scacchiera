@@ -19,8 +19,20 @@
 
 namespace chessgame
 {
+    /**
+     * @brief Helper function to check if move is valid
+     * 
+     * @param move array of symbols of initial and final cell of the move
+     * @return true if move is valid
+     * @return false if move is not valid
+     */
     bool check_move(const std::array<std::string, 2> &move);
 
+    /**
+     * @brief This derived class implement a human player: the act of thinking is 
+     * implemented as an input standard input
+     * 
+     */
     class Human : public Player
     {
     private:

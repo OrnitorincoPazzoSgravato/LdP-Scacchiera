@@ -13,11 +13,13 @@
 #include <vector>
 #include <stdexcept>
 #include <ctime>
+#include <random>
 
 #include "../../include/chessgame/Bot.h"
 #include "../../include/chessgame/Chessboard.h"
 #include "../../include/chessgame/Player.h"
 #include "../../include/chessgame/Regina.h"
+#include "../../include/chessgame/Utilities.h"
 
 namespace chessgame
 {
@@ -48,7 +50,6 @@ namespace chessgame
     std::array<Coordinates, 2> Bot::think()
     {
         int count{0};
-
         // generate coordinates
         Coordinates from{std::rand() % ROWS, std::rand() % COLUMNS};
 
