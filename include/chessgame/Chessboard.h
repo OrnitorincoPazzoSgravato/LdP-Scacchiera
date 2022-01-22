@@ -1,7 +1,7 @@
 /**
  * @file Chessboard.h
  * @author Enrico Cavinato
- * @brief Class that implement the concept of a real life Chessboard
+ * @brief The concept of a real life Chessboard
  * @version 0.1
  * @date 2022-01-12
  *
@@ -141,11 +141,6 @@ namespace chessgame
          *
          */
         Coordinates respawn_point;
-        /**
-         * @brief check if coordinates are in chessboard
-         *
-         * @param coord
-         */
     };
     /**
      * @brief Helper function: checks if coordinates are out of bounds

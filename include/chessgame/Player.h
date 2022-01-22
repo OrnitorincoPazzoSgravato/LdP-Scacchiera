@@ -25,6 +25,7 @@ namespace chessgame
     {
     protected:
         PieceColor pieceColor;
+        Player() = delete;
 
     public:
         /**

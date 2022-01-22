@@ -50,6 +50,7 @@ namespace chessgame
             std::cin >> from >> to;
             return std::array<std::string, 2>{from, to};
         }
+        Human() = delete;
 
     public:
         /**

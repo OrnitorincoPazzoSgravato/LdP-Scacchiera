@@ -62,6 +62,7 @@ namespace chessgame
          * 
          */
         int last_move_index;
+        Bot() = delete;
     };
     /**
      * @brief this helper function returns the coordinates of the cell after coord in an iteration column by column
