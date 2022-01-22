@@ -478,7 +478,6 @@ namespace gameplay
     {
         if(!is_bot_game) std::cout << "Use the command XX XX to print a snapshot of the chessboard." << std::endl;
         this->log_file.open("./game_log.txt"); // opens the log file
-        // if(n_moves != 0) this->writeLog("\n");
         do
         {   
             chessgame::PieceColor color = this->getCurrentPlayer()->getColor();
