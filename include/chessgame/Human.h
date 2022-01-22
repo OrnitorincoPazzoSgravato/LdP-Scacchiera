@@ -19,6 +19,13 @@
 
 namespace chessgame
 {
+    /**
+     * @brief check if the move is valid
+     *
+     * @param move a move from the human player
+     * @return true if valid
+     * @return false if invalid
+     */
     bool check_move(const std::array<std::string, 2> &move);
 
     class Human : public Player

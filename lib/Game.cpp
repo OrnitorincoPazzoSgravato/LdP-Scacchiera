@@ -1,7 +1,7 @@
 /**
  * @file Game.cpp
  * @author Riccardo Zuech
- * @brief 
+ * @brief Definition of methods of Game
  * @version 0.1
  * @date 2022-01-06
  * 
@@ -23,8 +23,64 @@
 
 namespace gameplay
 {
+    // namespace helper functions definition
+    bool isArrocco(const std::array<chessgame::Coordinates, 2> &move, const chessgame::Chessboard &board)
+    {
+        chessgame::Piece *p = board.get_piece(move[0]);
+        if (p == nullptr) // obviously an istance of arrocco needs two pieces
+            return false;
 
-    // constructors declaration
+        char piece_symbol = p->getSymbol();
+        chessgame::Piece *dest_p = board.get_piece(move[1]);
+
+        // an istance of arrocco needs two pieces of the same color
+        if (dest_p != nullptr && p->getColor() == dest_p->getColor())
+        {
+            char dest_p_symbol = dest_p->getSymbol();
+            
+            // series of conditions
+            bool p_Is_King = piece_symbol == chessgame::BLACK_KING || piece_symbol == chessgame::WHITE_KING;
+            bool p_Is_Tower = piece_symbol == chessgame::BLACK_TOWER || piece_symbol == chessgame::WHITE_TOWER;
+            bool dest_Is_King = dest_p_symbol == chessgame::BLACK_KING || dest_p_symbol == chessgame::WHITE_KING;
+            bool dest_Is_Tower = dest_p_symbol == chessgame::BLACK_TOWER || dest_p_symbol == chessgame::WHITE_TOWER;
+
+            bool king_in_tower = p_Is_King && dest_Is_Tower;
+            bool tower_in_king = p_Is_Tower && dest_Is_King;
+
+            // the two same-color pieces must be a king and a tower
+            if (king_in_tower || tower_in_king)
+            {
+                // the conditional operator is used to differentiate between king or tower istance as the object pointed by p (same for dest_p)
+                // other inner conditions
+                bool is_tower_first_move = !dynamic_cast<chessgame::Torre *>(king_in_tower ? dest_p : p)->has_already_moved;
+                bool is_king_first_move = !dynamic_cast<chessgame::Re *>(king_in_tower ? p : dest_p)->has_already_moved;
+
+                // another condition must be respected: the king and tower are moving for the first time
+                if (is_king_first_move && is_tower_first_move)
+                {
+                    int y = move[0].y; // they must be in the same row (as they already have to move)
+
+                    // flag used to check for obstacles between the two pieces
+                    bool obstacles = false;
+
+                    int index = move[0].x < move[1].x ? move[0].x : move[1].x;
+                    int end_index = move[0].x < move[1].x ? move[1].x : move[0].x;
+                    for (; index <= end_index && !obstacles; index++)
+                    {
+                        if (board.get_piece(chessgame::Coordinates(y, index)) != nullptr)
+                            obstacles == true;
+                    }
+
+                    // if there are no obstacles then the special rule is legal
+                    return !obstacles;
+                }
+            }
+        }
+
+        return false;
+    }
+    
+    // constructors definitions
     Game::Game() : n_moves{0}, en_passante_coord{nullptr}, board{chessgame::Chessboard()}, stall_counter{0}, is_bot_game{false}
     {
         std::array<chessgame::PieceColor, 2> a_colors = this->getRandColors(); // retrieves random colors
@@ -54,7 +110,7 @@ namespace gameplay
         }
     }
 
-    // destructor declaration
+    // destructor definition
     Game::~Game()
     {
         if (this->log_file.is_open()) // case: the file should have been closed in play() but it hasn't, so we close it here
@@ -65,7 +121,7 @@ namespace gameplay
         delete this->p2;
     }
 
-    // private methods declaration
+    // private methods definitions
     std::array<chessgame::PieceColor, 2> Game::getRandColors()
     {
         std::srand(time(NULL)); // used to randomize at each call
@@ -138,62 +194,6 @@ namespace gameplay
         bool p_is_paw = piece_symbol == chessgame::BLACK_PAW || piece_symbol == chessgame::WHITE_PAW;
         // en_passant is appliable (last turn a paw has been moved by two tiles) and the piece is a paw that's trying to capture another paw that previously moved by two tiles
         return (this->en_passante_coord != nullptr && p_is_paw && to == *(this->en_passante_coord));
-    }
-
-    bool isArrocco(const std::array<chessgame::Coordinates, 2> &move, const chessgame::Chessboard &board)
-    {
-        chessgame::Piece *p = board.get_piece(move[0]);
-        if (p == nullptr) // obviously an istance of arrocco needs two pieces
-            return false;
-
-        char piece_symbol = p->getSymbol();
-        chessgame::Piece *dest_p = board.get_piece(move[1]);
-
-        // an istance of arrocco needs two pieces of the same color
-        if (dest_p != nullptr && p->getColor() == dest_p->getColor())
-        {
-            char dest_p_symbol = dest_p->getSymbol();
-            
-            // series of conditions
-            bool p_Is_King = piece_symbol == chessgame::BLACK_KING || piece_symbol == chessgame::WHITE_KING;
-            bool p_Is_Tower = piece_symbol == chessgame::BLACK_TOWER || piece_symbol == chessgame::WHITE_TOWER;
-            bool dest_Is_King = dest_p_symbol == chessgame::BLACK_KING || dest_p_symbol == chessgame::WHITE_KING;
-            bool dest_Is_Tower = dest_p_symbol == chessgame::BLACK_TOWER || dest_p_symbol == chessgame::WHITE_TOWER;
-
-            bool king_in_tower = p_Is_King && dest_Is_Tower;
-            bool tower_in_king = p_Is_Tower && dest_Is_King;
-
-            // the two same-color pieces must be a king and a tower
-            if (king_in_tower || tower_in_king)
-            {
-                // the conditional operator is used to differentiate between king or tower istance as the object pointed by p (same for dest_p)
-                // other inner conditions
-                bool is_tower_first_move = !dynamic_cast<chessgame::Torre *>(king_in_tower ? dest_p : p)->has_already_moved;
-                bool is_king_first_move = !dynamic_cast<chessgame::Re *>(king_in_tower ? p : dest_p)->has_already_moved;
-
-                // another condition must be respected: the king and tower are moving for the first time
-                if (is_king_first_move && is_tower_first_move)
-                {
-                    int y = move[0].y; // they must be in the same row (as they already have to move)
-
-                    // flag used to check for obstacles between the two pieces
-                    bool obstacles = false;
-
-                    int index = move[0].x < move[1].x ? move[0].x : move[1].x;
-                    int end_index = move[0].x < move[1].x ? move[1].x : move[0].x;
-                    for (; index <= end_index && !obstacles; index++)
-                    {
-                        if (board.get_piece(chessgame::Coordinates(y, index)) != nullptr)
-                            obstacles == true;
-                    }
-
-                    // if there are no obstacles then the special rule is legal
-                    return !obstacles;
-                }
-            }
-        }
-
-        return false;
     }
 
     bool Game::isDefaultMove(chessgame::Piece &p, const chessgame::Coordinates &from, const chessgame::Coordinates &to)
@@ -473,9 +473,10 @@ namespace gameplay
         return true; // game now ends
     }
 
-    // public methods declaration
+    // public methods definitions
     void Game::play()
     {
+        if(!is_bot_game) std::cout << "Use the command XX XX to print a snapshot of the chessboard." << std::endl;
         this->log_file.open("./game_log.txt"); // opens the log file
         // if(n_moves != 0) this->writeLog("\n");
         do
@@ -496,7 +497,7 @@ namespace gameplay
                 if(!invalid_move) {
                     chessgame::Piece* p = this->board.get_piece(move[1]);
                     if(p != nullptr) {
-                        std::cout << "Moved: " << p->getSymbol() << " from " << move[0].symbol << " to " << move[1].symbol << std::endl;
+                        std::cout << "-> Moved: " << p->getSymbol() << " from " << move[0].symbol << " to " << move[1].symbol << std::endl;
                     }
                     else std::cout << "ATTENTION: moved from a void tile!" << std::endl; // for debugging
                 }
@@ -509,7 +510,6 @@ namespace gameplay
             this->n_moves++;
             this->stall_counter++;
 
-            std::cout << this->board.snapshot() << std::endl;
             std::cout << "********************** End of turn **********************" << std::endl;
     
             this->current_turn = !this->current_turn; // alternates turns

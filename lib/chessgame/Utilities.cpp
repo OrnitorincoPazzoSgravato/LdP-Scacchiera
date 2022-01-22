@@ -24,7 +24,7 @@ namespace chessgame
         this->symbol = std::string() + col + row;
     }
 
-    Coordinates::Coordinates(string symbol)
+    Coordinates::Coordinates(std::string symbol)
     {
         this->symbol = symbol;
 
