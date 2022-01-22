@@ -225,6 +225,10 @@ namespace gameplay
 		 * @param is_bot_game false: 1 bot and 1 human; true: 2 bots
 		 */
 		Game(bool is_bot_game);
+		
+		// We don't want to have a copy of an ongoing game.
+		Game(const Game&) = delete;
+		Game& operator=(const Game&) = delete;
 
 		/**
 		 * @brief starts a game of chess, logging valid moves in "game_log.txt"
