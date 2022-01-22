@@ -21,7 +21,7 @@ namespace chessgame
         @return: vector<Coordinates> of the possible moves of the current piece
 
     */
-    std::vector<Coordinates> Pedone::getMoves(Chessboard &board, const Coordinates &coord)
+    std::vector<Coordinates> Pedone::getMoves(const Chessboard &board, const Coordinates &coord)
     {
         vector<Coordinates> moves;
 

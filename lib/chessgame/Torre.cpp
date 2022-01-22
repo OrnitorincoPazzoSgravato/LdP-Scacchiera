@@ -22,7 +22,7 @@ namespace chessgame
         @return: vector<Coordinates> of the possible moves of the current piece
 
     */
-    vector<Coordinates> Torre::getMoves(Chessboard &board, const Coordinates &coord)
+    vector<Coordinates> Torre::getMoves(const Chessboard &board, const Coordinates &coord)
     {
         vector<Coordinates> moves;
 
@@ -41,7 +41,7 @@ namespace chessgame
         return moves;
     }
 
-    void Torre::finder(Chessboard &board, const Coordinates &coord, vector<Coordinates> &moves, int h_versor, int v_versor)
+    void Torre::finder(const Chessboard &board, const Coordinates &coord, vector<Coordinates> &moves, int h_versor, int v_versor)
     {
         int x = coord.x;
         int y = coord.y;

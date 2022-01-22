@@ -28,7 +28,7 @@ namespace chessgame
         bool has_already_moved;
         Re() = delete;
         Re(PieceColor color, const char symbol) : has_already_moved{false}, Piece(color, symbol) {}
-        vector<Coordinates> getMoves(Chessboard &board, const Coordinates &coord) override;
+        vector<Coordinates> getMoves(const Chessboard &board, const Coordinates &coord) override;
     };
 
 }

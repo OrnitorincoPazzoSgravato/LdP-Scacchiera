@@ -27,10 +27,10 @@ namespace chessgame
     public:
         Regina() = delete;
         Regina(PieceColor color, const char symbol);
-        vector<Coordinates> getMoves(Chessboard &board, const Coordinates &coord) override;
+        vector<Coordinates> getMoves(const Chessboard &board, const Coordinates &coord) override;
 
     private:
-        void finder(Chessboard &board, const Coordinates &coord, vector<Coordinates> &moves, int h_versor, int v_versor);
+        void finder(const Chessboard &board, const Coordinates &coord, vector<Coordinates> &moves, int h_versor, int v_versor);
     };
 
 }

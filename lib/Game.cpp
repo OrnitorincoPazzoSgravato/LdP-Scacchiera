@@ -81,7 +81,7 @@ namespace gameplay
     }
     
     // constructors definitions
-    Game::Game() : n_moves{0}, en_passante_coord{nullptr}, board{chessgame::Chessboard()}, stall_counter{0}, is_bot_game{false}
+    Game::Game() : n_moves{0}, en_passante_coord{nullptr}, stall_counter{0}, is_bot_game{false}
     {
         std::array<chessgame::PieceColor, 2> a_colors = this->getRandColors(); // retrieves random colors
         this->p1 = new chessgame::Human(a_colors[0]);

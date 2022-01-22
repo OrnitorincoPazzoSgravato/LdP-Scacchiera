@@ -27,10 +27,10 @@ namespace chessgame
     public:
         Alfiere() = delete;
         Alfiere(PieceColor color, const char symbol);
-        vector<Coordinates> getMoves(Chessboard &board, const Coordinates &coord) override;
+        vector<Coordinates> getMoves(const Chessboard &board, const Coordinates &coord) override;
 
     private:
-        void diagonalFinder(Chessboard &board, const Coordinates &coord, vector<Coordinates> &moves, int h_versor, int v_versor);
+        void diagonalFinder(const Chessboard &board, const Coordinates &coord, vector<Coordinates> &moves, int h_versor, int v_versor);
     };
 
 }

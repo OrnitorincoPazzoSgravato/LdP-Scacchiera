@@ -26,7 +26,7 @@ namespace chessgame
         @return: vector<Coordinates> of the possible moves of the current piece
 
     */
-    vector<Coordinates> Regina::getMoves(Chessboard &board, const Coordinates &coord)
+    vector<Coordinates> Regina::getMoves(const Chessboard &board, const Coordinates &coord)
     {
         vector<Coordinates> moves;
 
@@ -57,7 +57,7 @@ namespace chessgame
         return moves;
     }
 
-    void Regina::finder(Chessboard &board, const Coordinates &coord, vector<Coordinates> &moves, int h_versor, int v_versor)
+    void Regina::finder(const Chessboard &board, const Coordinates &coord, vector<Coordinates> &moves, int h_versor, int v_versor)
     {
         int x = coord.x;
         int y = coord.y;
