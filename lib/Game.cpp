@@ -83,6 +83,8 @@ namespace gameplay
     // constructors definitions
     Game::Game() : n_moves{0}, en_passante_coord{nullptr}, stall_counter{0}, is_bot_game{false}
     {
+        std::srand(time(NULL)); // seed to make random different at each run
+
         std::array<chessgame::PieceColor, 2> a_colors = this->getRandColors(); // retrieves random colors
         this->p1 = new chessgame::Human(a_colors[0]);
         this->p2 = new chessgame::Bot(a_colors[1], this->board);
@@ -124,7 +126,6 @@ namespace gameplay
     // private methods definitions
     std::array<chessgame::PieceColor, 2> Game::getRandColors()
     {
-        std::srand(time(NULL));
         double rand_num = std::rand() % 2; // std library rand function to get a random number between 0 and 1
         // based on rand_num c_array is initialized with different values (just two possible outcomes, so an if-else is enough to cover them)
         if (rand_num == 0)

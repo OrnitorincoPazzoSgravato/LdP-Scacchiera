@@ -65,7 +65,6 @@ namespace chessgame
         char getPromotionTarget();
 
         void resetBotSeed() {
-            std::srand(time(NULL));
             if(std::rand() % 2 == 0) {
                 starting_tile = {std::rand() % ROWS, std::rand() % COLUMNS};
             }
