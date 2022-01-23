@@ -36,24 +36,23 @@ namespace chessgame
     constexpr int COLUMNS{8};
     constexpr int CELLS{64};
 
-    constexpr char BLACK_BISHOP {'A'};
-    constexpr char WHITE_BISHOP {'a'};
+    constexpr char BLACK_BISHOP{'A'};
+    constexpr char WHITE_BISHOP{'a'};
 
-    constexpr char BLACK_HORSE {'C'};
-    constexpr char WHITE_HORSE {'c'};
+    constexpr char BLACK_HORSE{'C'};
+    constexpr char WHITE_HORSE{'c'};
 
-    constexpr char WHITE_QUEEN {'d'};
-    constexpr char BLACK_QUEEN {'D'};
+    constexpr char WHITE_QUEEN{'d'};
+    constexpr char BLACK_QUEEN{'D'};
 
-    constexpr char WHITE_TOWER {'t'};
-    constexpr char BLACK_TOWER {'T'};
+    constexpr char WHITE_TOWER{'t'};
+    constexpr char BLACK_TOWER{'T'};
 
-    constexpr char WHITE_KING {'r'};
-    constexpr char BLACK_KING {'R'};
+    constexpr char WHITE_KING{'r'};
+    constexpr char BLACK_KING{'R'};
 
-    constexpr char WHITE_PAW {'p'};
-    constexpr char BLACK_PAW {'P'};
-
+    constexpr char WHITE_PAW{'p'};
+    constexpr char BLACK_PAW{'P'};
 
     /**
      * @brief This class implements a chessboard
@@ -122,6 +121,10 @@ namespace chessgame
          * @param coord the coordinates where the paw get promoted
          */
         void promote(char target_index, const Coordinates &coord);
+        /**
+         * @brief Assignment operator disabled
+         */
+        Chessboard &operator=(const Chessboard &) = delete;
 
     private:
         /**
@@ -146,7 +149,7 @@ namespace chessgame
      * @brief Helper function: checks if coordinates are out of bounds
      *
      * @param coord coordinates we want to check
-     * 
+     *
      * @throw std::invalid_argument if coordinates are out of range
      */
     void check_coordinates(const Coordinates &coord);
