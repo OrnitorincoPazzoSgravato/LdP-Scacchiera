@@ -78,7 +78,9 @@ namespace gameplay
 		 * 
 		 * @param move move to be recorded in the log
 		 */
-		void writeLog(const std::string &move);
+		void writeLog(const std::string &move) {
+			this->log_file << move;
+		}
 		/**
 		 * @brief Checks if the current player's king is checked.
 		 * 
