@@ -444,10 +444,8 @@ namespace gameplay
                             chessgame::Piece* target_p = this->board.get_piece(*it);
 
                             bool is_capture = target_p != nullptr && target_p->getColor() != p->getColor();
-                            // if it's a capture movement, then obviously it's not an arrocco
-                            bool is_arrocco = !is_capture && isArrocco({piece_coord, *it}, this->board);
 
-                            if(!this->isMoveSelfCheck(piece_coord, (*it), p->getSymbol(), is_capture, is_arrocco)) {
+                            if(!this->isMoveSelfCheck(piece_coord, (*it), p->getSymbol(), is_capture, false)) {
                                 std::cout << "UNCHECKED BY " << piece_coord.symbol << " " << (*it).symbol << std::endl;
                                 this->writeLog(" * 0\n");
                                 return false;
@@ -481,10 +479,8 @@ namespace gameplay
                         chessgame::Piece* target_p = this->board.get_piece(*it);
 
                         bool is_capture = target_p != nullptr && target_p->getColor() != p->getColor();
-                        // if it's a capture movement, then obviously it's not an arrocco
-                        bool is_arrocco = !is_capture && isArrocco({piece_coord, *it}, this->board);
 
-                        if(!this->isMoveSelfCheck(piece_coord, (*it), p->getSymbol(), is_capture, is_arrocco)) {
+                        if(!this->isMoveSelfCheck(piece_coord, (*it), p->getSymbol(), is_capture, false)) {
                             std::cout << "UNCHECKED BY " << piece_coord.symbol << " " << (*it).symbol << std::endl;
                             this->writeLog(" 0\n");
                             return false;
