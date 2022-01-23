@@ -1,2 +1,5 @@
 https://google.github.io/styleguide/cppguide.html#:~:text=Define%20functions%20inline%20only%20when%20they%20are%20small%2C%20say%2C%2010%20lines%20or%20fewer
     Ho seguito questa indicazione 
+
+In replay ho dato per scontato che quello che viene inserito è un replay generato scacchiera.exe, quindi le 
+mosse sono valide

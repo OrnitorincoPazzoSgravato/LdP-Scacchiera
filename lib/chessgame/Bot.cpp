@@ -92,18 +92,18 @@ namespace chessgame
                     else if (from.x != 0)
                         possible_moves.push_back(Coordinates{from.x - 1, from.y + offset});
                 }
-                // if is king and did not move
+                // if p is king and did not move
                 else if (p_is_king && !dynamic_cast<Re *>(p)->has_already_moved)
                 {
                     //WHITE
                     if (p->getColor() == WHITE)
                     {
-                        possible_moves.push_back(Coordinates{"C1"});
-                        possible_moves.push_back(Coordinates{"G1"});
+                        possible_moves.push_back(white_castling_toleft);
+                        possible_moves.push_back(white_castling_toright);
                     }
                     //BLACK
-                    possible_moves.push_back(Coordinates{"C8"});
-                    possible_moves.push_back(Coordinates{"G8"});
+                    possible_moves.push_back(black_castling_toleft);
+                    possible_moves.push_back(black_castling_toright);
 
                 }
 

@@ -23,7 +23,7 @@
 
 namespace replay_game
 {
-    const std::string gameover_string{"********************** GAME OVER **********************"};
+    static const std::string gameover_string{"********************** GAME OVER **********************"};
 
     void Replay::print()
     {
@@ -169,40 +169,20 @@ namespace replay_game
         // if is not arrocco, return
         if (!gameplay::isArrocco(std::array<chessgame::Coordinates, 2>{from, to}, board))
             return;
+        // case 1 : black king to the left
+        if (to.symbol[0] < Re_nero_init.symbol[0])
+            this->board.swap_positions(T_sinistra, chessgame::Coordinates{"D8"});
+        // case 2 :black king to the right
+        else if (to.symbol[0] > Re_nero_init.symbol[0])
+            this->board.swap_positions(T_destra, chessgame::Coordinates{"F8"});
 
-        // if this is a king move
-        if (from == Re_nero_init || from == re_bianco_init)
-        {
-            // case 1 : black king to the left
-            if (to.symbol[0] < Re_nero_init.symbol[0])
-                this->board.swap_positions(T_sinistra, chessgame::Coordinates{"D8"});
-            // case 2 :black king to the right
-            else if (to.symbol[0] > Re_nero_init.symbol[0])
-                this->board.swap_positions(T_destra, chessgame::Coordinates{"F8"});
+        // case 3: white king to the left
+        else if (to.symbol[0] < re_bianco_init.symbol[0])
+            this->board.swap_positions(t_sinistra, chessgame::Coordinates{"D1"});
 
-            // case 3: white king to the left
-            else if (to.symbol[0] < re_bianco_init.symbol[0])
-                this->board.swap_positions(t_sinistra, chessgame::Coordinates{"D1"});
-
-            // case 4 :white king to the right
-            else if (to.symbol[0] > re_bianco_init.symbol[0])
-                this->board.swap_positions(chessgame::Coordinates{"F1"}, t_destra);
-            return;
-        }
-        // case 5 : black tower to the left
-        else if (from == T_sinistra)
-            this->board.swap_positions(Re_nero_init, chessgame::Coordinates{"C8"});
-
-        // case 6 : black tower to the right
-        else if (from == T_destra)
-            this->board.swap_positions(Re_nero_init, chessgame::Coordinates{"G8"});
-        // case 7 : white tower to the left
-        else if (from == t_sinistra)
-            this->board.swap_positions(re_bianco_init, chessgame::Coordinates{"C1"});
-
-        // case 8 : white tower to the right
-        else if (from == t_destra)
-            this->board.swap_positions(re_bianco_init, chessgame::Coordinates{"G1"});
+        // case 4 :white king to the right
+        else if (to.symbol[0] > re_bianco_init.symbol[0])
+            this->board.swap_positions(chessgame::Coordinates{"F1"}, t_destra);
     }
 
     void Replay::en_passant_capture(const chessgame::Coordinates &from, const chessgame::Coordinates &to)
