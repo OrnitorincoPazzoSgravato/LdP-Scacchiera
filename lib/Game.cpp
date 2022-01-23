@@ -130,7 +130,7 @@ namespace gameplay
                 // if it's an opponent's piece, then we check if we're checked by it (one of its possible moves would capture our king)
                 if (p != nullptr && p->getColor() != p_color)
                 {
-                    std::vector<chessgame::Coordinates> moves_vec = p->getMoves(this->board, piece_coord);
+                    std::vector<chessgame::Coordinates> moves_vec = this->getPieceMovesAll(piece_coord);
                     // iterators used to check if our king would be captured by a move of the currently analyzed opponent's piece
                     for (auto it = moves_vec.begin(); it != moves_vec.end(); ++it)
                     {
@@ -276,29 +276,19 @@ namespace gameplay
 
         // boolean used for conditions
         bool p_is_paw = p_symbol == chessgame::WHITE_PAW || p_symbol == chessgame::BLACK_PAW;
-        bool p_is_tower = p_symbol == chessgame::WHITE_TOWER || p_symbol == chessgame::BLACK_TOWER;
-        // bool p_is_king = p_symbol == chessgame::WHITE_KING || p_symbol == chessgame::BLACK_KING;
 
         // two tiles movement of a first time moving paw
         if (p_is_paw && !dynamic_cast<chessgame::Pedone *>(p)->has_already_moved)
         {
             chessgame::Coordinates adjacent_coord {piece_coord.x, piece_coord.y + (p_color == chessgame::WHITE ? 1 : -1)};
             bool adjacent_cell_empty = this->board.get_piece(adjacent_coord) == nullptr;
-            if(adjacent_cell_empty) {
-                int offset = p_color == chessgame::WHITE ? 2 : -2;
-                moves_vec.push_back(chessgame::Coordinates{piece_coord.x, piece_coord.y + offset});
+
+            int offset = p_color == chessgame::WHITE ? 2 : -2;
+            chessgame::Coordinates target_coord {piece_coord.x, piece_coord.y + offset};
+            bool path_empty = adjacent_cell_empty && this->board.get_piece(target_coord) == nullptr;
+            if(path_empty) {
+                moves_vec.push_back(target_coord);
             }
-        }
-        // en passant capture
-        else if (p_is_paw && this->en_passante_coord != nullptr && this->board.get_piece(*(this->en_passante_coord))->getColor() != p_color)
-        {
-            int offset = p_color == chessgame::WHITE ? 1 : -1;
-            bool left_capturable = *(this->en_passante_coord) == chessgame::Coordinates{piece_coord.x - 1, piece_coord.y + offset};
-            bool right_capturable = *(this->en_passante_coord) == chessgame::Coordinates{piece_coord.x + 1, piece_coord.y + offset};
-            if (left_capturable)
-                moves_vec.push_back(chessgame::Coordinates{piece_coord.x - 1, piece_coord.y + offset});
-            else if (right_capturable)
-                moves_vec.push_back(chessgame::Coordinates{piece_coord.x + 1, piece_coord.y + offset});
         }
 
         return moves_vec;
@@ -365,11 +355,12 @@ namespace gameplay
             // booleans used to understand what type of movement it's being made
             bool is_default = this->isDefaultMove(*p, move[0], move[1]);
             bool is_paw_2_tiles_movement = this->isPawTwoTilesMovement(move);
-            bool is_arrocco = isArrocco(move, this->board);
+            // arrocco valido solo se il re non è in scacco
+            bool is_arrocco = isArrocco(move, this->board) && !this->isPlayerKingInCheck();
             bool is_en_passant = this->isEnPassant(piece_symbol, p->getColor(), move[1]);
 
             // check if it's one of the valid mvoes (can't do an arrocco if the king is in check)
-            bool is_valid_move = is_default || is_paw_2_tiles_movement || (is_arrocco && !this->isPlayerKingInCheck()) || is_en_passant;
+            bool is_valid_move = is_default || is_paw_2_tiles_movement || is_arrocco || is_en_passant;
 
             // here move is executed if valid
             if (is_valid_move)
@@ -436,6 +427,8 @@ namespace gameplay
                     if (p != nullptr && p->getColor() == color) {
                         // also it must not be checked by every move available
                         std::vector<chessgame::Coordinates> moves_vec = this->getPieceMovesAll(piece_coord);
+                        // N.B.! special rule arrocco can be excluded, if it was available, then the tower must be able to move near the king
+                        // this means that a move that doesn't check the king must exist if there would be the conditions to apply an istance of arrocco
                         if(moves_vec.size() == 0)
                             continue;
                         // iterators are used to theck if at least one move exists that unchecks the player
