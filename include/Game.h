@@ -78,7 +78,9 @@ namespace gameplay
 		 * 
 		 * @param move move to be recorded in the log
 		 */
-		void writeLog(const std::string &move);
+		void writeLog(const std::string &move) {
+			this->log_file << move;
+		}
 		/**
 		 * @brief Checks if the current player's king is checked.
 		 * 
@@ -212,7 +214,7 @@ namespace gameplay
 		 * @brief A full bot game is considered invalid after this number of moves without a winner
 		 * 
 		 */
-		static const int kBot_moves = 500;
+		static const int kBot_moves = 350;
 		/**
 		 * @brief Constructs a new Game object and initialize one human player and one bot player
 		 * 

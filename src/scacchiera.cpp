@@ -1,7 +1,7 @@
 /**
  * @file scacchiera.cpp
  * @author Riccardo Zuech
- * @brief 
+ * @brief Executable used for playing a game of chess (pc == human vs bot; cc == bot vs bot)
  * @version 0.1
  * @date 2022-01-14
  * 
