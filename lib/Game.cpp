@@ -288,7 +288,7 @@ namespace gameplay
         // two tiles movement of a first time moving paw
         if (p_is_paw && !dynamic_cast<chessgame::Pedone *>(p)->has_already_moved)
         {
-            chessgame::Coordinates adjacent_coord {piece_coord.x, piece_coord.y + (p->getColor() == chessgame::WHITE ? 1 : -1)};
+            chessgame::Coordinates adjacent_coord {piece_coord.x, piece_coord.y + (p_color == chessgame::WHITE ? 1 : -1)};
             bool adjacent_cell_empty = this->board.get_piece(adjacent_coord) == nullptr;
             if(adjacent_cell_empty) {
                 int offset = p_color == chessgame::WHITE ? 2 : -2;
@@ -506,6 +506,7 @@ namespace gameplay
             chessgame::PieceColor color = this->getCurrentPlayer()->getColor();
             std::cout << "\nTurn n.: " << this->n_moves + 1 << (color == chessgame::WHITE ? " - WHITE" : " - BLACK") << " moves." << std::endl;
             bool invalid_move = true;
+            std::cout << this->board.snapshot() << std::endl;
             do
             {
                 // player's move for its turn
