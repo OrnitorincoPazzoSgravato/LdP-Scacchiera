@@ -68,7 +68,7 @@ namespace gameplay
                     for (; index <= end_index && !obstacles; index++)
                     {
                         if (board.get_piece(chessgame::Coordinates{y, index}) != nullptr)
-                            obstacles == true;
+                            obstacles = true;
                     }
 
                     // if there are no obstacles then the special rule is legal
@@ -150,7 +150,7 @@ namespace gameplay
                 // if it's an opponent's piece, then we check if we're checked by it (one of its possible moves would capture our king)
                 if (p != nullptr && p->getColor() != p_color)
                 {
-                    std::vector<chessgame::Coordinates> moves_vec = p->getMoves(this->board, piece_coord);
+                    std::vector<chessgame::Coordinates> moves_vec = this->getPieceMovesAll(piece_coord);
                     // iterators used to check if our king would be captured by a move of the currently analyzed opponent's piece
                     for (auto it = moves_vec.begin(); it != moves_vec.end(); ++it)
                     {
@@ -330,7 +330,7 @@ namespace gameplay
 
         // the king must be forced to not put itself in check, so we need to pass the updated king coordinates to isPlayerKingInCheck()
         chessgame::Coordinates king_coord = getCurrentPlayerKing();
-        if (piece_symbol == 'r' || piece_symbol == 'R')
+        if (piece_symbol == chessgame::WHITE_KING || piece_symbol == chessgame::BLACK_KING)
             king_coord = to;
         else if(is_arrocco)
             king_coord = from;
@@ -427,9 +427,25 @@ namespace gameplay
                     chessgame::Coordinates piece_coord {x, y};
                     chessgame::Piece *p = this->board.get_piece(piece_coord);
                     // a piece of the opponent (now current player) which has moves available
-                    if (p != nullptr && p->getColor() == color && this->getPieceMovesAll(piece_coord).size() != 0) {
-                        this->writeLog(" * 0\n");
-                        return false;
+                    if (p != nullptr && p->getColor() == color) {
+                        // also it must not be checked by every move available
+                        std::vector<chessgame::Coordinates> moves_vec = this->getPieceMovesAll(piece_coord);
+                        if(moves_vec.size() == 0)
+                            continue;
+                        // iterators are used to theck if at least one move exists that unchecks the player
+                        for (auto it = moves_vec.begin(); it != moves_vec.end(); ++it)
+                        {
+                            chessgame::Piece* target_p = this->board.get_piece(*it);
+
+                            bool is_capture = target_p != nullptr && target_p->getSymbol() != p->getSymbol();
+                            bool is_arrocco = isArrocco({piece_coord, *it}, this->board);
+
+                            if(!this->isMoveSelfCheck(piece_coord, (*it), p->getSymbol(), is_capture, is_arrocco)) {
+                                std::cout << "UNCHECKED BY " << piece_coord.symbol << " " << (*it).symbol << std::endl;
+                                this->writeLog(" 0\n");
+                                return false;
+                            }
+                        }
                     }
                 }
             }
@@ -458,9 +474,10 @@ namespace gameplay
                         chessgame::Piece* target_p = this->board.get_piece(*it);
 
                         bool is_capture = target_p != nullptr && target_p->getSymbol() != p->getSymbol();
-                        bool is_arrocco = isArrocco(std::array<chessgame::Coordinates, 2> {piece_coord, *it}, this->board);
+                        bool is_arrocco = isArrocco({piece_coord, *it}, this->board);
 
                         if(!this->isMoveSelfCheck(piece_coord, (*it), p->getSymbol(), is_capture, is_arrocco)) {
+                            std::cout << "UNCHECKED BY " << piece_coord.symbol << " " << (*it).symbol << std::endl;
                             this->writeLog(" 0\n");
                             return false;
                         }
@@ -484,6 +501,9 @@ namespace gameplay
             std::cout << "\nTurn n.: " << this->n_moves + 1 << (color == chessgame::WHITE ? " - WHITE" : " - BLACK") << " moves." << std::endl;
             std::cout << this->board.snapshot() << std::endl;
             bool invalid_move = true;
+            // resets seed generator if bot player
+            if(!this->getCurrentPlayer()->is_human)
+                dynamic_cast<chessgame::Bot*>(this->getCurrentPlayer())->resetBotSeed();
             do
             {
                 // player's move for its turn
@@ -501,10 +521,6 @@ namespace gameplay
                     else std::cout << "ATTENTION: moved from a void tile!" << std::endl; // for debugging
                 }
             } while (invalid_move); // this cycle keeps going until a valid move has been entered
-
-            
-            //use current time as seed for random generator. srand affects globally, so the bot will use a new seed to generate its moves
-            std::srand(time(0));
 
             this->n_moves++;
             this->stall_counter++;

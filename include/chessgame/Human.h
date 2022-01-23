@@ -59,7 +59,7 @@ namespace chessgame
          * @param pcolor the color of this player
          */
         Human(const PieceColor pcolor)
-            : Player{pcolor}
+            : Player{pcolor, true}
         {
         }
 

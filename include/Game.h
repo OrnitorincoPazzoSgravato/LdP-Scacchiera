@@ -197,7 +197,7 @@ namespace gameplay
 		}
 
 		/**
-		 * @brief Get all possible moves for a specifies piece based on the board's current state. Except for king in tower arrocco, as it's already covered by tower in king
+		 * @brief Get all possible moves for a specified piece based on the board's current state. Except for king in tower arrocco, as it's already covered by tower in king
 		 * arrocco.
 		 * @note In the current implementation, this method is used on in isGameOver() to check if a checked opponent still has move available to uncheck their king. Obviously,
 		 * if tower in king arrocco exist, then also king in tower exists, so it's not needed to add complexity to the algorithm by adding its calculation. Nonetheless the

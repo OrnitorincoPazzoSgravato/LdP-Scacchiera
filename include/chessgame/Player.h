@@ -28,13 +28,14 @@ namespace chessgame
         Player() = delete;
 
     public:
+        bool is_human;
         /**
          * @brief Construct a new Player object
          *
          * @param p_color the color of the Pieces this player controls
          */
-        Player(const PieceColor p_color)
-            : pieceColor(p_color)
+        Player(const PieceColor p_color, bool human)
+            : pieceColor(p_color), is_human{human}
         {
         }
 

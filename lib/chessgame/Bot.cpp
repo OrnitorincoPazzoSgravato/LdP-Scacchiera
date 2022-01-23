@@ -11,7 +11,6 @@
 
 #include <array>
 #include <vector>
-#include <stdexcept>
 #include <ctime>
 #include <random>
 
@@ -51,24 +50,25 @@ namespace chessgame
     {
         int count{0};
         // generate coordinates
-        Coordinates from{std::rand() % ROWS, std::rand() % COLUMNS};
+        Coordinates from = this->starting_tile;
 
         // while we ispectionate
         while (count < CELLS)
         {
+            
             count++;
-            // next cell
-            from = next_cell(from);
-
             // get piece in from, if empty cell continue
             Piece *p{this->board.get_piece(from)};
-            if (!p)
-                continue; 
+            if (!p) {
+                from = next_cell(from);
+                continue;
+            }
 
             PieceColor p_color = p->getColor();
             // if a piece does exist and is controlled by this player
             if (p_color == this->pieceColor)
             {
+                starting_tile = from;
                 // get possible moves
                 std::vector<Coordinates> possible_moves{p->getMoves(this->board, from)};
 
@@ -109,15 +109,29 @@ namespace chessgame
 
                 // if a possible move does exist
                 size_t moves_number{possible_moves.size()};
+                
                 if (moves_number != 0)
                 {
-                    int index = this->last_move_index >= moves_number ? std::rand() % moves_number : this->last_move_index;
+                    if(last_move_index < 0) last_move_index = std::rand() % moves_number;
+
+                    int index = this->last_move_index >= moves_number ? 0 : last_move_index;
                     this->last_move_index = index + 1;
+                    this->moves_used++;
+
+                    if(moves_used > moves_number) {
+                        this->moves_used = 0;
+                        this->last_move_index = -1;
+                        starting_tile = next_cell(from);
+                    }
+
                     // returns a move
                     Coordinates to{possible_moves[index]};
                     return std::array<Coordinates, 2>{from, to};
                 }
+
             }
+            
+            from = next_cell(from);
         }
         // good practice : this function has a defualt move to return: it never occurs because 
         // gameplay::Game controls checkmate

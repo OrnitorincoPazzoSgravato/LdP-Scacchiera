@@ -11,6 +11,7 @@
 #define BOT_H
 
 #include <array>
+#include <random>
 
 #include "Player.h"
 #include "Utilities.h"
@@ -32,8 +33,9 @@ namespace chessgame
          *
          */
         Bot(const PieceColor &p_color, Chessboard &cboard)
-            : Player{p_color}, board{cboard}, last_move_index{0}
+            : Player{p_color, false}, board{cboard}, last_move_index{-1}, moves_used{0}, starting_tile{std::rand() % ROWS, std::rand() % COLUMNS}
         {
+            
         }
 
         /**
@@ -52,6 +54,13 @@ namespace chessgame
          */
         char getPromotionTarget();
 
+        void resetBotSeed() {
+            std::srand(time(0));
+            starting_tile = {std::rand() % ROWS, std::rand() % COLUMNS};
+            last_move_index = -1;
+            moves_used = 0;
+        }
+
     private:
         /**
          * @brief reference to the chessboard of this game 
@@ -62,6 +71,8 @@ namespace chessgame
          * 
          */
         int last_move_index;
+        int moves_used;
+        Coordinates starting_tile;
         Bot() = delete;
     };
     /**
