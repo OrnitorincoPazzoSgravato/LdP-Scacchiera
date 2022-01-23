@@ -32,29 +32,33 @@ namespace gameplay
 
         char piece_symbol = p->getSymbol();
 
-        // series of conditions
+        // p must be a king
         bool p_Is_King = piece_symbol == chessgame::BLACK_KING || piece_symbol == chessgame::WHITE_KING;
+        // p must move of two tiles horizontally
         bool two_columns_move = std::abs(move[0].x - move[1].x) == 2 && move[0].y == move[1].y;
-        if(p_Is_King && !dynamic_cast<chessgame::Re *>(p)->has_already_moved && two_columns_move) { // a king already to move
+        // p must also be a king already to move
+        if(p_Is_King && !dynamic_cast<chessgame::Re *>(p)->has_already_moved && two_columns_move) {
+            int x, x_end;
+            chessgame::Piece* p_angle = nullptr;
             if(move[0].x == (move[1].x - 2)) { // short arrocco
-                chessgame::Piece* p_angle = move[0] == chessgame::Coordinates{"E8"} ? board.get_piece(chessgame::Coordinates{"H8"}) : board.get_piece(chessgame::Coordinates{"H1"});
-                bool p_angle_is_tower = p_angle != nullptr && (p_angle->getSymbol() == chessgame::BLACK_TOWER || p_angle->getSymbol() == chessgame::WHITE_TOWER);
-                bool moved = !(p_angle_is_tower && !dynamic_cast<chessgame::Torre* >(p_angle)->has_already_moved);
-                if(moved) return false;
-                for(int x = 5; x < 7; x++) {
-                    if(board.get_piece(chessgame::Coordinates{x, move[0].y}) != nullptr)
-                        return false;
-                }
+                p_angle = move[0] == chessgame::Coordinates{"E8"} ? board.get_piece(chessgame::Coordinates{"H8"}) : board.get_piece(chessgame::Coordinates{"H1"});
+                x = 5;
+                x_end = 7;
             }
             else if(move[0].x == (move[1].x + 2)) { // long arrocco
-                chessgame::Piece* p_angle = move[0] == chessgame::Coordinates{"E1"} ? board.get_piece(chessgame::Coordinates{"A1"}) : board.get_piece(chessgame::Coordinates{"A8"});
-                bool p_angle_is_tower = p_angle != nullptr && (p_angle->getSymbol() == chessgame::BLACK_TOWER || p_angle->getSymbol() == chessgame::WHITE_TOWER);
-                bool moved = !(p_angle_is_tower && !dynamic_cast<chessgame::Torre* >(p_angle)->has_already_moved);
-                if(moved) return false;
-                for(int x = 1; x < 4; x++) {
-                    if(board.get_piece(chessgame::Coordinates{x, move[0].y}) != nullptr)
-                        return false;
-                }
+                p_angle = move[0] == chessgame::Coordinates{"E1"} ? board.get_piece(chessgame::Coordinates{"A1"}) : board.get_piece(chessgame::Coordinates{"A8"});
+                x = 1;
+                x_end = 4;
+            }
+            // p angle must be a tower
+            bool p_angle_is_tower = p_angle != nullptr && (p_angle->getSymbol() == chessgame::BLACK_TOWER || p_angle->getSymbol() == chessgame::WHITE_TOWER);
+            // and also a tower that has already to move
+            bool moved = !(p_angle_is_tower && !dynamic_cast<chessgame::Torre* >(p_angle)->has_already_moved);
+            if(moved) return false;
+
+            for(; x < x_end; x++) {
+                if(board.get_piece(chessgame::Coordinates{x, move[0].y}) != nullptr) // there must be no obstacles between the tower and the king
+                    return false;
             }
             return true;
         }
@@ -529,7 +533,7 @@ namespace gameplay
     
             this->current_turn = !this->current_turn; // alternates turns
         } while (!isGameOver());
-
+        std::cout << this->board.snapshot() << std::endl;
         this->log_file.close(); // closes the log file
     }
 }

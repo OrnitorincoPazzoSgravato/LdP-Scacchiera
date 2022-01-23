@@ -144,6 +144,7 @@ namespace gameplay
 		 * @brief Checks if the provided piece can move from and to the provided coordinates.
 		 * 
 		 * @param p piece about to move
+		 * @param p_color the color of the piece about to move
 		 * @param from starting coordinate
 		 * @param to ending coordinate
 		 * @return true 
@@ -197,8 +198,9 @@ namespace gameplay
 		}
 
 		/**
-		 * @brief Get all possible moves for a specified piece based on the board's current state. Except arrocco
-		 * @note 
+		 * @brief Get all possible moves for a specified piece based on the board's current state. Special rule "arrocco" excluded.
+		 * @note "Arrocco" has been excluded as this method is mainly used to check the state of the game. As "arrocco" can't uncheck a king, it's
+		 * unnecessary to include.
 		 * 
 		 * @param piece_coord
 		 * @return std::vector<chessgame::Coordinates> vector containing all the coordinates the piece can move to
