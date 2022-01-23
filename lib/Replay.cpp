@@ -81,7 +81,7 @@ namespace replay_game
             output_file << "********************** End of turn " << turn << " **********************" << std::endl;
             output_file << end_of_game_check(end_of_game) << std::endl;
 
-            // if game ended
+            // if game ended, exit loop
             if (end_of_game != 0)
                 break;
         }
@@ -97,10 +97,12 @@ namespace replay_game
         // while loop input
         while (!input_file.eof())
         {
+            // next turn
             turn++;
+            std::cout << "********************** Turn " << turn << " **********************\n";
+
             // wait 1 second before the move
             std::this_thread::sleep_for(std::chrono::seconds(1));
-            std::cout << "********************** Turn " << turn << " **********************\n";
 
             // make the move
             std::array<chessgame::Coordinates, 2> this_move = move();
@@ -115,6 +117,7 @@ namespace replay_game
             this->input_file >> checkmate_flag >> end_of_game;
             std::cout << kingcheck_string(checkmate_flag) << "\n";
 
+            // print state of chessboard
             std::cout << "Moved: " << this->board.get_piece(to)->getSymbol() << " from " << from << " to " << to << std::endl;
             std::cout << "********************** End of turn " << turn << " **********************\n";
             std::cout << end_of_game_check(end_of_game) << "\n";
@@ -135,9 +138,9 @@ namespace replay_game
         // get input
         this->input_file >> initial >> final >> promotion_char;
         check_input_from_file(initial, final);
-
         chessgame::Coordinates from{initial}, to{final};
 
+        // if move is not valid
         if (!this->board.get_piece(from))
             throw std::invalid_argument("This move does not exist: no piece in from");
 
@@ -145,21 +148,19 @@ namespace replay_game
         if (!this->board.get_piece(to))
         {
             // if this is an enpassant or arrocco move
-            if (this->board.get_piece(from)->getSymbol() == chessgame::WHITE_PAW || this->board.get_piece(from)->getSymbol() == chessgame::BLACK_PAW)
+            bool is_arrocco{gameplay::isArrocco(std::array<chessgame::Coordinates, 2>{from, to}, this->board)};
+            bool is_enpassant {this->board.get_piece(from)->getSymbol() == chessgame::WHITE_PAW || this->board.get_piece(from)->getSymbol() == chessgame::BLACK_PAW};
+            if (is_enpassant)
                 en_passant_capture(from, to);
-            arrocco_move(from, to);
-
-            // move
-            board.swap_positions(from, to);
+            if (is_arrocco)
+                arrocco_move(from, to);
         }
         // if to is not an empty cell
         else
-        {
             board.set_piece(to, nullptr);
-            board.swap_positions(from, to);
-        }
 
-        // try promotion
+        //here we move the piece and try promotion
+        board.swap_positions(from, to);
         this->board.promote(promotion_char, to);
 
         return std::array<chessgame::Coordinates, 2>{from, to};
@@ -167,13 +168,10 @@ namespace replay_game
 
     void Replay::arrocco_move(const chessgame::Coordinates &from, const chessgame::Coordinates &to)
     {
-        // if is not arrocco, return
-        bool is_arrocco {gameplay::isArrocco(std::array<chessgame::Coordinates, 2>{from, to}, this->board)};
-        if (!is_arrocco)
-            return;
         // case 1 : black king to the left
         if (to == chessgame::black_castling_toleft)
             this->board.swap_positions(T_sinistra, chessgame::Coordinates{"D8"});
+            
         // case 2 :black king to the right
         else if (to == chessgame::black_castling_toright)
             this->board.swap_positions(T_destra, chessgame::Coordinates{"F8"});
