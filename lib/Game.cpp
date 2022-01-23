@@ -34,7 +34,7 @@ namespace gameplay
 
         // series of conditions
         bool p_Is_King = piece_symbol == chessgame::BLACK_KING || piece_symbol == chessgame::WHITE_KING;
-        bool two_columns_move = std::abs(move[0].x - move[1].x) == 2 || move[0].y == move[1].y;
+        bool two_columns_move = std::abs(move[0].x - move[1].x) == 2 && move[0].y == move[1].y;
         if(p_Is_King && !dynamic_cast<chessgame::Re *>(p)->has_already_moved && two_columns_move) { // a king already to move
             if(move[0].x == (move[1].x - 2)) { // short arrocco
                 chessgame::Piece* p_angle = move[0] == chessgame::Coordinates{"E8"} ? board.get_piece(chessgame::Coordinates{"H8"}) : board.get_piece(chessgame::Coordinates{"H1"});
