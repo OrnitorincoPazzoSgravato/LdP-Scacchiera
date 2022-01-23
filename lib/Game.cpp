@@ -302,7 +302,7 @@ namespace gameplay
         else if (p_is_tower && !dynamic_cast<chessgame::Torre *>(p)->has_already_moved)
         {
             chessgame::Coordinates king_coord = p_color == this->p1->getColor() ? p1_king_coord : p2_king_coord;
-            if (!dynamic_cast<chessgame::Re *>(this->board.get_piece(king_coord))->has_already_moved)
+            if(isArrocco({piece_coord, king_coord}, this->board))
                 moves_vec.push_back(king_coord);
         }
         // king in tower arrocco -> N.B.! for our current implementation we don't need this part, as if tower in king exists, then also king in tower must exist
@@ -482,7 +482,7 @@ namespace gameplay
         {   
             chessgame::PieceColor color = this->getCurrentPlayer()->getColor();
             std::cout << "\nTurn n.: " << this->n_moves + 1 << (color == chessgame::WHITE ? " - WHITE" : " - BLACK") << " moves." << std::endl;
-
+            std::cout << this->board.snapshot() << std::endl;
             bool invalid_move = true;
             do
             {

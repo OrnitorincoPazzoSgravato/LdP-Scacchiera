@@ -75,30 +75,36 @@ namespace chessgame
                 char p_symbol = p->getSymbol();
                 bool p_is_paw = p_symbol == chessgame::WHITE_PAW || p_symbol == chessgame::BLACK_PAW;
                 bool p_is_tower = p_symbol == chessgame::WHITE_TOWER || p_symbol == chessgame::BLACK_TOWER;
-                try {
-                    if(p_is_paw && !dynamic_cast<Pedone*>(p)->has_already_moved) {
-                        int offset = p_color == WHITE ? 2 : -2;
-                        if((p_color == WHITE && from.y != 6) || (p_color == BLACK && from.y != 1)) possible_moves.push_back(Coordinates{from.x, from.y + offset});
-                    }
-                    else if(p_is_paw) {
-                        int offset = p_color == WHITE ? 1 : -1;
-                        if(from.x != (COLUMNS - 1)) possible_moves.push_back(Coordinates{from.x + 1, from.y + offset});
-                        else if(from.x != 0) possible_moves.push_back(Coordinates{from.x - 1, from.y + offset});
-                    }
-                    else if(p_is_tower && !dynamic_cast<Torre*>(p)->has_already_moved) {
-                        for(int i = from.x; i < COLUMNS; i++) {
-                            Piece* obstacle_p = this->board.get_piece(Coordinates{i, from.y});
-                            if(!obstacle_p || obstacle_p->getColor() != p_color)
-                                continue;
-                            bool obstacle_is_king = obstacle_p->getSymbol() == chessgame::WHITE_KING || obstacle_p->getSymbol() == chessgame::BLACK_KING;
-                            if(obstacle_is_king && !dynamic_cast<Re*>(obstacle_p)->has_already_moved) {
-                                possible_moves.push_back(Coordinates{i, from.y});
-                                break;
-                            }
+
+                if(p_is_paw && !dynamic_cast<Pedone*>(p)->has_already_moved) {
+                    int offset = p_color == WHITE ? 2 : -2;
+                    if((p_color == WHITE && from.y != 6) || (p_color == BLACK && from.y != 1)) possible_moves.push_back(Coordinates{from.x, from.y + offset});
+                }
+                else if(p_is_paw) {
+                    int offset = p_color == WHITE ? 1 : -1;
+                    if(from.x != (COLUMNS - 1)) possible_moves.push_back(Coordinates{from.x + 1, from.y + offset});
+                    else if(from.x != 0) possible_moves.push_back(Coordinates{from.x - 1, from.y + offset});
+                }
+                else if(p_is_tower && !dynamic_cast<Torre*>(p)->has_already_moved) {
+                    int i = from.x;
+                    while(0 <= i && i < COLUMNS) {
+                        Piece* obstacle_p = this->board.get_piece(Coordinates{i, from.y});
+                        if(!obstacle_p) {
+                            if(from.x == COLUMNS - 1) i--;
+                            else i++;
+                            continue;
                         }
+                        if(obstacle_p->getColor() != p_color) break;
+                        bool obstacle_is_king = obstacle_p->getSymbol() == chessgame::WHITE_KING || obstacle_p->getSymbol() == chessgame::BLACK_KING;
+                        if(obstacle_is_king && !dynamic_cast<Re*>(obstacle_p)->has_already_moved) {
+                            possible_moves.push_back(Coordinates{i, from.y});
+                            break;
+                        }
+                        else break;
+                        if(from.x == COLUMNS - 1) i--;
+                        else i++;
                     }
                 }
-                catch(std::invalid_argument) {} // we cannot move there, out of chessboard bounds
                 
 
                 // if a possible move does exist
