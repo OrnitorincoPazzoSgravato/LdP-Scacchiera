@@ -375,7 +375,7 @@ namespace gameplay
             // here move is executed if valid
             if (is_valid_move)
             {
-                bool is_capture = (is_default && this->board.get_piece(move[1]) != nullptr) || is_en_passant;
+                bool is_capture = this->board.get_piece(move[1]) != nullptr && this->board.get_piece(move[1])->getColor() != p->getColor();
                 // self check case, obviously illegal
                 if(this->isMoveSelfCheck(move[0], move[1], piece_symbol, is_capture, is_arrocco))
                     return false;
