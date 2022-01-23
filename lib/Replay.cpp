@@ -170,6 +170,8 @@ namespace replay_game
         bool is_arrocco {gameplay::isArrocco(std::array<chessgame::Coordinates, 2>{from, to}, board)};
         if (!is_arrocco)
             return;
+        if (this->board.get_piece(from)->getSymbol() != chessgame::WHITE_KING || this->board.get_piece(from)->getSymbol() != chessgame::WHITE_KING)
+            return;
         // case 1 : black king to the left
         if (to.symbol == "C8")
             this->board.swap_positions(T_sinistra, chessgame::Coordinates{"D8"});
