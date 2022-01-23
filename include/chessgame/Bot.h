@@ -19,6 +19,16 @@
 
 namespace chessgame
 {
+    
+    /**
+     * @brief this helper function returns the coordinates of the cell after coord in an iteration column by column
+     * WE DID NOT implemented this as a Coordinates operator++ because the iteration is
+     * not a standard row by row 
+     *
+     * @param coord the previous coordinates
+     * @return Coordinates after coord
+     */
+    Coordinates next_cell(const Coordinates &coord);
     /**
      * @brief This class represents a Bot
      *
@@ -56,7 +66,12 @@ namespace chessgame
 
         void resetBotSeed() {
             std::srand(time(NULL));
-            starting_tile = {std::rand() % ROWS, std::rand() % COLUMNS};
+            if(std::rand() % 2 == 0) {
+                starting_tile = {std::rand() % ROWS, std::rand() % COLUMNS};
+            }
+            else {
+                starting_tile = next_cell(starting_tile);
+            }
             last_move_index = -1;
             moves_used = 0;
         }
@@ -75,15 +90,6 @@ namespace chessgame
         Coordinates starting_tile;
         Bot() = delete;
     };
-    /**
-     * @brief this helper function returns the coordinates of the cell after coord in an iteration column by column
-     * WE DID NOT implemented this as a Coordinates operator++ because the iteration is
-     * not a standard row by row 
-     *
-     * @param coord the previous coordinates
-     * @return Coordinates after coord
-     */
-    Coordinates next_cell(const Coordinates &coord);
 }
 
 #endif
