@@ -176,7 +176,7 @@ namespace gameplay
             return false;
         bool p_is_paw = p->getSymbol() == chessgame::BLACK_PAW || p->getSymbol() == chessgame::WHITE_PAW;
 
-        // if we're not moving a paw, then there's no meaning to go on
+        // if we're not moving a paw then there's no meaning to go on
         if (!p_is_paw) return false;
 
         // other conditions to verify
@@ -185,8 +185,12 @@ namespace gameplay
         bool offset_is_two {std::abs(move[0].y - move[1].y) == 2};
         bool final_cell_is_empty {this->board.get_piece(move[1]) == nullptr};
 
+        
+        chessgame::Coordinates adjacent_coord {move[0].x, move[0].y + (p->getColor() == chessgame::WHITE ? 1 : -1)};
+        bool adjacent_cell_empty = this->board.get_piece(adjacent_coord) == nullptr;
+
         // a first time moving paw is trying to advance by two tiles vertically, arriving in an empty tile
-        return (p_is_paw && has_not_moved && same_column && offset_is_two && final_cell_is_empty);
+        return (p_is_paw && has_not_moved && same_column && offset_is_two && final_cell_is_empty && adjacent_cell_empty);
     }
 
     bool Game::isEnPassant(char piece_symbol, const chessgame::Coordinates &to)
@@ -284,8 +288,12 @@ namespace gameplay
         // two tiles movement of a first time moving paw
         if (p_is_paw && !dynamic_cast<chessgame::Pedone *>(p)->has_already_moved)
         {
-            int offset = p_color == chessgame::WHITE ? 2 : -2;
-            moves_vec.push_back(chessgame::Coordinates{piece_coord.x, piece_coord.y + offset});
+            chessgame::Coordinates adjacent_coord {piece_coord.x, piece_coord.y + (p->getColor() == chessgame::WHITE ? 1 : -1)};
+            bool adjacent_cell_empty = this->board.get_piece(adjacent_coord) == nullptr;
+            if(adjacent_cell_empty) {
+                int offset = p_color == chessgame::WHITE ? 2 : -2;
+                moves_vec.push_back(chessgame::Coordinates{piece_coord.x, piece_coord.y + offset});
+            }
         }
         // en passant capture
         else if (p_is_paw && this->en_passante_coord != nullptr && this->board.get_piece(*(this->en_passante_coord))->getColor() != p_color)
