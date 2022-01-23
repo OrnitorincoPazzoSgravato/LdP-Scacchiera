@@ -20,6 +20,7 @@
 #include "../include/chessgame/Utilities.h"
 #include "../include/chessgame/Chessboard.h"
 #include "../include/chessgame/Human.h"
+#include "../include/chessgame/Player.h"
 
 namespace replay_game
 {
@@ -137,8 +138,8 @@ namespace replay_game
 
         chessgame::Coordinates from{initial}, to{final};
 
-        //if (!this->board.get_piece(from))
-          //  throw std::invalid_argument("This move does not exist: no piece in from");
+        if (!this->board.get_piece(from))
+            throw std::invalid_argument("This move does not exist: no piece in from");
 
         // if to is an empty cell
         if (!this->board.get_piece(to))
@@ -167,24 +168,22 @@ namespace replay_game
     void Replay::arrocco_move(const chessgame::Coordinates &from, const chessgame::Coordinates &to)
     {
         // if is not arrocco, return
-        bool is_arrocco {gameplay::isArrocco(std::array<chessgame::Coordinates, 2>{from, to}, board)};
+        bool is_arrocco {gameplay::isArrocco(std::array<chessgame::Coordinates, 2>{from, to}, this->board)};
         if (!is_arrocco)
             return;
-        if (this->board.get_piece(from)->getSymbol() != chessgame::WHITE_KING || this->board.get_piece(from)->getSymbol() != chessgame::WHITE_KING)
-            return;
         // case 1 : black king to the left
-        if (to.symbol == "C8")
+        if (to == chessgame::black_castling_toleft)
             this->board.swap_positions(T_sinistra, chessgame::Coordinates{"D8"});
         // case 2 :black king to the right
-        else if (to.symbol == "G8")
+        else if (to == chessgame::black_castling_toright)
             this->board.swap_positions(T_destra, chessgame::Coordinates{"F8"});
 
         // case 3: white king to the left
-        else if (to.symbol == "C1")
+        else if (to == chessgame::white_castling_toleft)
             this->board.swap_positions(t_sinistra, chessgame::Coordinates{"D1"});
 
         // case 4 :white king to the right
-        else if (to.symbol == "G1")
+        else if (to == chessgame::white_castling_toright)
             this->board.swap_positions(chessgame::Coordinates{"F1"}, t_destra);
     }
 

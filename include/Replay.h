@@ -137,11 +137,8 @@ namespace replay_game
         /**
          * @brief Initial coordinates of towers for arrocco
          */
-        const chessgame::Coordinates T_destra{"H8"}, T_sinistra{"A8"}, t_destra{"H1"}, t_sinistra{"A1"};
-        /**
-         * @brief Initial coordinates of kings for arrocco
-         */
-        const chessgame::Coordinates Re_nero_init{"E8"}, re_bianco_init{"E1"};
+        static const chessgame::Coordinates T_destra{"H8"}, T_sinistra{"A8"}, t_destra{"H1"}, t_sinistra{"A1"};
+
 
         /**
          * @brief helper function. Check if input is valid and returns a string to print
