@@ -87,10 +87,12 @@ namespace chessgame
                 else if (p_is_paw)
                 {
                     int offset{p_color == WHITE ? 1 : -1};
-                    if (from.x != (COLUMNS - 1))
+                    if (from.x != (COLUMNS - 1)) {
                         possible_moves.push_back(Coordinates{from.x + 1, from.y + offset});
-                    else if (from.x != 0)
+                    }
+                    if (from.x != 0) {
                         possible_moves.push_back(Coordinates{from.x - 1, from.y + offset});
+                    }
                 }
                 // if p is king and did not move
                 else if (p_is_king && !dynamic_cast<Re *>(p)->has_already_moved)
