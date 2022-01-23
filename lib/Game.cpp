@@ -67,7 +67,7 @@ namespace gameplay
                     int end_index = move[0].x < move[1].x ? move[1].x : move[0].x;
                     for (; index <= end_index && !obstacles; index++)
                     {
-                        if (board.get_piece(chessgame::Coordinates{y, index}) != nullptr)
+                        if (board.get_piece(chessgame::Coordinates{index, y}) != nullptr)
                             obstacles = true;
                     }
 
