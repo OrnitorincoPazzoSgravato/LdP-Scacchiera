@@ -441,8 +441,7 @@ namespace gameplay
                             bool is_arrocco = isArrocco({piece_coord, *it}, this->board);
 
                             if(!this->isMoveSelfCheck(piece_coord, (*it), p->getSymbol(), is_capture, is_arrocco)) {
-                                std::cout << "UNCHECKED BY " << piece_coord.symbol << " " << (*it).symbol << std::endl;
-                                this->writeLog(" 0\n");
+                                this->writeLog(" * 0\n");
                                 return false;
                             }
                         }
@@ -477,7 +476,6 @@ namespace gameplay
                         bool is_arrocco = isArrocco({piece_coord, *it}, this->board);
 
                         if(!this->isMoveSelfCheck(piece_coord, (*it), p->getSymbol(), is_capture, is_arrocco)) {
-                            std::cout << "UNCHECKED BY " << piece_coord.symbol << " " << (*it).symbol << std::endl;
                             this->writeLog(" 0\n");
                             return false;
                         }
@@ -499,7 +497,6 @@ namespace gameplay
         {   
             chessgame::PieceColor color = this->getCurrentPlayer()->getColor();
             std::cout << "\nTurn n.: " << this->n_moves + 1 << (color == chessgame::WHITE ? " - WHITE" : " - BLACK") << " moves." << std::endl;
-            std::cout << this->board.snapshot() << std::endl;
             bool invalid_move = true;
             do
             {
