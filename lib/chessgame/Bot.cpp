@@ -114,15 +114,16 @@ namespace chessgame
 
                 if (moves_number != 0)
                 {
-                    if (last_move_index < 0)
+                    if (last_move_index < 0) // move index must be re-calculated
                     {
                         last_move_index = std::rand() % moves_number;
                     }
+                    // if last index exceeds the vector bounds, then it starts again from 0
                     int index{this->last_move_index >= moves_number ? 0 : last_move_index};
                     this->last_move_index = index + 1;
                     this->moves_used++;
 
-                    if (moves_used > moves_number)
+                    if (moves_used > moves_number) // tried all moves for this piece, proceeds to the next one (if and when needed)
                     {
                         this->moves_used = 0;
                         this->last_move_index = -1;

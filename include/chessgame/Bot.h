@@ -26,6 +26,10 @@ namespace chessgame
      * @brief this helper function returns the coordinates of the cell after coord in an iteration column by column
      * WE DID NOT implemented this as a Coordinates operator++ because the iteration is
      * not a standard row by row 
+     * 
+     * @note when an istance of Bot thinks, it starts considering pieces from a certain pseudo-randomic point and for each piece it tryes all its possible moves, starting from
+     * a randomic point in the sequence. The method to reset the starting point of think must be called after a valid move has been returned, in order to mantain
+     * this pseduo-randomic behaviour.
      *
      * @param coord the previous coordinates
      * @return Coordinates after coord
@@ -65,8 +69,13 @@ namespace chessgame
          *
          */
         char getPromotionTarget();
-
+        /**
+         * @brief Function used to reset the internal starting point for moves generation.
+         * 
+         */
         void resetBotSeed() {
+            // pseudo-random (half of the time it's a random starting point, the other half it goes to the next cell)
+            // this prevents a piece from going back and forth most of the time while keeping a mostly randomic behaviour
             if(std::rand() % 2 == 0) {
                 starting_tile = {std::rand() % ROWS, std::rand() % COLUMNS};
             }
@@ -86,8 +95,20 @@ namespace chessgame
          * @brief int of the index of last move
          * 
          */
+        /**
+         * @brief index of the last used move
+         * 
+         */
         int last_move_index;
+        /**
+         * @brief number of moves tied of the currently analyzed piece. It is a negative number when it must be re-calculated
+         * 
+         */
         int moves_used;
+        /**
+         * @brief starting point for searching pieces
+         * 
+         */
         Coordinates starting_tile;
         /**
          * @brief Default constructor Disabled
