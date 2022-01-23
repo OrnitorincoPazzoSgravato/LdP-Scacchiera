@@ -119,10 +119,10 @@ namespace gameplay
 		 * @brief Function to be called when a successful move has been recognized. Used to call and apply methods and algorithms for correctly ending a turn.
 		 * 
 		 * @param move the array representation of the move
-		 * @param is_swap disables the capture flag if true
+		 * @param is_arrocco used to manage the special rule arrocco
 		 * @return std::string representation of the legal move (to be logged in the log file)
 		 */
-		std::string legalTurnCleanUp(const std::array<chessgame::Coordinates, 2> &move, bool is_swap);
+		std::string legalTurnCleanUp(const std::array<chessgame::Coordinates, 2> &move, bool is_arrocco);
 		/**
 		 * @brief Checks if the provided move is a case of a paw's two-tiles movement.
 		 * 
@@ -139,7 +139,7 @@ namespace gameplay
 		 * @return true 
 		 * @return false 
 		 */
-		bool isEnPassant(char piece_symbol, const chessgame::Coordinates &to);
+		bool isEnPassant(char piece_symbol, chessgame::PieceColor p_color, const chessgame::Coordinates &to);
 		/**
 		 * @brief Checks if the provided piece can move from and to the provided coordinates.
 		 * 
@@ -197,11 +197,8 @@ namespace gameplay
 		}
 
 		/**
-		 * @brief Get all possible moves for a specified piece based on the board's current state. Except for king in tower arrocco, as it's already covered by tower in king
-		 * arrocco.
-		 * @note In the current implementation, this method is used on in isGameOver() to check if a checked opponent still has move available to uncheck their king. Obviously,
-		 * if tower in king arrocco exist, then also king in tower exists, so it's not needed to add complexity to the algorithm by adding its calculation. Nonetheless the
-		 * algorithm is still coded, but it has been commented out.
+		 * @brief Get all possible moves for a specified piece based on the board's current state. Except arrocco
+		 * @note 
 		 * 
 		 * @param piece_coord
 		 * @return std::vector<chessgame::Coordinates> vector containing all the coordinates the piece can move to
