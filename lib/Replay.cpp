@@ -137,6 +137,9 @@ namespace replay_game
 
         chessgame::Coordinates from{initial}, to{final};
 
+        if (!this->board.get_piece(from))
+            throw std::invalid_argument("This move does not exist: no piece in from");
+
         // if to is an empty cell
         if (!this->board.get_piece(to))
         {
@@ -163,48 +166,49 @@ namespace replay_game
 
     void Replay::arrocco_move(const chessgame::Coordinates &from, const chessgame::Coordinates &to)
     {
-        // se non è arrocco termina
+        // if is not arrocco, return
         if (!gameplay::isArrocco(std::array<chessgame::Coordinates, 2>{from, to}, board))
             return;
 
-        // se muovo il re
+        // if this is a king move
         if (from == Re_nero_init || from == re_bianco_init)
         {
-            // case 1 : nero a sinisra
+            // case 1 : black king to the left
             if (to.symbol[0] < Re_nero_init.symbol[0])
                 this->board.swap_positions(T_sinistra, chessgame::Coordinates{"D8"});
-            // case 2 :nero a destra
+            // case 2 :black king to the right
             else if (to.symbol[0] > Re_nero_init.symbol[0])
                 this->board.swap_positions(T_destra, chessgame::Coordinates{"F8"});
 
-            // case 3:bianco a sinistra
+            // case 3: white king to the left
             else if (to.symbol[0] < re_bianco_init.symbol[0])
                 this->board.swap_positions(t_sinistra, chessgame::Coordinates{"D1"});
 
-            // case 4 :bianco a destra
+            // case 4 :white king to the right
             else if (to.symbol[0] > re_bianco_init.symbol[0])
                 this->board.swap_positions(chessgame::Coordinates{"F1"}, t_destra);
             return;
         }
-        // case 5 : muovo la torre nera di sinistra
+        // case 5 : black tower to the left
         else if (from == T_sinistra)
             this->board.swap_positions(Re_nero_init, chessgame::Coordinates{"C8"});
 
-        // case 6 : muovo torre nera di destra
+        // case 6 : black tower to the right
         else if (from == T_destra)
             this->board.swap_positions(Re_nero_init, chessgame::Coordinates{"G8"});
-        // case 7 : muovo torre bianca di sinistra
+        // case 7 : white tower to the left
         else if (from == t_sinistra)
             this->board.swap_positions(re_bianco_init, chessgame::Coordinates{"C1"});
 
-        // case 8 :muovo torre bianca di destra
+        // case 8 : white tower to the right
         else if (from == t_destra)
             this->board.swap_positions(re_bianco_init, chessgame::Coordinates{"G1"});
     }
 
     void Replay::en_passant_capture(const chessgame::Coordinates &from, const chessgame::Coordinates &to)
     {
-        // if column is different but cell is empty
+        // if column is different but cell is empty: this implementation implies that the replay is from
+        // a valid move
         bool different_column{from.x != to.x};
         bool destination_empty{!(from.x != to.x)};
         if (different_column && destination_empty)
@@ -258,9 +262,14 @@ namespace replay_game
 
     void check_input_from_file(const std::string &initial, const std::string &final)
     {
+        // check if the move is in a valid form
         bool valid_formula{chessgame::check_move(std::array<std::string, 2>{initial, final})};
+
+        // no lowercase
         bool initial_lowercase{initial[0] >= 'a' && initial[0] <= 'h'};
         bool final_lowercase{final[0] >= 'a' && final[0] <= 'h'};
+
+        // if move is invalid exception
         if (!valid_formula || initial_lowercase || final_lowercase)
             throw std::invalid_argument("Invalid string in log file");
     }
