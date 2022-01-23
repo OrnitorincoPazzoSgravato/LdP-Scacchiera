@@ -40,19 +40,13 @@ namespace chessgame
         this->v[7][6] = std::make_unique<Cavallo>(BLACK, BLACK_HORSE);
         this->v[7][7] = std::make_unique<Torre>(BLACK, BLACK_TOWER);
 
-        // for loop to initialize black Paws
+        // for loop to initialize black and white Paws
         for (int i = 0; i < COLUMNS; i++)
         {
             this->v[6][i] = std::make_unique<Pedone>(BLACK, BLACK_PAW);
-        }
-
-        // initialize white Pieces
-
-        // for loop to inizialize white Paws
-        for (int i = 0; i < COLUMNS; i++)
-        {
             this->v[1][i] = std::make_unique<Pedone>(WHITE, WHITE_PAW);
         }
+
         // initialize other white Pieces
         this->v[0][0] = std::make_unique<Torre>(WHITE, WHITE_TOWER);
         this->v[0][1] = std::make_unique<Cavallo>(WHITE, WHITE_HORSE);

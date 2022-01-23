@@ -101,6 +101,8 @@ namespace replay_game
                  * @brief make the move in the replay chessboard
                  *
                  * @return std::array<chessgame::Coordinates, 2> an array with coordinates of the move
+                 * 
+                 * @throw std::invalid_argument if the initial cell is empty 
                  *
                  */
                 std::array<chessgame::Coordinates, 2> move();
