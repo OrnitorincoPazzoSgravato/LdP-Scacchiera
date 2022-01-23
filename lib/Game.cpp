@@ -39,7 +39,8 @@ namespace gameplay
             if(move[0].x == (move[1].x - 2)) { // short arrocco
                 chessgame::Piece* p_angle = move[0] == chessgame::Coordinates{"E8"} ? board.get_piece(chessgame::Coordinates{"H8"}) : board.get_piece(chessgame::Coordinates{"H1"});
                 bool p_angle_is_tower = p_angle != nullptr && (p_angle->getSymbol() == chessgame::BLACK_TOWER || p_angle->getSymbol() == chessgame::WHITE_TOWER);
-                bool not_moved = p_angle_is_tower && !dynamic_cast<chessgame::Torre* >(p_angle)->has_already_moved;
+                bool moved = !(p_angle_is_tower && !dynamic_cast<chessgame::Torre* >(p_angle)->has_already_moved);
+                if(moved) return false;
                 for(int x = 5; x < 7; x++) {
                     if(board.get_piece(chessgame::Coordinates{x, move[0].y}) != nullptr)
                         return false;
@@ -48,7 +49,8 @@ namespace gameplay
             else if(move[0].x == (move[1].x + 2)) { // long arrocco
                 chessgame::Piece* p_angle = move[0] == chessgame::Coordinates{"E1"} ? board.get_piece(chessgame::Coordinates{"A1"}) : board.get_piece(chessgame::Coordinates{"A8"});
                 bool p_angle_is_tower = p_angle != nullptr && (p_angle->getSymbol() == chessgame::BLACK_TOWER || p_angle->getSymbol() == chessgame::WHITE_TOWER);
-                bool not_moved = p_angle_is_tower && !dynamic_cast<chessgame::Torre* >(p_angle)->has_already_moved;
+                bool moved = !(p_angle_is_tower && !dynamic_cast<chessgame::Torre* >(p_angle)->has_already_moved);
+                if(moved) return false;
                 for(int x = 1; x < 4; x++) {
                     if(board.get_piece(chessgame::Coordinates{x, move[0].y}) != nullptr)
                         return false;
@@ -441,7 +443,7 @@ namespace gameplay
                             if(!this->isMoveSelfCheck(piece_coord, (*it), p->getSymbol(), is_capture, false)) {
                                 std::cout << "UNCHECKED BY " << piece_coord.symbol << " " << (*it).symbol << std::endl;
                                 this->writeLog(" * 0\n");
-                                return false;
+                                return false; // it's not a stalemate as we found one legal move to do
                             }
                         }
                     }
@@ -476,7 +478,7 @@ namespace gameplay
                         if(!this->isMoveSelfCheck(piece_coord, (*it), p->getSymbol(), is_capture, false)) {
                             std::cout << "UNCHECKED BY " << piece_coord.symbol << " " << (*it).symbol << std::endl;
                             this->writeLog(" 0\n");
-                            return false;
+                            return false; // it's not checkmate, as we found a move to uncheck the king
                         }
                     }
                 }
