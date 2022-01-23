@@ -67,7 +67,7 @@ namespace gameplay
                     int end_index = move[0].x < move[1].x ? move[1].x : move[0].x;
                     for (; index <= end_index && !obstacles; index++)
                     {
-                        if (board.get_piece(chessgame::Coordinates(y, index)) != nullptr)
+                        if (board.get_piece(chessgame::Coordinates{y, index}) != nullptr)
                             obstacles == true;
                     }
 
@@ -87,12 +87,12 @@ namespace gameplay
         this->p1 = new chessgame::Human(a_colors[0]);
         this->p2 = new chessgame::Bot(a_colors[1], this->board);
         if(a_colors[0] == chessgame::WHITE) {
-            this->p1_king_coord = chessgame::Coordinates("E1");
-            this->p2_king_coord = chessgame::Coordinates("E8");
+            this->p1_king_coord = chessgame::Coordinates{"E1"};
+            this->p2_king_coord = chessgame::Coordinates{"E8"};
         }
         else {
-            this->p1_king_coord = chessgame::Coordinates("E8");
-            this->p2_king_coord = chessgame::Coordinates("E1");
+            this->p1_king_coord = chessgame::Coordinates{"E8"};
+            this->p2_king_coord = chessgame::Coordinates{"E1"};
         }
         this->current_turn = a_colors[0] == chessgame::WHITE; // checking which player is WHITE
         // GUI initialization
@@ -124,7 +124,7 @@ namespace gameplay
     // private methods definitions
     std::array<chessgame::PieceColor, 2> Game::getRandColors()
     {
-        std::srand(time(NULL)); // used to randomize at each call
+        std::srand(time(0));
         double rand_num = std::rand(); // std library rand function to get a random number between 0 and 1
         // based on rand_num c_array is initialized with different values (just two possible outcomes, so an if-else is enough to cover them)
         if (rand_num < 0.5)
@@ -144,7 +144,7 @@ namespace gameplay
         {
             for (int x = 0; x < chessgame::COLUMNS; x++)
             {
-                chessgame::Coordinates piece_coord = chessgame::Coordinates(x, y);
+                chessgame::Coordinates piece_coord {x, y};
                 chessgame::Piece *p = this->board.get_piece(piece_coord);
                 chessgame::PieceColor p_color = this->getCurrentPlayer()->getColor();
                 // if it's an opponent's piece, then we check if we're checked by it (one of its possible moves would capture our king)
@@ -279,24 +279,24 @@ namespace gameplay
         // boolean used for conditions
         bool p_is_paw = p_symbol == chessgame::WHITE_PAW || p_symbol == chessgame::BLACK_PAW;
         bool p_is_tower = p_symbol == chessgame::WHITE_TOWER || p_symbol == chessgame::BLACK_TOWER;
-        bool p_is_king = p_symbol == chessgame::WHITE_KING || p_symbol == chessgame::BLACK_KING;
+        // bool p_is_king = p_symbol == chessgame::WHITE_KING || p_symbol == chessgame::BLACK_KING;
 
         // two tiles movement of a first time moving paw
         if (p_is_paw && !dynamic_cast<chessgame::Pedone *>(p)->has_already_moved)
         {
             int offset = p_color == chessgame::WHITE ? 2 : -2;
-            moves_vec.push_back(chessgame::Coordinates(piece_coord.x, piece_coord.y + offset));
+            moves_vec.push_back(chessgame::Coordinates{piece_coord.x, piece_coord.y + offset});
         }
         // en passant capture
         else if (p_is_paw && this->en_passante_coord != nullptr && this->board.get_piece(*(this->en_passante_coord))->getColor() != p_color)
         {
             int offset = p_color == chessgame::WHITE ? 1 : -1;
-            bool left_capturable = *(this->en_passante_coord) == chessgame::Coordinates(piece_coord.x - 1, piece_coord.y + offset);
-            bool right_capturable = *(this->en_passante_coord) == chessgame::Coordinates(piece_coord.x + 1, piece_coord.y + offset);
+            bool left_capturable = *(this->en_passante_coord) == chessgame::Coordinates{piece_coord.x - 1, piece_coord.y + offset};
+            bool right_capturable = *(this->en_passante_coord) == chessgame::Coordinates{piece_coord.x + 1, piece_coord.y + offset};
             if (left_capturable)
-                moves_vec.push_back(chessgame::Coordinates(piece_coord.x - 1, piece_coord.y + offset));
+                moves_vec.push_back(chessgame::Coordinates{piece_coord.x - 1, piece_coord.y + offset});
             else if (right_capturable)
-                moves_vec.push_back(chessgame::Coordinates(piece_coord.x + 1, piece_coord.y + offset));
+                moves_vec.push_back(chessgame::Coordinates{piece_coord.x + 1, piece_coord.y + offset});
         }
         // tower in king arrocco
         else if (p_is_tower && !dynamic_cast<chessgame::Torre *>(p)->has_already_moved)
@@ -385,7 +385,7 @@ namespace gameplay
                     this->setCurrentPlayerKing(move[0]);
                 else if (is_paw_2_tiles_movement) { // after effect of paw moving by two tiles
                     delete this->en_passante_coord;
-                    this->en_passante_coord = new chessgame::Coordinates(move[1]);
+                    this->en_passante_coord = new chessgame::Coordinates{move[1]};
                 }
                 
                 // we're moving a paw or capturing a piece, so we must reset the stall counter
@@ -424,7 +424,7 @@ namespace gameplay
             {
                 for (int x = 0; x < chessgame::COLUMNS; x++)
                 {
-                    chessgame::Coordinates piece_coord = chessgame::Coordinates(x, y);
+                    chessgame::Coordinates piece_coord {x, y};
                     chessgame::Piece *p = this->board.get_piece(piece_coord);
                     // a piece of the opponent (now current player) which has moves available
                     if (p != nullptr && p->getColor() == color && this->getPieceMovesAll(piece_coord).size() != 0) {
@@ -446,7 +446,7 @@ namespace gameplay
         {
             for (int x = 0; x < chessgame::COLUMNS; x++)
             {
-                chessgame::Coordinates piece_coord = chessgame::Coordinates(x, y);
+                chessgame::Coordinates piece_coord {x, y};
                 chessgame::Piece *p = this->board.get_piece(piece_coord);
                 // obviously we only look into pieces belonging to the checked player
                 if (p != nullptr && p->getColor() == color)
@@ -504,7 +504,7 @@ namespace gameplay
 
             
             //use current time as seed for random generator. srand affects globally, so the bot will use a new seed to generate its moves
-            std::srand(time(NULL));
+            std::srand(time(0));
 
             this->n_moves++;
             this->stall_counter++;

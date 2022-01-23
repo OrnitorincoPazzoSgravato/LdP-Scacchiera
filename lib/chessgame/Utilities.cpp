@@ -23,7 +23,7 @@ namespace chessgame
         if(x == -1 && y == -1) {
             this->symbol = "XX";
         }
-        else if((x < 0 && x >= chessgame::COLUMNS) || (y < 0 && y >= chessgame::ROWS)) {
+        else if((x < 0 || x >= chessgame::COLUMNS) && (y < 0 || y >= chessgame::ROWS)) {
             throw std::invalid_argument("Coordinates out of bounds");
         }
         else {
