@@ -20,6 +20,7 @@
 #include "../include/chessgame/Utilities.h"
 #include "../include/chessgame/Chessboard.h"
 #include "../include/chessgame/Human.h"
+#include "../include/chessgame/Player.h"
 
 namespace replay_game
 {
@@ -167,21 +168,22 @@ namespace replay_game
     void Replay::arrocco_move(const chessgame::Coordinates &from, const chessgame::Coordinates &to)
     {
         // if is not arrocco, return
-        if (!gameplay::isArrocco(std::array<chessgame::Coordinates, 2>{from, to}, board))
+        bool is_arrocco {gameplay::isArrocco(std::array<chessgame::Coordinates, 2>{from, to}, this->board)};
+        if (!is_arrocco)
             return;
         // case 1 : black king to the left
-        if (to.symbol[0] < Re_nero_init.symbol[0])
+        if (to == chessgame::black_castling_toleft)
             this->board.swap_positions(T_sinistra, chessgame::Coordinates{"D8"});
         // case 2 :black king to the right
-        else if (to.symbol[0] > Re_nero_init.symbol[0])
+        else if (to == chessgame::black_castling_toright)
             this->board.swap_positions(T_destra, chessgame::Coordinates{"F8"});
 
         // case 3: white king to the left
-        else if (to.symbol[0] < re_bianco_init.symbol[0])
+        else if (to == chessgame::white_castling_toleft)
             this->board.swap_positions(t_sinistra, chessgame::Coordinates{"D1"});
 
         // case 4 :white king to the right
-        else if (to.symbol[0] > re_bianco_init.symbol[0])
+        else if (to == chessgame::white_castling_toright)
             this->board.swap_positions(chessgame::Coordinates{"F1"}, t_destra);
     }
 

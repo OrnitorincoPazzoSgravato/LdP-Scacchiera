@@ -21,10 +21,13 @@
 
 namespace chessgame
 {
-    static const Coordinates black_castling_toleft{"C8"};
-    static const Coordinates black_castling_toright{"G8"};
-    static const Coordinates white_castling_toleft{"C1"};
-    static const Coordinates white_castling_toright{"G1"};
+    /**
+     * @brief coordinates for castling
+     * 
+     */
+    static const Coordinates black_castling_toleft{"C8"},black_castling_toright{"G8"};
+    static const Coordinates white_castling_toleft{"C1"},white_castling_toright{"G1"};
+    
     class Player
     {
     protected:
