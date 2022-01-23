@@ -1,7 +1,7 @@
 /**
  * @file Player.h
  * @author Enrico Cavinato
- * @brief
+ * @brief This abstact class represent a player, human or bot
  * @version 0.1
  * @date 2022-12-27
  *
@@ -31,10 +31,22 @@ namespace chessgame
     class Player
     {
     protected:
+        /**
+         * @brief Color of this player
+         * 
+         */
         PieceColor pieceColor;
+        /**
+         * @brief Default constructor disabled
+         * 
+         */
         Player() = delete;
 
     public:
+        /**
+         * @brief state if this is a human or bot player
+         * 
+         */
         bool is_human;
         /**
          * @brief Construct a new Player object

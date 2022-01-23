@@ -85,6 +85,11 @@ namespace chessgame
             last_move_index = -1;
             moves_used = 0;
         }
+        /**
+         * @brief Default constructor Disabled
+         * 
+         */
+        Bot() = delete;
 
     private:
         /**
@@ -110,11 +115,7 @@ namespace chessgame
          * 
          */
         Coordinates starting_tile;
-        /**
-         * @brief Default constructor Disabled
-         * 
-         */
-        Bot() = delete;
+        
     };
 }
 
