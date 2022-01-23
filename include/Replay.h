@@ -67,7 +67,16 @@ namespace replay_game
                  * @brief Copy constructor disabled
                  *
                  */
-                Replay(const Replay &) = delete;
+                Replay (const Replay&) = delete;
+                /**
+                 * @brief Assignment operator disabled
+                 */
+                Replay& operator=(const Replay&) = delete;
+                /**
+                 * @brief Default constructor disabled
+                 * 
+                 */
+                Replay() = delete;
                 /**
                  * @brief Destroy the Replay object, release resources
                  *
@@ -138,7 +147,6 @@ namespace replay_game
          * @brief Initial coordinates of towers for arrocco
          */
         static const chessgame::Coordinates T_destra{"H8"}, T_sinistra{"A8"}, t_destra{"H1"}, t_sinistra{"A1"};
-
 
         /**
          * @brief helper function. Check if input is valid and returns a string to print
