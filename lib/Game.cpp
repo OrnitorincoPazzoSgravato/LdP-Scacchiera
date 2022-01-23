@@ -451,6 +451,7 @@ namespace gameplay
                             bool is_arrocco = !is_capture && isArrocco({piece_coord, *it}, this->board);
 
                             if(!this->isMoveSelfCheck(piece_coord, (*it), p->getSymbol(), is_capture, is_arrocco)) {
+                                std::cout << "UNCHECKED BY " << piece_coord.symbol << " " << (*it).symbol << std::endl;
                                 this->writeLog(" * 0\n");
                                 return false;
                             }
@@ -487,6 +488,7 @@ namespace gameplay
                         bool is_arrocco = !is_capture && isArrocco({piece_coord, *it}, this->board);
 
                         if(!this->isMoveSelfCheck(piece_coord, (*it), p->getSymbol(), is_capture, is_arrocco)) {
+                            std::cout << "UNCHECKED BY " << piece_coord.symbol << " " << (*it).symbol << std::endl;
                             this->writeLog(" 0\n");
                             return false;
                         }
