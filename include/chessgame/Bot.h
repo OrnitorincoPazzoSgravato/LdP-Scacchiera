@@ -1,11 +1,13 @@
-/*
-
-    @author: Cavinato Enrico
-    @date: 2021-12-30
-
-    This class represents a bot.
-
-*/
+/**
+ * @file Bot.h
+ * @author Enrico Cavinato
+ * @brief This class implement a Bot
+ * @version 0.1
+ * @date 2022-01-10
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
 
 #ifndef BOT_H
 #define BOT_H
@@ -87,6 +89,10 @@ namespace chessgame
         int last_move_index;
         int moves_used;
         Coordinates starting_tile;
+        /**
+         * @brief Default constructor Disabled
+         * 
+         */
         Bot() = delete;
     };
 }
