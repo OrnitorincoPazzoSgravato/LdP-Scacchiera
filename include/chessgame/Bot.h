@@ -32,7 +32,7 @@ namespace chessgame
          *
          */
         Bot(const PieceColor &p_color, Chessboard &cboard)
-            : Player{p_color}, board{cboard}, last_move_index{0}
+            : Player{p_color}, board{cboard}, last_move_index{rand() % 2} // most pieces start with two possible moves
         {
         }
 
