@@ -112,8 +112,10 @@ namespace chessgame
                 
                 if (moves_number != 0)
                 {
-                    if(last_move_index < 0) last_move_index = std::rand() % moves_number;
-
+                    if(last_move_index < 0) {
+                        std::srand(time(NULL));
+                        last_move_index = std::rand() % moves_number;
+                    }
                     int index = this->last_move_index >= moves_number ? 0 : last_move_index;
                     this->last_move_index = index + 1;
                     this->moves_used++;

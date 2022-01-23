@@ -124,10 +124,10 @@ namespace gameplay
     // private methods definitions
     std::array<chessgame::PieceColor, 2> Game::getRandColors()
     {
-        std::srand(time(0));
-        double rand_num = std::rand(); // std library rand function to get a random number between 0 and 1
+        std::srand(time(NULL));
+        double rand_num = std::rand() % 2; // std library rand function to get a random number between 0 and 1
         // based on rand_num c_array is initialized with different values (just two possible outcomes, so an if-else is enough to cover them)
-        if (rand_num < 0.5)
+        if (rand_num == 0)
             return {chessgame::PieceColor::BLACK, chessgame::PieceColor::WHITE};
         else
             return {chessgame::PieceColor::WHITE, chessgame::PieceColor::BLACK};
@@ -501,9 +501,6 @@ namespace gameplay
             std::cout << "\nTurn n.: " << this->n_moves + 1 << (color == chessgame::WHITE ? " - WHITE" : " - BLACK") << " moves." << std::endl;
             std::cout << this->board.snapshot() << std::endl;
             bool invalid_move = true;
-            // resets seed generator if bot player
-            if(!this->getCurrentPlayer()->is_human)
-                dynamic_cast<chessgame::Bot*>(this->getCurrentPlayer())->resetBotSeed();
             do
             {
                 // player's move for its turn
@@ -521,6 +518,10 @@ namespace gameplay
                     else std::cout << "ATTENTION: moved from a void tile!" << std::endl; // for debugging
                 }
             } while (invalid_move); // this cycle keeps going until a valid move has been entered
+
+            // resets seed generator if bot player
+            if(!this->getCurrentPlayer()->is_human)
+                dynamic_cast<chessgame::Bot*>(this->getCurrentPlayer())->resetBotSeed();
 
             this->n_moves++;
             this->stall_counter++;
